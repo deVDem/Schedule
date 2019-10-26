@@ -20,4 +20,5 @@
     <string name="groupc">Выберите группу</string>
     <string name="emailc">Введите E-mail</string>
     <string name="namec">Введите ваше имя и фамилию</string>
+    <string name="remain">Осталось до </string>
 </resources>

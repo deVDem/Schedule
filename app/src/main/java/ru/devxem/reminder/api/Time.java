@@ -19,7 +19,8 @@ public class Time {
         if(sec == 60) {
             min++;
         }
-        if(hour==0 || hour==24) answer="0:";
+        if(hour==24) hour=23;
+        if(hour==0) answer="0:";
         else {
             answer=hour+":";
         }

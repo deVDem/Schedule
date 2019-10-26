@@ -19,4 +19,5 @@
     <string name="groupc">Choose group</string>
     <string name="emailc">Enter your E-mail</string>
     <string name="namec">Enter your first and last name</string>
+    <string name="remain">Left before the</string>
 </resources>
