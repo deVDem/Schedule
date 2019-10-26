@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Расписание</string>
+    <string name="title_activity_main">Расписание</string>
+    <string name="title_dashboard">Расписание</string>
+    <string name="title_home">Таймер</string>
+    <string name="title_notifications">Уведомления</string>
+    <string name="welcometoast">Добро пожаловать в моё приложение! :)</string>
+    <string name="hello">Привет</string>
+    <string name="hello2">Перед запуском требуются ваши данные</string>
+    <string name="name">Имя и фамилия</string>
+    <string name="spam">Я согласен получать информационные сообщения на почту</string>
+    <string name="privacy">Я согласен на обработку персональных данных</string>
+    <string name="Accept">Готово</string>
+    <string name="error">Ошибка</string>
+    <string name="Exit">Выход из приложения</string>
+    <string name="error_text">Произошла неожиданная ошибка. Однако, не переживайте, о ней уже известно, если у вас есть интернет :)</string>
+    <string name="choose">Выберите</string>
+    <string name="spamc">Подтвердите обработку данных</string>
+    <string name="groupc">Выберите группу</string>
+    <string name="emailc">Введите E-mail</string>
+    <string name="namec">Введите ваше имя и фамилию</string>
+</resources>

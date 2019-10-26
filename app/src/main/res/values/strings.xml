@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Schedule</string>
+    <string name="title_activity_main">Schedule</string>
+    <string name="title_home">Timer</string>
+    <string name="title_dashboard">Schedule</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="welcometoast">Welcome to my app! :)</string>
+    <string name="hello">Hello</string>
+    <string name="hello2">Your data is required before running the app</string>
+    <string name="name">First and Last name</string>
+    <string name="spam">I agree to receive information messages by e-mail</string>
+    <string name="privacy">I agree to the processing of personal data</string>
+    <string name="Accept">Accept</string>
+    <string name="error">Error</string>
+    <string name="Exit">Exit application</string>
+    <string name="error_text">An unexpected error occurred. However, do not worry, it is already known if you have the Internet :)</string>
+    <string name="choose">Choose</string>
+    <string name="spamc">Confirm the processing of data</string>
+    <string name="groupc">Choose group</string>
+    <string name="emailc">Enter your E-mail</string>
+    <string name="namec">Enter your first and last name</string>
+</resources>
