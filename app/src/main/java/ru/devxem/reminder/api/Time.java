@@ -14,10 +14,21 @@ public class Time {
 
         String answer = "";
 
-        if(hour==0 || hour==24) answer="00:";
+        if(hour==0 || hour==24) answer="0:";
+        else {
+            answer=hour+":";
+        }
         if(min==0 || min == 60) answer=answer+"00:";
+        else {
+            if(min<10) answer=answer+"0"+min;
+            else answer=answer+min;
+            answer=answer+":";
+        }
         if(sec==0 || sec == 60) answer=answer+"00";
-
-        return "null";
+        else {
+            if(sec<10) answer=answer+"0"+sec;
+            else answer=answer+sec;
+        }
+        return answer;
     }
 }
