@@ -12,13 +12,19 @@ public class Time {
         int min = min1-min2;
         int sec = sec1-sec2;
 
-        String answer = "";
-
+        String answer;
+        if(min == 60) {
+            hour++;
+        }
+        if(sec == 60) {
+            min++;
+        }
         if(hour==0 || hour==24) answer="0:";
         else {
             answer=hour+":";
         }
-        if(min==0 || min == 60) answer=answer+"00:";
+        if(min==0) answer=answer+"00:";
+
         else {
             if(min<10) answer=answer+"0"+min;
             else answer=answer+min;

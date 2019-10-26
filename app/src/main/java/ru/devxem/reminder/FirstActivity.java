@@ -157,10 +157,12 @@ public class FirstActivity extends AppCompatActivity {
             for (float i = 0f; i <= 1000f; i++) {
                 float a = i / 1000f;
                 findViewById(object).setAlpha(a);
-                try {
-                    Thread.sleep(3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(i%2==0) {
+                    try {
+                        Thread.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -172,10 +174,12 @@ public class FirstActivity extends AppCompatActivity {
         for (float i = 1000f; i > 0f; i--) {
             float a = i / 1000f;
             findViewById(object).setAlpha(a);
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if(i%2==0) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         ok();
