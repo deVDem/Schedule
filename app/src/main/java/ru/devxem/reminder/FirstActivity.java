@@ -105,7 +105,7 @@ public class FirstActivity extends AppCompatActivity {
                                 finish();
                             }
                         } catch (JSONException e) {
-                            Error.setError(FirstActivity.this);
+                            Error.setError(FirstActivity.this, null);
                             e.printStackTrace();
                         }
                         dialog.cancel();
@@ -116,7 +116,7 @@ public class FirstActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         dialog.cancel();
                         Toast.makeText(FirstActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                        Error.setError(FirstActivity.this);
+                        Error.setError(FirstActivity.this, null);
                     }
                 };
                 SendInfo groupss = new SendInfo(listener, errorListener, eTname.getText().toString(), eTemail.getText().toString(), list.getSelectedItemPosition(), swspam.isChecked());

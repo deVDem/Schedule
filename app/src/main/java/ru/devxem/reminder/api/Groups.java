@@ -38,7 +38,7 @@ public class Groups {
                         groups.add(array.getString(i));
                     }
                 } catch (JSONException e) {
-                    Error.setError(context);
+                    Error.setError(context, null);
                     e.printStackTrace();
                 }
             }
@@ -47,7 +47,7 @@ public class Groups {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                Error.setError(context);
+                Error.setError(context, null);
             }
         };
         Groupss groupss = new Groupss(listener, errorListener);
