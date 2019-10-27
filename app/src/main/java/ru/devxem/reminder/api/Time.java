@@ -13,6 +13,8 @@ public class Time {
         int sec = sec1-sec2;
 
         String answer;
+        if(min<0) { min=60+min; hour--; }
+        if(sec<0) { sec=60+sec; min--; }
         if(min == 60) {
             hour++;
         }

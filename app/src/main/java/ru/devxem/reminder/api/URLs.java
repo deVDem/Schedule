@@ -9,4 +9,7 @@ public class URLs {
     public static String getInfos() {
         return "https://api.devdem.ru/schedule/info.php";
     }
+    public static String getLess() {
+        return "https://api.devdem.ru/schedule/timings.php";
+    }
 }
