@@ -3,13 +3,13 @@
 This is a simple program that shows the schedule and the rest of the time of the lesson or recess. 
 Made for students of "College of Electronics and Instrumentation"
 
-APK: https://github.com/deVDem/Schedule/tree/master/app/build/outputs/apk/debug
+APK: https://github.com/deVDem/Schedule/tree/master/app/release
 The website of the College: http://pl130.ru
 
 Это простая программа, которая показывает расписание и остаток времени урока или перемены.
 Сделано для студентов "Колледжа Электроники и Приборостроения"
 
-APK: https://github.com/deVDem/Schedule/tree/master/app/build/outputs/apk/debug
+APK: https://github.com/deVDem/Schedule/tree/master/app/release
 Сайт колледжа: http://pl130.ru
 
 
