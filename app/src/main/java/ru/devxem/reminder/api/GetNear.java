@@ -2,6 +2,7 @@ package ru.devxem.reminder.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -19,10 +20,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.devxem.reminder.ui.dashboard.DashboardFragment;
 import ru.devxem.reminder.ui.home.HomeFragment;
 
 public class GetNear {
     private static RequestQueue queue;
+
+    public static String checknull(String integer) {
+        String answer = null;
+        if (integer.equals("0")) answer = "00";
+        else answer = integer;
+
+        return answer;
+    }
 
     public static void reloadlessons(final Context context, String group, final String id, final int hour, final int min, String day, final int sec) {
         final String[][] lessons = new String[6][5];
@@ -63,7 +73,7 @@ public class GetNear {
                     lessons[3][3] = fivesix.getString("end_h");
                     lessons[3][4] = fivesix.getString("end_m");
                     int a = 3;
-                    if(!jsonResponse.isNull("7")) {
+                    if (!jsonResponse.isNull("7")) {
                         a = 5;
                         JSONObject seven = jsonResponse.getJSONObject("7");
                         lessons[4][0] = seven.getString("text");
@@ -91,14 +101,14 @@ public class GetNear {
                     for (i = 0; i <= a; i++) {
                         h = Integer.parseInt(lessons[i][1]);
                         m = Integer.parseInt(lessons[i][2]);
-                        if(a==5) {
-                            if(i!=5) {
+                        if (a == 5) {
+                            if (i != 5) {
                                 hp = Integer.parseInt(lessons[i + 1][1]);
                                 mp = Integer.parseInt(lessons[i + 1][2]);
                             }
                         }
-                        if (a==3) {
-                            if(i != 3) {
+                        if (a == 3) {
+                            if (i != 3) {
                                 hp = Integer.parseInt(lessons[i + 1][1]);
                                 mp = Integer.parseInt(lessons[i + 1][2]);
                             }
@@ -126,7 +136,7 @@ public class GetNear {
                             konec = curFormater.parse(date2Str);
                             now = curFormater.parse(nowStr);
                             nachalol = curFormater.parse(date3Str);
-                            if (i==a && konec.before(now)) {
+                            if (i == a && konec.before(now)) {
                                 answer[5] = 2;
                                 break;
                             }
@@ -173,7 +183,73 @@ public class GetNear {
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(groupss);
     }
+
+    public static void parseLessons(String group, final String id, Context context) {
+        final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        for (int i = 2; i <= 7; i++) {
+            final int finalI = i - 1;
+            Response.Listener<String> listener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    JSONObject jsonResponse = null;
+                    try {
+                        jsonResponse = new JSONObject(response);
+                        boolean noles = jsonResponse.getBoolean("no_les");
+                        if (noles) {
+                            return;
+                        }
+                        stringArrayAdapter.add(Days.getDay(finalI));
+                        JSONObject onetwo = jsonResponse.getJSONObject("1-2");
+                        stringArrayAdapter.add(onetwo.getString("n") + ": " + onetwo.getString("text") + " "
+                                + checknull(onetwo.getString("hour")) + ":" + checknull(onetwo.getString("time")) +
+                                "->" + checknull(onetwo.getString("end_h")) + ":" + checknull(onetwo.getString("end_m")));
+                        JSONObject three = jsonResponse.getJSONObject("3");
+                        stringArrayAdapter.add(three.getString("n") + ": " + three.getString("text") + " "
+                                + checknull(three.getString("hour")) + ":" + checknull(three.getString("time")) +
+                                "->" + checknull(three.getString("end_h")) + ":" + checknull(three.getString("end_m")));
+                        JSONObject four = jsonResponse.getJSONObject("4");
+                        stringArrayAdapter.add(four.getString("n") + ": " + checknull(four.getString("text")) + " "
+                                + checknull(four.getString("hour")) + ":" + checknull(four.getString("time")) +
+                                "->" + checknull(four.getString("end_h")) + ":" + checknull(four.getString("end_m")));
+                        JSONObject fivesix = jsonResponse.getJSONObject("5-6");
+                        stringArrayAdapter.add(fivesix.getString("n") + ": " + fivesix.getString("text") + " "
+                                + checknull(fivesix.getString("hour")) + ":" + checknull(fivesix.getString("time")) +
+                                "->" + checknull(fivesix.getString("end_h")) + ":" + checknull(fivesix.getString("end_m")));
+                        if (!jsonResponse.isNull("7")) {
+                            JSONObject seven = jsonResponse.getJSONObject("7");
+                            stringArrayAdapter.add(seven.getString("n") + ": " + seven.getString("text") + " "
+                                    + checknull(seven.getString("hour")) + ":" + checknull(seven.getString("time")) +
+                                    "->" + checknull(seven.getString("end_h")) + ":" + checknull(seven.getString("end_m")));
+                            JSONObject eight = jsonResponse.getJSONObject("8");
+                            stringArrayAdapter.add(eight.getString("n") + ": " + eight.getString("text") + " "
+                                    + checknull(eight.getString("hour")) + ":" + checknull(eight.getString("time")) +
+                                    "->" + checknull(eight.getString("end_h")) + ":" + checknull(eight.getString("end_m")));
+                        } else if (!jsonResponse.isNull("7-8")) {
+                            JSONObject seveneight = jsonResponse.getJSONObject("7-8");
+                            stringArrayAdapter.add(seveneight.getString("n") + ": " + seveneight.getString("text") + " "
+                                    + checknull(seveneight.getString("hour")) + ":" + checknull(seveneight.getString("time")) +
+                                    "->" + checknull(seveneight.getString("end_h")) + ":" + checknull(seveneight.getString("end_m")));
+                        }
+                        DashboardFragment.reloadLess(stringArrayAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            Response.ErrorListener errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            };
+            GetLessons groupss = new GetLessons(listener, errorListener, id, group, String.valueOf(i));
+            if (queue == null) queue = Volley.newRequestQueue(context);
+            queue.add(groupss);
+        }
+    }
 }
+
 
 class GetLessons extends StringRequest {
     private static final String LOGIN_REQUEST_URL = URLs.getLess();
