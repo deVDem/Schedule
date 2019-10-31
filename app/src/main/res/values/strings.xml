@@ -20,4 +20,8 @@
     <string name="emailc">Enter your E-mail</string>
     <string name="namec">Enter your first and last name</string>
     <string name="remain">Left before the</string>
+    <string name="lesson">" lesson"</string>
+    <string name="pause">" pause"</string>
+    <string name="noles">No lessons today</string>
+    <string name="rest">Rest!</string>
 </resources>

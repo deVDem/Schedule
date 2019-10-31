@@ -1,7 +1,17 @@
 package ru.devxem.reminder.api;
 
+import java.util.Date;
+
 public class Time {
 
+    public static String getRemainFromData(Date date1, Date date2) {
+        String answer;
+        long mill = date1.getTime()-date2.getTime();
+        Date answerd = new Date(mill);
+        answer=answerd.getHours()+":"+answerd.getMinutes()+":"+answerd.getSeconds();
+
+        return answer;
+    }
 
 
     public static String getRemain(int hour1, int hour2, int min1, int min2, int sec1, int sec2) {

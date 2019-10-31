@@ -21,4 +21,8 @@
     <string name="emailc">Введите E-mail</string>
     <string name="namec">Введите ваше имя и фамилию</string>
     <string name="remain">Осталось до </string>
+    <string name="lesson">" урока"</string>
+    <string name="pause">" перемены"</string>
+    <string name="noles">Сегодня нет уроков</string>
+    <string name="rest">Отдых!</string>
 </resources>
