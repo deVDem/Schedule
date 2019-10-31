@@ -10,10 +10,10 @@ The website of the College: http://pl130.ru
 
 
 ## API
-  API is available here: https://api.devdem.ru/schedule/
+  API is available here: https://api.devdem.ru/schedule/nameofscript.php
   Only 3 of the script.
   
-  API доступно по ссылке: https://api.devdem.ru/schedule/
+  API доступно по ссылке: https://api.devdem.ru/schedule/nameofscript.php
   Всего 3 скрипта.
 ### Groups
   Returns a list of groups as a JSONArray.
