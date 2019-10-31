@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import ru.devxem.reminder.ui.dashboard.DashboardFragment;
 import ru.devxem.reminder.ui.home.HomeFragment;
@@ -26,8 +27,8 @@ import ru.devxem.reminder.ui.home.HomeFragment;
 public class GetNear {
     private static RequestQueue queue;
 
-    public static String checknull(String integer) {
-        String answer = null;
+    private static String checknull(String integer) {
+        String answer;
         if (integer.equals("0")) answer = "00";
         else answer = integer;
 
@@ -123,10 +124,10 @@ public class GetNear {
                         String nowStr = hour + ":" + min + ":" + sec;
                         @SuppressLint("SimpleDateFormat")
                         SimpleDateFormat curFormater = new SimpleDateFormat("HH:mm:ss");
-                        Date nachalo = null;
-                        Date nachalol = null;
-                        Date konec = null;
-                        Date now = null;
+                        Date nachalo;
+                        Date nachalol;
+                        Date konec;
+                        Date now;
                         if (i == 0 && hour < h) {
                             answer[5] = 1;
                             break;
@@ -136,14 +137,14 @@ public class GetNear {
                             konec = curFormater.parse(date2Str);
                             now = curFormater.parse(nowStr);
                             nachalol = curFormater.parse(date3Str);
-                            if (i == a && konec.before(now)) {
+                            if (i == a && Objects.requireNonNull(konec).before(now)) {
                                 answer[5] = 2;
                                 break;
                             }
-                            if (nachalo.before(now) && konec.after(now)) {
+                            if (Objects.requireNonNull(nachalo).before(now) && Objects.requireNonNull(konec).after(now)) {
                                 answer[5] = 0;
                                 break;
-                            } else if (nachalol.after(now) && konec.after(now)) {
+                            } else if (Objects.requireNonNull(nachalol).after(now) && Objects.requireNonNull(konec).after(now)) {
                                 answer[5] = 1;
                                 break;
                             }
@@ -184,14 +185,14 @@ public class GetNear {
         queue.add(groupss);
     }
 
-    public static void parseLessons(String group, final String id, Context context) {
+    public static void parseLessons(String group, final String id, final Context context) {
         final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         for (int i = 2; i <= 7; i++) {
             final int finalI = i - 1;
             Response.Listener<String> listener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    JSONObject jsonResponse = null;
+                    JSONObject jsonResponse;
                     try {
                         jsonResponse = new JSONObject(response);
                         boolean noles = jsonResponse.getBoolean("no_les");
@@ -240,7 +241,8 @@ public class GetNear {
             Response.ErrorListener errorListener = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                    Error.setError(context, id);
                 }
             };
             GetLessons groupss = new GetLessons(listener, errorListener, id, group, String.valueOf(i));

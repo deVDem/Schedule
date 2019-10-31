@@ -2,7 +2,6 @@ package ru.devxem.reminder;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,7 +42,6 @@ public class FirstActivity extends AppCompatActivity {
     Switch swspam;
     Switch swprivacy;
     int object;
-    int sel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

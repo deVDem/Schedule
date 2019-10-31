@@ -40,7 +40,6 @@ public class HomeFragment extends Fragment {
     private static Context context;
     private String id;
     private String group;
-    private static Thread threads;
     private static boolean isEnabled = true;
 
     @SuppressLint("SetTextI18n")
@@ -55,7 +54,7 @@ public class HomeFragment extends Fragment {
         id = MainActivity.getSss().get(0);
         group = MainActivity.getSss().get(1);
         grouptext.setText("Ваша группа: " + group);
-        threads = new Thread(null, doBackgroundThreadProcessing,
+        Thread threads = new Thread(null, doBackgroundThreadProcessing,
                 "Background");
         threads.start();
 
