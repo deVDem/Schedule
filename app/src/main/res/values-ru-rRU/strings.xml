@@ -25,4 +25,5 @@
     <string name="pause">" перемены"</string>
     <string name="noles">Сегодня нет уроков</string>
     <string name="rest">Отдых!</string>
+    <string name="settings">Настройки</string>
 </resources>

@@ -24,4 +24,5 @@
     <string name="pause">" pause"</string>
     <string name="noles">No lessons today</string>
     <string name="rest">Rest!</string>
+    <string name="settings">Settings</string>
 </resources>
