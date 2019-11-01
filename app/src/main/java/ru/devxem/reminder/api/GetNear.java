@@ -242,7 +242,7 @@ public class GetNear {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                    Error.setError(context, id);
+                    // Error.setError(context, id);
                 }
             };
             GetLessons groupss = new GetLessons(listener, errorListener, id, group, String.valueOf(i));
