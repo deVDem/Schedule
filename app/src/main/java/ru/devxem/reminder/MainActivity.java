@@ -13,14 +13,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ru.devxem.reminder.api.Error;
 
 public class MainActivity extends AppCompatActivity {
     public static List<String> sss = new ArrayList<>();
+    static Set<String[][]> lessons = null;
 
 
     public static List<String> getSss() { return sss;}
+
+    public static Set<String[][]> getLessons() {
+        return lessons;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         if(id.equals("0") || group == null) {
             Error.setError(this, id);
         }
-
         sss.add(0,id);
         sss.add(1,group);
     }

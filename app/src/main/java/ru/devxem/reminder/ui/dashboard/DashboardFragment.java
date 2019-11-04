@@ -14,6 +14,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.Objects;
 
@@ -27,11 +28,14 @@ public class DashboardFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     private static ListView listView;
     private static Dialog dialog;
-    static CountDownTimer timer;
+    private static CountDownTimer timer;
     private static boolean loaded;
+    @SuppressLint("StaticFieldLeak")
+    private static SwipeRefreshLayout swipeRefreshLayout;
 
     public static void reloadLess(ArrayAdapter<String> adp2) {
-        dialog.cancel();
+        if (dialog != null) dialog.cancel();
+        swipeRefreshLayout.setRefreshing(false);
         loaded = true;
         timer.cancel();
         listView.setAdapter(adp2);
@@ -41,12 +45,12 @@ public class DashboardFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final String id = MainActivity.getSss().get(0);
-        String group = MainActivity.getSss().get(1);
+        final String group = MainActivity.getSss().get(1);
         Objects.requireNonNull(getActivity()).setTitle("хуй");
         // findViewById() делать через root!
         listView = root.findViewById(R.id.listofitems);
+        swipeRefreshLayout = root.findViewById(R.id.swipe_dash);
         final Context context = Objects.requireNonNull(getContext());
-        GetNear.parseLessons(group, id, context);
         loaded = false;
         timer = new CountDownTimer(15000, 250) {
             @Override
@@ -70,6 +74,14 @@ public class DashboardFragment extends Fragment {
                 .setCancelable(false);
         dialog = builder.create();
         dialog.show();
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadLess(GetNear.updateLessons(group, getContext(), 1));
+            }
+        });
+        reloadLess(GetNear.updateLessons(group, getContext(), 0));
         return root;
     }
 }
