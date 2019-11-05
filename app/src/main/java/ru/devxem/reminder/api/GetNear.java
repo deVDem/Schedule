@@ -187,21 +187,21 @@ public class GetNear {
             int m = Integer.parseInt(lessons[i][2]);
             int he = Integer.parseInt(lessons[i][3]);
             int me = Integer.parseInt(lessons[i][4]);
-            int hp;
-            int mp;
+            int hp = 0;
+            int mp = 0;
             if (lessons[4][0] != null) a = 4;
             if (lessons[5][0] != null) a = 5;
             for (i = 0; i <= a; i++) {
                 h = Integer.parseInt(lessons[i][1]);
                 m = Integer.parseInt(lessons[i][2]);
                 if (i != a) {
-                        hp = Integer.parseInt(lessons[i + 1][1]);
-                        mp = Integer.parseInt(lessons[i + 1][2]);
-                    } else {
+                    hp = Integer.parseInt(lessons[i + 1][1]);
+                    mp = Integer.parseInt(lessons[i + 1][2]);
+                } else {
 
                     hp = Integer.parseInt(lessons[i][1]);
                     mp = Integer.parseInt(lessons[i][2]);
-                    }
+                }
                 he = Integer.parseInt(lessons[i][3]);
                 me = Integer.parseInt(lessons[i][4]);
                 // 0 - урок
@@ -242,8 +242,8 @@ public class GetNear {
                 }
             }
             if (answer[5] == 1) {
-                answer[0] = h;
-                answer[1] = m;
+                answer[0] = hp;
+                answer[1] = mp;
                 answer[2] = i;
 
             } else {
