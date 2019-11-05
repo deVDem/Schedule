@@ -183,8 +183,8 @@ public class GetNear {
             }
             int i = 0;
             int a = 3;
-            int h = Integer.parseInt(lessons[i][1]);
-            int m = Integer.parseInt(lessons[i][2]);
+            int h;
+            int m;
             int he = Integer.parseInt(lessons[i][3]);
             int me = Integer.parseInt(lessons[i][4]);
             int hp = 0;
