@@ -3,8 +3,8 @@ package ru.devxem.reminder.ui.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
+import ru.devxem.reminder.TimeNotification;
 import ru.devxem.reminder.api.Days;
 import ru.devxem.reminder.api.Error;
 import ru.devxem.reminder.api.GetNear;
@@ -48,6 +50,9 @@ public class HomeFragment extends Fragment {
     private static SwipeRefreshLayout swipeRefreshLayout;
     @SuppressLint("StaticFieldLeak")
     private static Activity activity;
+    private SharedPreferences preferences;
+
+
     private Runnable doBackgroundThreadProcessing = new Runnable() {
         public void run() {
             backgroundThreadProcessing();
@@ -82,6 +87,7 @@ public class HomeFragment extends Fragment {
         TextView grouptext = root.findViewById(R.id.grouptext);
         activity = getActivity();
         context = getContext();
+        preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = MainActivity.getSss().get(0);
         group = MainActivity.getSss().get(1);
         grouptext.setText("Ваша группа: " + group);
@@ -92,7 +98,6 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d("Refresh", "xyu");
                 Calendar c = Calendar.getInstance();
                 c.setTimeZone(TimeZone.getDefault());
                 c.setTime(currentDate);
@@ -138,9 +143,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        TimeNotification.cancel(context);
+    }
+
     @SuppressLint("SetTextI18n")
     private void Update(final int[] answer) {
-
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -152,7 +162,8 @@ public class HomeFragment extends Fragment {
                 String timeText = timeFormat.format(currentDate);
                 if (answer == null) return;
                 if (answer[5] != 2) {
-                    textView.setText(Time.getRemain(answer[0], hour, answer[1], min, 0, sec));
+                    String remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec);
+                    textView.setText(remain);
 
                     String string = context.getString(R.string.remain) + context.getString(R.string.pause);
 
@@ -160,12 +171,17 @@ public class HomeFragment extends Fragment {
                         string = context.getString(R.string.remain) + context.getString(R.string.lesson);
                     }
                     lefttext.setText(string);
-
+                    if (preferences.getBoolean("notification", true))
+                        TimeNotification.notify(context, string + ": " + remain, context.getString(R.string.app_name), 1);
                 } else {
+                    if (preferences.getBoolean("notification", true))
+                        TimeNotification.notify(context, context.getString(R.string.noles) + ": " + context.getString(R.string.rest), context.getString(R.string.app_name), 1);
                     lefttext.setText(context.getString(R.string.noles));
                     textView.setText(context.getString(R.string.rest));
                 }
+
                 timetext.setText("Текущее время: " + timeText + "\n" + "День недели: " + Days.getDay(dayOfWeek - 1) + "\n" + "i: " + answer[2] + " a: " + answer[3] + " b: " + answer[4] + "\n" + answer[0] + ":" + answer[1]);
+                if (!preferences.getBoolean("notification", true)) TimeNotification.cancel(context);
             }
         });
     }

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         }
         sss.add(0,id);
         sss.add(1,group);
+
     }
 
 }
