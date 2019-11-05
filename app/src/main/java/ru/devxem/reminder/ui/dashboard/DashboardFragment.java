@@ -50,6 +50,8 @@ public class DashboardFragment extends Fragment {
         // findViewById() делать через root!
         listView = root.findViewById(R.id.listofitems);
         swipeRefreshLayout = root.findViewById(R.id.swipe_dash);
+        swipeRefreshLayout.setNestedScrollingEnabled(true);
+        //swipeRefreshLayout.canChildScrollUp() = true;
         final Context context = Objects.requireNonNull(getContext());
         loaded = false;
         timer = new CountDownTimer(15000, 250) {

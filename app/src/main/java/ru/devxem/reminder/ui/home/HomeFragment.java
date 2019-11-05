@@ -25,7 +25,6 @@ import java.util.TimeZone;
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.TimeNotification;
-import ru.devxem.reminder.api.Days;
 import ru.devxem.reminder.api.Error;
 import ru.devxem.reminder.api.GetNear;
 import ru.devxem.reminder.api.Time;
@@ -33,8 +32,6 @@ import ru.devxem.reminder.api.Time;
 public class HomeFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     private static TextView textView;
-    @SuppressLint("StaticFieldLeak")
-    private static TextView timetext;
     @SuppressLint("StaticFieldLeak")
     private static TextView lefttext;
     private static Date currentDate;
@@ -82,15 +79,12 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, final Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         textView = root.findViewById(R.id.remaintext);
-        timetext = root.findViewById(R.id.timetext);
         lefttext = root.findViewById(R.id.textView);
-        TextView grouptext = root.findViewById(R.id.grouptext);
         activity = getActivity();
         context = getContext();
         preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = MainActivity.getSss().get(0);
         group = MainActivity.getSss().get(1);
-        grouptext.setText("Ваша группа: " + group);
         Thread threads = new Thread(null, doBackgroundThreadProcessing,
                 "Main");
         threads.start();
@@ -128,7 +122,6 @@ public class HomeFragment extends Fragment {
                     c.setTime(currentDate);
                     int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
                     Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
-                    //GetNear.reloadlessons(context, group, String.valueOf(id),hour,min, "2");
                 } catch (InterruptedException e) {
                     Error.setError(context, id);
                     e.printStackTrace();
@@ -157,12 +150,17 @@ public class HomeFragment extends Fragment {
                 Calendar c = Calendar.getInstance();
                 c.setTimeZone(TimeZone.getDefault());
                 c.setTime(currentDate);
-                int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-                String timeText = timeFormat.format(currentDate);
                 if (answer == null) return;
                 if (answer[5] != 2) {
-                    String remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec);
+                    String remain;
+                    if (!preferences.getBoolean("millis", false)) {
+                        remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec, -1);
+                    } else {
+                        Date dateNow = new Date();
+                        @SuppressLint("SimpleDateFormat")
+                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("SSS");
+                        remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec, Integer.parseInt(formatForDateNow.format(dateNow)));
+                    }
                     textView.setText(remain);
 
                     String string = context.getString(R.string.remain) + context.getString(R.string.pause);
@@ -180,7 +178,6 @@ public class HomeFragment extends Fragment {
                     textView.setText(context.getString(R.string.rest));
                 }
 
-                timetext.setText("Текущее время: " + timeText + "\n" + "День недели: " + Days.getDay(dayOfWeek - 1) + "\n" + "i: " + answer[2] + " a: " + answer[3] + " b: " + answer[4] + "\n" + answer[0] + ":" + answer[1]);
                 if (!preferences.getBoolean("notification", true)) TimeNotification.cancel(context);
             }
         });

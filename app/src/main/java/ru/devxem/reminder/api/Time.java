@@ -3,13 +3,18 @@ package ru.devxem.reminder.api;
 public class Time {
 
 
-    public static String getRemain(int hour1, int hour2, int min1, int min2, int sec1, int sec2) {
+    public static String getRemain(int hour1, int hour2, int min1, int min2, int sec1, int sec2, int millis2) {
         // (24 - hour) +":"+ (60 - min)+":"+(60-sec)
         // Algoritm: hour1-hour2:min1-min2:sec1-sec2
 
         int hour = hour1-hour2;
         int min = min1-min2;
         int sec = sec1-sec2;
+        int millis = 0;
+        if (millis2 != -1) {
+            millis = 1000 - millis2;
+        }
+
 
         String answer;
         if(min<0) { min=60+min; hour--; }
@@ -36,6 +41,11 @@ public class Time {
         else {
             if(sec<10) answer=answer+"0"+sec;
             else answer=answer+sec;
+        }
+        if (millis2 != -1) {
+            if (millis >= 100) answer = answer + "." + millis;
+            else if (millis >= 10) answer = answer + ".0" + millis;
+            else if (millis >= 0) answer = answer + ".00" + millis;
         }
         return answer;
     }

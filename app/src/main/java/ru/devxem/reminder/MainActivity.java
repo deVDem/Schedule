@@ -1,6 +1,7 @@
 package ru.devxem.reminder;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,26 +14,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import ru.devxem.reminder.api.Error;
 
 public class MainActivity extends AppCompatActivity {
     public static List<String> sss = new ArrayList<>();
-    static Set<String[][]> lessons = null;
 
 
     public static List<String> getSss() { return sss;}
-
-    public static Set<String[][]> getLessons() {
-        return lessons;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         String id = String.valueOf(settings.getInt("id",0));
         String group = settings.getString("group",null);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -49,5 +45,4 @@ public class MainActivity extends AppCompatActivity {
         sss.add(1,group);
 
     }
-
 }
