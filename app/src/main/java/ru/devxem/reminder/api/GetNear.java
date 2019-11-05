@@ -236,7 +236,7 @@ public class GetNear {
                     if (Objects.requireNonNull(nachalo).before(now) && Objects.requireNonNull(konec).after(now)) {
                         answer[5] = 0;
                         break;
-                    } else if (Objects.requireNonNull(nachalol).after(now) && Objects.requireNonNull(konec).after(now)) {
+                    } else if (Objects.requireNonNull(nachalol).after(now) && Objects.requireNonNull(konec).before(now)) {
                         answer[5] = 1;
                         break;
                     }
