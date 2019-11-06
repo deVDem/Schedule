@@ -183,8 +183,8 @@ public class GetNear {
             }
             int i = 0;
             int a = 3;
-            int h = 0;
-            int m = 0;
+            int h;
+            int m;
             int he = Integer.parseInt(lessons[i][3]);
             int me = Integer.parseInt(lessons[i][4]);
             int hp = 0;
@@ -223,7 +223,6 @@ public class GetNear {
                     nachalol = curFormater.parse(date3Str);
                     if (i == 0 && Objects.requireNonNull(nachalo).after(now)) {
                         answer[5] = 1;
-                        i = 0;
                         break;
                     }
                     if (i == a && Objects.requireNonNull(konec).before(now)) {
@@ -243,13 +242,8 @@ public class GetNear {
                 }
             }
             if (answer[5] == 1) {
-                if (i == 0) {
-                    answer[0] = h;
-                    answer[1] = m;
-                } else {
-                    answer[0] = hp;
-                    answer[1] = mp;
-                }
+                answer[0] = hp;
+                answer[1] = mp;
                 answer[2] = i;
 
             } else {
