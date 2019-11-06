@@ -246,7 +246,7 @@ public class GetNear {
                 answer[1] = mp;
                 answer[2] = i;
 
-            } else if (answer[5] == 1) {
+            } else if (answer[5] == 1 && i == 0) {
                 answer[0] = h;
                 answer[1] = m;
                 answer[2] = i;
