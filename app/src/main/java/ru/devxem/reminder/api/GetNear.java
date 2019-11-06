@@ -241,15 +241,16 @@ public class GetNear {
                     e.printStackTrace();
                 }
             }
-            if (answer[5] == 1 && i != 0) {
-                answer[0] = hp;
-                answer[1] = mp;
+            if (answer[5] == 1) {
+                if (i != 0) {
+                    answer[0] = hp;
+                    answer[1] = mp;
+                } else {
+                    answer[0] = h;
+                    answer[1] = m;
+                }
                 answer[2] = i;
 
-            } else if (answer[5] == 1 && i == 0) {
-                answer[0] = h;
-                answer[1] = m;
-                answer[2] = i;
             } else {
                 answer[0] = he;
                 answer[1] = me;
