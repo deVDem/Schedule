@@ -13,4 +13,8 @@ class URLs {
     static String getLess() {
         return "https://api.devdem.ru/schedule/timings.php";
     }
+
+    static String getNotes() {
+        return "https://api.devdem.ru/schedule/notification.php";
+    }
 }

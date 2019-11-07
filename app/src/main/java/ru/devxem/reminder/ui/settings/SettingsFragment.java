@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
+import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 
 public class SettingsFragment extends Fragment {
@@ -41,6 +43,24 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("millis", isChecked);
+                editor.apply();
+            }
+        });
+        Button bt_cache = root.findViewById(R.id.clear_cache);
+        bt_cache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean millis = preferences.getBoolean("millis", false);
+                boolean notif = preferences.getBoolean("notification", true);
+                String group = MainActivity.getSss().get(1);
+                String id = MainActivity.getSss().get(0);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.putBoolean("first", false);
+                editor.putBoolean("millis", millis);
+                editor.putBoolean("notif", notif);
+                editor.putString("group", group);
+                editor.putString("id", id);
                 editor.apply();
             }
         });

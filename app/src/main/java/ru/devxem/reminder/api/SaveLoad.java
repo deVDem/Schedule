@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 class SaveLoad {
     static void SaveAll(String arg, SharedPreferences preferences) {
         SharedPreferences.Editor editor = preferences.edit();
@@ -86,6 +88,46 @@ class SaveLoad {
                 Error.setError(context, null);
             }
         }
+        return answer;
+    }
+
+    static void SaveNotes(String json, SharedPreferences preferences) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("notifications", json);
+        editor.apply();
+    }
+
+    static ArrayList<ArrayList<String>> LoadNotes(SharedPreferences preferences) {
+        ArrayList<String> ids = new ArrayList<>();
+        ArrayList<String> date = new ArrayList<>();
+        ArrayList<String> text = new ArrayList<>();
+        ArrayList<String> head = new ArrayList<>();
+        ArrayList<ArrayList<String>> answer = new ArrayList<>();
+
+        String json = preferences.getString("notifications", null);
+        if (json == null) return null;
+        try {
+            JSONObject notes = new JSONObject(json);
+            for (int i = 1; i <= 50; i++) {
+                try {
+                    JSONObject temp = notes.getJSONObject(String.valueOf(i));
+                    ids.add(temp.getString("id"));
+                    date.add(temp.getString("date"));
+                    head.add(temp.getString("head"));
+                    text.add(temp.getString("text"));
+                } catch (Exception e) {
+                    break;
+                }
+            }
+            answer.add(0, ids);
+            answer.add(1, date);
+            answer.add(2, head);
+            answer.add(3, text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return answer;
     }
 }

@@ -63,6 +63,13 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/clear_cache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Удалить кэш"
+            tools:ignore="HardcodedText" />
+
     </LinearLayout>
 
 </RelativeLayout>

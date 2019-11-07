@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
-        String id = String.valueOf(settings.getInt("id",0));
+        String id = settings.getString("id", "0");
         String group = settings.getString("group",null);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
