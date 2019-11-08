@@ -95,7 +95,7 @@ public class FirstActivity extends AppCompatActivity {
                                 SharedPreferences settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putBoolean("first", false);
-                                editor.putString("id", String.valueOf(id));
+                                editor.putInt("id", id);
                                 editor.putString("group",list.getSelectedItem().toString());
                                 editor.apply();
                                 Toast.makeText(FirstActivity.this, R.string.welcometoast, Toast.LENGTH_LONG).show();
