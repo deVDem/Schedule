@@ -15,6 +15,12 @@ public class SplashScreen extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (settings.getBoolean("fix", true)) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove("id");
+            editor.putBoolean("fix", false);
+            editor.apply();
+        }
         if(settings.getBoolean("first",true )) {
             startActivity(new Intent(SplashScreen.this, FirstActivity.class));
 
