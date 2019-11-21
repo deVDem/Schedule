@@ -17,4 +17,8 @@ class URLs {
     static String getNotes() {
         return "https://api.devdem.ru/schedule/notification.php";
     }
+
+    static String getErr() {
+        return "https://api.devdem.ru/schedule/senderr.php";
+    }
 }

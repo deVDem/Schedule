@@ -78,27 +78,28 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, final Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
-        textView = root.findViewById(R.id.remaintext);
-        lefttext = root.findViewById(R.id.textView);
-        activity = getActivity();
         context = getContext();
-        preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
-        id = MainActivity.getSss().get(0);
-        group = MainActivity.getSss().get(1);
-        Thread threads = new Thread(null, doBackgroundThreadProcessing,
-                "Main");
-        threads.start();
-        swipeRefreshLayout = root.findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Calendar c = Calendar.getInstance();
-                c.setTimeZone(TimeZone.getDefault());
-                c.setTime(currentDate);
-                int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2);
-            }
-        });
+        try {
+            textView = root.findViewById(R.id.remaintext);
+            lefttext = root.findViewById(R.id.textView);
+            activity = getActivity();
+            preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
+            id = MainActivity.getSss().get(0);
+            group = MainActivity.getSss().get(1);
+            Thread threads = new Thread(null, doBackgroundThreadProcessing,
+                    "Main");
+            threads.start();
+            swipeRefreshLayout = root.findViewById(R.id.swipe_container);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Calendar c = Calendar.getInstance();
+                    c.setTimeZone(TimeZone.getDefault());
+                    c.setTime(currentDate);
+                    int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                    GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2);
+                }
+            });
         /*MobileAds.initialize(context, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -107,7 +108,9 @@ public class HomeFragment extends Fragment {
                 mAdView.loadAd(adRequest);
             }
         });*/
-
+        } catch (Exception e) {
+            Error.setErr(context, e.toString(), context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
+        }
         return root;
     }
 
@@ -167,18 +170,9 @@ public class HomeFragment extends Fragment {
                 if (answer == null) return;
                 if (answer[5] != 2) {
                     String remain;
-                    if (!preferences.getBoolean("millis", false)) {
-                        remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec, -1);
-                    } else {
-                        Date dateNow = new Date();
-                        @SuppressLint("SimpleDateFormat")
-                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("SSS");
-                        remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec, Integer.parseInt(formatForDateNow.format(dateNow)));
-                    }
+                    remain = Time.getRemain(answer[0], hour, answer[1], min, 0, sec, -1);
                     textView.setText(remain);
-
                     String string = context.getString(R.string.remain) + context.getString(R.string.pause);
-
                     if (answer[5] == 1) {
                         string = context.getString(R.string.remain) + context.getString(R.string.lesson);
                     }

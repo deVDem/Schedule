@@ -44,46 +44,50 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final String id = MainActivity.getSss().get(0);
-        final String group = MainActivity.getSss().get(1);
-        Objects.requireNonNull(getActivity()).setTitle("хуй");
-        // findViewById() делать через root!
-        listView = root.findViewById(R.id.listofitems);
-        swipeRefreshLayout = root.findViewById(R.id.swipe_dash);
-        swipeRefreshLayout.setNestedScrollingEnabled(true);
-        //swipeRefreshLayout.canChildScrollUp() = true;
-        final Context context = Objects.requireNonNull(getContext());
-        loaded = false;
-        timer = new CountDownTimer(15000, 250) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                if (loaded) {
-                    this.cancel();
+        try {
+            final String id = MainActivity.getSss().get(0);
+            final String group = MainActivity.getSss().get(1);
+            Objects.requireNonNull(getActivity()).setTitle("хуй");
+            // findViewById() делать через root!
+            listView = root.findViewById(R.id.listofitems);
+            swipeRefreshLayout = root.findViewById(R.id.swipe_dash);
+            swipeRefreshLayout.setNestedScrollingEnabled(true);
+            //swipeRefreshLayout.canChildScrollUp() = true;
+            final Context context = Objects.requireNonNull(getContext());
+            loaded = false;
+            timer = new CountDownTimer(15000, 250) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (loaded) {
+                        this.cancel();
+                    }
                 }
-            }
 
-            @Override
-            public void onFinish() {
-                if (!loaded) {
-                    dialog.cancel();
-                    Error.setError(context, id);
+                @Override
+                public void onFinish() {
+                    if (!loaded) {
+                        dialog.cancel();
+                        Error.setError(context, id);
+                    }
                 }
-            }
-        }.start();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Пожалуйста, подождите")
-                .setTitle("Загрузка..")
-                .setCancelable(false);
-        dialog = builder.create();
-        dialog.show();
-        swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                reloadLess(GetNear.updateLessons(group, getContext(), 1));
-            }
-        });
-        reloadLess(GetNear.updateLessons(group, getContext(), 0));
+            }.start();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Пожалуйста, подождите")
+                    .setTitle("Загрузка..")
+                    .setCancelable(false);
+            dialog = builder.create();
+            dialog.show();
+            swipeRefreshLayout.setRefreshing(true);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    reloadLess(GetNear.updateLessons(group, getContext(), 1));
+                }
+            });
+            reloadLess(GetNear.updateLessons(group, getContext(), 0));
+        } catch (Exception e) {
+            Error.setErr(getContext(), e.toString(), Objects.requireNonNull(getContext()).getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
+        }
         return root;
     }
 }

@@ -1,6 +1,7 @@
 package ru.devxem.reminder.ui.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,53 +18,61 @@ import java.util.Objects;
 
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
+import ru.devxem.reminder.SplashScreen;
+import ru.devxem.reminder.api.Error;
 
 public class SettingsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-        // findViewById() делать через root! root.findViewById(...);
-        Switch switchs = root.findViewById(R.id.switch_not);
-        Switch switch_mills = root.findViewById(R.id.switch_millis);
         Context context = getContext();
-        final SharedPreferences preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
-        switchs.setChecked(preferences.getBoolean("notification", true));
-        switchs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("notification", isChecked);
-                editor.apply();
-            }
-        });
-        switch_mills.setChecked(preferences.getBoolean("millis", false));
-        switch_mills.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("millis", isChecked);
-                editor.apply();
-            }
-        });
-        Button bt_cache = root.findViewById(R.id.clear_cache);
-        bt_cache.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean millis = preferences.getBoolean("millis", false);
-                boolean notif = preferences.getBoolean("notification", true);
-                String group = MainActivity.getSss().get(1);
-                String id = MainActivity.getSss().get(0);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.putBoolean("first", false);
-                editor.putBoolean("millis", millis);
-                editor.putBoolean("notif", notif);
-                editor.putString("group", group);
-                editor.putString("id", id);
-                editor.apply();
-            }
-        });
+        try {
+            // findViewById() делать через root! root.findViewById(...);
+            Switch switchs = root.findViewById(R.id.switch_not);
+            Switch switch_mills = root.findViewById(R.id.switch_nicht);
+            final SharedPreferences preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
+            switchs.setChecked(preferences.getBoolean("notification", true));
+            switchs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("notification", isChecked);
+                    editor.apply();
+                }
+            });
+            switch_mills.setChecked(preferences.getBoolean("nicht", false));
+            switch_mills.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("nicht", isChecked);
+                    editor.apply();
+                    startActivity(new Intent(Objects.requireNonNull(getContext()), SplashScreen.class));
+                    Objects.requireNonNull(getActivity()).finish();
+                }
+            });
+            Button bt_cache = root.findViewById(R.id.clear_cache);
+            bt_cache.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean nicht = preferences.getBoolean("nicht", false);
+                    boolean notif = preferences.getBoolean("notification", true);
+                    String group = MainActivity.getSss().get(1);
+                    String id = MainActivity.getSss().get(0);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.putBoolean("first", false);
+                    editor.putBoolean("nicht", nicht);
+                    editor.putBoolean("notif", notif);
+                    editor.putString("group", group);
+                    editor.putString("id", id);
+                    editor.apply();
+                }
+            });
+        } catch (Exception e) {
+            Error.setErr(context, e.toString(), Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
+        }
         return root;
     }
 }

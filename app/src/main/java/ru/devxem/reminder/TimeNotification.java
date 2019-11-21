@@ -12,25 +12,30 @@ import androidx.core.app.NotificationCompat;
 
 import java.util.Objects;
 
+import ru.devxem.reminder.api.Error;
+
 public class TimeNotification {
     private static final String NOTIFICATION_TAG = "Time";
     private static final String CHANNEL_ID = "CHANNEL_ID";
 
     public static void notify(final Context context,
                               final String text, final String title, final int number) {
-
-        Intent intent = new Intent(context, SplashScreen.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_stat_time)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setTicker(text)
-                .setContentIntent(pendingIntent)
-                .setNumber(number)
-                .setAutoCancel(false);
-        notifys(context, builder.build());
+        try {
+            Intent intent = new Intent(context, SplashScreen.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_stat_time)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setTicker(text)
+                    .setContentIntent(pendingIntent)
+                    .setNumber(number)
+                    .setAutoCancel(false);
+            notifys(context, builder.build());
+        } catch (Exception e) {
+            Error.setErr(context, e.toString(), context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
+        }
     }
 
     private static void notifys(final Context context, final Notification notification) {

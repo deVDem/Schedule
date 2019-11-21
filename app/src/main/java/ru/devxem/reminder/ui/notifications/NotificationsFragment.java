@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
+import ru.devxem.reminder.api.Error;
 import ru.devxem.reminder.api.GetNotes;
 
 public class NotificationsFragment extends Fragment {
@@ -37,21 +38,25 @@ public class NotificationsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         final Context context = getContext();
-        // findViewById() делать через root. !
-        swipeRefreshLayout = root.findViewById(R.id.swipe_notes);
+        try {
+            // findViewById() делать через root. !
+            swipeRefreshLayout = root.findViewById(R.id.swipe_notes);
 
-        rv = root.findViewById(R.id.recycler_notifications);
-        rv.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(context);
-        rv.setLayoutManager(llm);
+            rv = root.findViewById(R.id.recycler_notifications);
+            rv.setHasFixedSize(true);
+            LinearLayoutManager llm = new LinearLayoutManager(context);
+            rv.setLayoutManager(llm);
 
-        GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 0);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 1);
-            }
-        });
+            GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 0);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 1);
+                }
+            });
+        } catch (Exception e) {
+            Error.setErr(context, e.toString(), Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
+        }
         return root;
     }
 }

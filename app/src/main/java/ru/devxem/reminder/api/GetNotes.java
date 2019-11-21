@@ -35,7 +35,7 @@ public class GetNotes {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, R.string.error + ": " + error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.error) + ": " + error.toString(), Toast.LENGTH_LONG).show();
             }
         };
 
