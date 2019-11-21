@@ -1,5 +1,6 @@
 package ru.devxem.reminder.ui.settings;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
+import ru.devxem.reminder.BuildConfig;
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.SplashScreen;
@@ -23,12 +26,15 @@ import ru.devxem.reminder.api.Error;
 
 public class SettingsFragment extends Fragment {
 
+    @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
         Context context = getContext();
         try {
             // findViewById() делать через root! root.findViewById(...);
+            TextView textView = root.findViewById(R.id.textNowVer);
+            textView.setText("Версия приложения: " + BuildConfig.VERSION_NAME + "\nКод версии: " + BuildConfig.VERSION_CODE);
             Switch switchs = root.findViewById(R.id.switch_not);
             Switch switch_mills = root.findViewById(R.id.switch_nicht);
             final SharedPreferences preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -60,6 +66,7 @@ public class SettingsFragment extends Fragment {
                     boolean notif = preferences.getBoolean("notification", true);
                     String group = MainActivity.getSss().get(1);
                     String id = MainActivity.getSss().get(0);
+                    String email = preferences.getString("email", "null");
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.putBoolean("first", false);
@@ -67,10 +74,12 @@ public class SettingsFragment extends Fragment {
                     editor.putBoolean("notif", notif);
                     editor.putString("group", group);
                     editor.putString("id", id);
+                    editor.putString("email", email);
                     editor.apply();
                 }
             });
         } catch (Exception e) {
+            e.printStackTrace();
             Error.setErr(context, e.toString(), Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
         }
         return root;

@@ -19,6 +19,35 @@
              ads:adUnitId="ca-app-pub-7389415060915567/7081052515">
          </com.google.android.gms.ads.AdView>-->
 
+        <RelativeLayout
+            android:id="@+id/panel_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Вышло новое обновление"
+                android:textColor="#fff"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView7"
+                android:layout_marginTop="10dp"
+                android:text="Скачать и установить"
+                tools:ignore="HardcodedText" />
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"

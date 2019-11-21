@@ -1,6 +1,6 @@
 package ru.devxem.reminder.api;
 
-class URLs {
+public class URLs {
 
     static String getGroups() {
         return "https://api.devdem.ru/schedule/groups.php";
@@ -20,5 +20,9 @@ class URLs {
 
     static String getErr() {
         return "https://api.devdem.ru/schedule/senderr.php";
+    }
+
+    public static String getVer() {
+        return "https://api.devdem.ru/schedule/getVer.php";
     }
 }

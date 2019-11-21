@@ -3,23 +3,35 @@ package ru.devxem.reminder.ui.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.Map;
 import java.util.TimeZone;
 
 import ru.devxem.reminder.MainActivity;
@@ -28,6 +40,7 @@ import ru.devxem.reminder.TimeNotification;
 import ru.devxem.reminder.api.Error;
 import ru.devxem.reminder.api.GetNear;
 import ru.devxem.reminder.api.Time;
+import ru.devxem.reminder.api.URLs;
 
 public class HomeFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
@@ -47,7 +60,8 @@ public class HomeFragment extends Fragment {
     private static SwipeRefreshLayout swipeRefreshLayout;
     @SuppressLint("StaticFieldLeak")
     private static Activity activity;
-    private SharedPreferences preferences;
+    private RelativeLayout panel_update;
+    private Button updateBT;
 
 
     private Runnable doBackgroundThreadProcessing = new Runnable() {
@@ -80,10 +94,22 @@ public class HomeFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
         context = getContext();
         try {
+            /*Response.Listener<String> listener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    int curVer = BuildConfig.VERSION_CODE;
+                    int nowVer = Integer.parseInt(response);
+                    setUpdate(nowVer > curVer);
+                }
+            };
+            getVer getVer = new getVer(listener);
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(getVer);
+            panel_update = root.findViewById(R.id.panel_update);
+            updateBT = root.findViewById(R.id.button3); */
             textView = root.findViewById(R.id.remaintext);
             lefttext = root.findViewById(R.id.textView);
             activity = getActivity();
-            preferences = Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE);
             id = MainActivity.getSss().get(0);
             group = MainActivity.getSss().get(1);
             Thread threads = new Thread(null, doBackgroundThreadProcessing,
@@ -148,6 +174,22 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void setUpdate(boolean update) {
+        if (update)
+            panel_update.setVisibility(View.VISIBLE);
+        else panel_update.setVisibility(View.GONE);
+        updateBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: сделать запрос разрешения
+                String destFileName = "img.jpg";
+                String src = "http://files.devdem.ru/image.png";
+                File dest = new File(Environment.getExternalStorageDirectory() + "/Download/" + destFileName);
+                new LoadFile(src, dest).start();
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -177,16 +219,55 @@ public class HomeFragment extends Fragment {
                         string = context.getString(R.string.remain) + context.getString(R.string.lesson);
                     }
                     lefttext.setText(string);
-                    if (preferences.getBoolean("notification", true))
-                        TimeNotification.notify(context, string + ": " + remain, context.getString(R.string.app_name), 1);
                 } else {
-                    if (preferences.getBoolean("notification", true))
-                        TimeNotification.notify(context, context.getString(R.string.noles) + ": " + context.getString(R.string.rest), context.getString(R.string.app_name), 1);
                     lefttext.setText(context.getString(R.string.noles));
                     textView.setText(context.getString(R.string.rest));
                 }
-                if (!preferences.getBoolean("notification", true)) TimeNotification.cancel(context);
             }
         });
+    }
+
+    private void onDownloadComplete(boolean success, File dest) {
+        // файл скачался, можно как-то реагировать
+        if (success) {
+            // TODO: открытие файла
+        }
+        Log.i("***", "************** " + success);
+    }
+
+    private class LoadFile extends Thread {
+        private final String src;
+        private final File dest;
+
+        LoadFile(String src, File dest) {
+            this.src = src;
+            this.dest = dest;
+        }
+
+        @Override
+        public void run() {
+            try {
+                FileUtils.copyURLToFile(new URL(src), dest);
+                onDownloadComplete(true, dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+                onDownloadComplete(false, null);
+            }
+        }
+    }
+}
+
+class getVer extends StringRequest {
+    private static final String LOGIN_REQUEST_URL = URLs.getVer();
+    private Map<String, String> params;
+
+    getVer(Response.Listener<String> listener) {
+        super(Method.POST, LOGIN_REQUEST_URL, listener, null);
+        params = new HashMap<>();
+    }
+
+    @Override
+    public Map<String, String> getParams() {
+        return params;
     }
 }

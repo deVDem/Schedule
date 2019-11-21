@@ -1,7 +1,9 @@
 package ru.devxem.reminder;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -29,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     public static List<String> sss = new ArrayList<>();
 
 
-    public static List<String> getSss() { return sss;}
+    public static List<String> getSss() {
+        return sss;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -39,20 +44,16 @@ public class MainActivity extends AppCompatActivity {
             String group = settings.getString("group", null);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             setContentView(R.layout.activity_main);
-            BottomNavigationView navView = findViewById(R.id.nav_view);
-            AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                    .build();
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-            NavigationUI.setupWithNavController(navView, navController);
-            if (settings.getString("email", null) == null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            Context context = this;
+            if (settings.getString("email", "null").equals("null")) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 LayoutInflater inflater = this.getLayoutInflater();
                 @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.email_confirm, null);
-                builder.setView(view);
                 final EditText emaileT = view.findViewById(R.id.editText3);
                 Button confirmbt = view.findViewById(R.id.button2);
+                builder.setView(view);
+                final Dialog dialog = builder.create();
+                dialog.show();
                 confirmbt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -63,11 +64,20 @@ public class MainActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putString("email", email);
                             editor.apply();
+                            Toast.makeText(MainActivity.this, "Спасибо", Toast.LENGTH_LONG).show();
+                            dialog.cancel();
                         }
                     }
                 });
-                builder.create();
             }
+            BottomNavigationView navView = findViewById(R.id.nav_view);
+            AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                    .build();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+            NavigationUI.setupWithNavController(navView, navController);
+            startService(new Intent(this, UpdateNotes.class));
             sss.add(0, id);
             sss.add(1, group);
         } catch (Exception e) {
