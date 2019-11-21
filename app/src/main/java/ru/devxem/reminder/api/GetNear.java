@@ -221,7 +221,7 @@ public class GetNear {
                     konec = curFormater.parse(date2Str);
                     now = curFormater.parse(nowStr);
                     nachalol = curFormater.parse(date3Str);
-                    if (i == 0 && Objects.requireNonNull(nachalo).after(now)) {
+                    if (i == 0 && (Objects.requireNonNull(nachalo).after(now) || nachalo == now)) {
                         answer[5] = 1;
                         break;
                     }

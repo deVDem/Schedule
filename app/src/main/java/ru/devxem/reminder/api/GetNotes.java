@@ -10,7 +10,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +20,7 @@ public class GetNotes {
     private static RequestQueue queue;
 
     public static void updateNotes(Context context, String group, int reason) {
-        ArrayList<ArrayList<String>> data = SaveLoad.LoadNotes(context.getSharedPreferences("settings", Context.MODE_PRIVATE));
-        if (data == null || reason == 1) reloadNotes(group, context);
-        else NotificationsFragment.Update(data);
+        reloadNotes(group, context);
 
     }
 
@@ -32,7 +29,7 @@ public class GetNotes {
             @Override
             public void onResponse(String response) {
                 SaveLoad.SaveNotes(response, context.getSharedPreferences("settings", Context.MODE_PRIVATE));
-                updateNotes(context, group, 0);
+                NotificationsFragment.Update(SaveLoad.LoadNotes(context.getSharedPreferences("settings", Context.MODE_PRIVATE)));
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {

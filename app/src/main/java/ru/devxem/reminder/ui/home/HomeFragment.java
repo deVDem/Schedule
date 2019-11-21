@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, final Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_home, container, false);
         textView = root.findViewById(R.id.remaintext);
         lefttext = root.findViewById(R.id.textView);
         activity = getActivity();
@@ -99,6 +99,15 @@ public class HomeFragment extends Fragment {
                 GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2);
             }
         });
+        /*MobileAds.initialize(context, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                AdView mAdView = root.findViewById(R.id.adViewHome);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
+            }
+        });*/
+
         return root;
     }
 
@@ -142,6 +151,11 @@ public class HomeFragment extends Fragment {
         TimeNotification.cancel(context);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
     @SuppressLint("SetTextI18n")
     private void Update(final int[] answer) {
         activity.runOnUiThread(new Runnable() {
@@ -177,7 +191,6 @@ public class HomeFragment extends Fragment {
                     lefttext.setText(context.getString(R.string.noles));
                     textView.setText(context.getString(R.string.rest));
                 }
-
                 if (!preferences.getBoolean("notification", true)) TimeNotification.cancel(context);
             }
         });
