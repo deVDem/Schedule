@@ -4,15 +4,15 @@
     <translate
         android:duration="500"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-        android:startOffset="2500"
-        android:toXDelta="45"
-        android:toYDelta="-45" />
+        android:startOffset="2000"
+        android:toXDelta="-2.75%"
+        android:toYDelta="2%" />
     <translate
         android:duration="500"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-        android:startOffset="2000"
-        android:toXDelta="-45"
-        android:toYDelta="45" />
+        android:startOffset="2500"
+        android:toXDelta="2.75%"
+        android:toYDelta="-2%" />
     <scale
         android:duration="1000"
         android:fromXScale="0%"

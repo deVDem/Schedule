@@ -3,7 +3,7 @@
     <style name="StartApp" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#777</item>
         <item name="colorPrimaryDark">#444</item>
-        <item name="colorAccent">#844</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/dark</item>
     </style>
     <!-- Base application theme. -->

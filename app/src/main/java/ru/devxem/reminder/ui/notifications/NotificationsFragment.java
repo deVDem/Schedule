@@ -46,7 +46,7 @@ public class NotificationsFragment extends Fragment {
             rv.setHasFixedSize(true);
             LinearLayoutManager llm = new LinearLayoutManager(context);
             rv.setLayoutManager(llm);
-
+            swipeRefreshLayout.setRefreshing(true);
             GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 0);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override

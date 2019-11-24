@@ -20,6 +20,7 @@ public class GetNotes {
     private static RequestQueue queue;
 
     public static void updateNotes(Context context, String group, int reason) {
+        NotificationsFragment.Update(SaveLoad.LoadNotes(context.getSharedPreferences("settings", Context.MODE_PRIVATE)));
         reloadNotes(group, context);
 
     }

@@ -25,4 +25,12 @@ public class URLs {
     public static String getVer() {
         return "https://api.devdem.ru/schedule/getVer.php";
     }
+
+    static String getLogin() {
+        return "https://api.devdem.ru/schedule/accounts/login.php";
+    }
+
+    static String getRegister() {
+        return "https://api.devdem.ru/schedule/accounts/register.php";
+    }
 }

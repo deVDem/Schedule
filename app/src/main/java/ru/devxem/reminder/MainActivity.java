@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             final SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             String id = "5";
-            String group = settings.getString("group", null);
+            String group = settings.getString("groups", null);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setTheme(R.style.AppTheme);
             setContentView(R.layout.activity_main);
             Context context = this;
             if (settings.getString("email", "null").equals("null")) {

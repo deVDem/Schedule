@@ -20,7 +20,7 @@ import ru.devxem.reminder.ui.home.HomeFragment;
 public class Error {
     public static void setErr(Context context, String error, String email) {
         Log.e("Error", error);
-        if (!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG || email == null) {
             sendError sendError = new sendError(error, email);
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(sendError);

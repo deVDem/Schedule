@@ -81,9 +81,20 @@ public class SettingsFragment extends Fragment {
                     editor.putBoolean("first", false);
                     editor.putBoolean("nicht", nicht);
                     editor.putBoolean("notif", notif);
-                    editor.putString("group", group);
-                    editor.putString("id", id);
+                    String login = preferences.getString("login", null);
+                    String name = preferences.getString("name", null);
+                    String groups = preferences.getString("groups", null);
+                    String spam = preferences.getString("spam", null);
+                    String permisson = preferences.getString("permisson", null);
+                    String token = preferences.getString("token", null);
+                    editor.putString("login", login);
                     editor.putString("email", email);
+                    editor.putString("name", name);
+                    editor.putString("groups", groups);
+                    editor.putString("spam", spam);
+                    editor.putString("permisson", permisson);
+                    editor.putString("token", token);
+                    editor.putBoolean("first", false);
                     editor.apply();
                 }
             });

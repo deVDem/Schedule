@@ -1,6 +1,8 @@
 package ru.devxem.reminder;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -28,6 +31,7 @@ public class SplashScreen extends AppCompatActivity {
         //setTheme(R.style.AppTheme_NoActionBar);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash);
+        Context context = this;
         TextView appname = findViewById(R.id.text_appname);
         appname.setAnimation(AnimationUtils.loadAnimation(this, R.anim.text));
         Animation anim_count = AnimationUtils.loadAnimation(this, R.anim.count);
@@ -39,6 +43,23 @@ public class SplashScreen extends AppCompatActivity {
         arrow.setAnimation(AnimationUtils.loadAnimation(this, R.anim.arrow));
         ImageView circle = findViewById(R.id.img_circle);
         circle.setAnimation(AnimationUtils.loadAnimation(this, R.anim.circle));
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final Dialog dialog = builder.setMessage("Каким-то чудом вы получили тестовую версию приложения. В нём отключена реклама и могут быть ошибки в коде.")
+                .setTitle("Тестовая версия приложения")
+                .setNegativeButton(context.getString(R.string.Exit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        System.exit(0);
+                    }
+                })
+                .setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        start();
+                    }
+                })
+                .setCancelable(false)
+                .create();
         anim_count.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -47,7 +68,11 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                start();
+                if (BuildConfig.DEBUG) {
+                    dialog.show();
+                } else {
+                    start();
+                }
             }
 
             @Override
