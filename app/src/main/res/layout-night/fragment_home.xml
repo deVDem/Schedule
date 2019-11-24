@@ -9,14 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        <FrameLayout
             android:id="@+id/adViewHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-7389415060915567/7081052515" />
+            android:layout_centerHorizontal="true" />
 
         <RelativeLayout
             android:id="@+id/panel_update"
