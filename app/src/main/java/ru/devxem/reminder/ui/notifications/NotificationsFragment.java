@@ -47,11 +47,12 @@ public class NotificationsFragment extends Fragment {
             LinearLayoutManager llm = new LinearLayoutManager(context);
             rv.setLayoutManager(llm);
             swipeRefreshLayout.setRefreshing(true);
-            GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 0);
+            String group = MainActivity.getSss().get(1);
+            GetNotes.updateNotes(Objects.requireNonNull(context), group);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1), 1);
+                    GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1));
                 }
             });
         } catch (Exception e) {

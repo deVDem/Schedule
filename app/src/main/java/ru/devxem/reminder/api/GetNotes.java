@@ -19,10 +19,8 @@ import ru.devxem.reminder.ui.notifications.NotificationsFragment;
 public class GetNotes {
     private static RequestQueue queue;
 
-    public static void updateNotes(Context context, String group, int reason) {
-        NotificationsFragment.Update(SaveLoad.LoadNotes(context.getSharedPreferences("settings", Context.MODE_PRIVATE)));
+    public static void updateNotes(Context context, String group) {
         reloadNotes(group, context);
-
     }
 
     private static void reloadNotes(final String group, final Context context) {
