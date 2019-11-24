@@ -1,5 +1,6 @@
 package ru.devxem.reminder;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,12 +43,14 @@ public class FirstActivity extends AppCompatActivity {
     Switch swspam;
     Switch swprivacy;
     int object;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_first);
+            activity = this;
             eTname = findViewById(R.id.editText2);
             eTemail = findViewById(R.id.editText);
             swspam = findViewById(R.id.switch1);
@@ -102,6 +105,7 @@ public class FirstActivity extends AppCompatActivity {
                                     editor.apply();
                                     Toast.makeText(FirstActivity.this, R.string.welcometoast, Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                    overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                     finish();
                                 }
                             } catch (JSONException e) {
@@ -156,10 +160,20 @@ public class FirstActivity extends AppCompatActivity {
     };
 
     private void backgroundThreadProcessing() {
+        float b;
+        float a;
+        float c;
+        float i;
         if (object != R.id.hello_r) {
-            for (float i = 0f; i <= 1000f; i++) {
-                float a = i / 1000f;
-                findViewById(object).setAlpha(a);
+            for (i = 0f; i <= 1000f; i++) {
+                a = i / 1000f;
+                final float finalA = a;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        findViewById(object).setAlpha(finalA);
+                    }
+                });
                 if(i%2==0) {
                     try {
                         Thread.sleep(3);
@@ -174,10 +188,10 @@ public class FirstActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        for (float i = 1000f; i > 0f; i--) {
-            float a = i / 1000f;
-            findViewById(object).setAlpha(a);
-            if(i%2==0) {
+        for (c = 1000f; c > 0f; c--) {
+            b = c / 1000f;
+            findViewById(object).setAlpha(b);
+            if (c % 2 == 0) {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {

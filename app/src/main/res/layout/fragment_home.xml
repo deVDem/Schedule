@@ -8,16 +8,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!-- <com.google.android.gms.ads.AdView
-             xmlns:ads="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/adViewHome"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_centerHorizontal="true"
-             android:layout_alignParentTop="true"
-             ads:adSize="BANNER"
-             ads:adUnitId="ca-app-pub-7389415060915567/7081052515">
-         </com.google.android.gms.ads.AdView>-->
+
+        <FrameLayout
+            android:id="@+id/adViewHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
         <RelativeLayout
             android:id="@+id/panel_update"
@@ -72,5 +69,6 @@
             android:textSize="48sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
+
     </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

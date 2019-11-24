@@ -2,6 +2,7 @@ package ru.devxem.reminder.api;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -12,14 +13,18 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.devxem.reminder.BuildConfig;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.ui.home.HomeFragment;
 
 public class Error {
     public static void setErr(Context context, String error, String email) {
-        sendError sendError = new sendError(error, email);
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(sendError);
+        Log.e("Error", error);
+        if (!BuildConfig.DEBUG) {
+            sendError sendError = new sendError(error, email);
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(sendError);
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getString(R.string.error_text))
                 .setTitle(context.getString(R.string.error))
@@ -33,8 +38,9 @@ public class Error {
                 .create()
                 .show();
     }
+
     public static void setError(Context context, String id) {
-        if(id==null) {
+        if (id == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(context.getString(R.string.error_text))
                     .setTitle(context.getString(R.string.error))
@@ -49,7 +55,7 @@ public class Error {
                     .show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(context.getString(R.string.error_text)+"\nID: "+id)
+            builder.setMessage(context.getString(R.string.error_text) + "\nID: " + id)
                     .setTitle(context.getString(R.string.error))
                     .setNegativeButton(context.getString(R.string.Exit), new DialogInterface.OnClickListener() {
                         @Override

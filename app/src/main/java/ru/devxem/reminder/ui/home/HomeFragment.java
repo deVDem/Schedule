@@ -3,13 +3,16 @@ package ru.devxem.reminder.ui.home;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,14 +20,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,9 +40,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import ru.devxem.reminder.BuildConfig;
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
-import ru.devxem.reminder.TimeNotification;
 import ru.devxem.reminder.api.Error;
 import ru.devxem.reminder.api.GetNear;
 import ru.devxem.reminder.api.Time;
@@ -62,6 +68,7 @@ public class HomeFragment extends Fragment {
     private static Activity activity;
     private RelativeLayout panel_update;
     private Button updateBT;
+    private AdView mAdView;
 
 
     private Runnable doBackgroundThreadProcessing = new Runnable() {
@@ -94,7 +101,12 @@ public class HomeFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
         context = getContext();
         try {
-            /*Response.Listener<String> listener = new Response.Listener<String>() {
+            MobileAds.initialize(context, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+            Response.Listener<String> listener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     int curVer = BuildConfig.VERSION_CODE;
@@ -106,7 +118,8 @@ public class HomeFragment extends Fragment {
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(getVer);
             panel_update = root.findViewById(R.id.panel_update);
-            updateBT = root.findViewById(R.id.button3); */
+            updateBT = root.findViewById(R.id.button3);
+
             textView = root.findViewById(R.id.remaintext);
             lefttext = root.findViewById(R.id.textView);
             activity = getActivity();
@@ -126,18 +139,36 @@ public class HomeFragment extends Fragment {
                     GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2);
                 }
             });
-        /*MobileAds.initialize(context, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                AdView mAdView = root.findViewById(R.id.adViewHome);
-                AdRequest adRequest = new AdRequest.Builder().build();
-                mAdView.loadAd(adRequest);
-            }
-        });*/
+            final FrameLayout adContainerView = root.findViewById(R.id.adViewHome);
+            mAdView = new AdView(context);
+            if (!BuildConfig.DEBUG) mAdView.setAdUnitId("ca-app-pub-7389415060915567/7081052515");
+            else mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+            adContainerView.addView(mAdView);
+            loadBanner();
         } catch (Exception e) {
             Error.setErr(context, e.toString(), context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
         }
         return root;
+    }
+
+    private void loadBanner() {
+        AdRequest adRequest =
+                new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        mAdView.setAdSize(adSize);
+        mAdView.loadAd(adRequest);
+    }
+
+    private AdSize getAdSize() {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidth);
     }
 
     private void backgroundThreadProcessing() {
@@ -174,6 +205,25 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        isEnabled = true;
+        if (currentDate != null) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeZone(TimeZone.getDefault());
+            c.setTime(currentDate);
+            int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+            Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isEnabled = false;
+    }
+
     private void setUpdate(boolean update) {
         if (update)
             panel_update.setVisibility(View.VISIBLE);
@@ -181,24 +231,11 @@ public class HomeFragment extends Fragment {
         updateBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: сделать запрос разрешения
-                String destFileName = "img.jpg";
-                String src = "http://files.devdem.ru/image.png";
-                File dest = new File(Environment.getExternalStorageDirectory() + "/Download/" + destFileName);
-                new LoadFile(src, dest).start();
+                Uri address = Uri.parse("https://github.com/deVDem/Schedule/raw/master/app/release/app-release.apk");
+                Intent openlink = new Intent(Intent.ACTION_VIEW, address);
+                startActivity(openlink);
             }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        TimeNotification.cancel(context);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @SuppressLint("SetTextI18n")
@@ -225,35 +262,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private void onDownloadComplete(boolean success, File dest) {
-        // файл скачался, можно как-то реагировать
-        if (success) {
-            // TODO: открытие файла
-        }
-        Log.i("***", "************** " + success);
-    }
-
-    private class LoadFile extends Thread {
-        private final String src;
-        private final File dest;
-
-        LoadFile(String src, File dest) {
-            this.src = src;
-            this.dest = dest;
-        }
-
-        @Override
-        public void run() {
-            try {
-                FileUtils.copyURLToFile(new URL(src), dest);
-                onDownloadComplete(true, dest);
-            } catch (IOException e) {
-                e.printStackTrace();
-                onDownloadComplete(false, null);
-            }
-        }
     }
 }
 

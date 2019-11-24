@@ -24,8 +24,21 @@ public class UpdateNotes extends Service {
     int sec;
     Context context;
     SharedPreferences preferences;
+    CountDownTimer timer;
 
     public UpdateNotes() {
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
+        timer = null;
+        TimeNotification.cancel(context);
+        TimeNotification.cancel(context);
+        TimeNotification.cancel(context);
+        TimeNotification.cancel(context);
+        TimeNotification.cancel(context);
     }
 
     @Override
@@ -57,33 +70,35 @@ public class UpdateNotes extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         preferences = getSharedPreferences("settings", MODE_PRIVATE);
-        new CountDownTimer(1000000000, 250) {
+        if (timer == null) {
+            timer = new CountDownTimer(1000000000, 250) {
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                context = getApplicationContext();
-                currentDate = new Date();
-                DateFormat timeFormatH = new SimpleDateFormat("HH", Locale.getDefault());
-                DateFormat timeFormatM = new SimpleDateFormat("mm", Locale.getDefault());
-                DateFormat timeFormatS = new SimpleDateFormat("ss", Locale.getDefault());
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    context = getApplicationContext();
+                    currentDate = new Date();
+                    DateFormat timeFormatH = new SimpleDateFormat("HH", Locale.getDefault());
+                    DateFormat timeFormatM = new SimpleDateFormat("mm", Locale.getDefault());
+                    DateFormat timeFormatS = new SimpleDateFormat("ss", Locale.getDefault());
 
 
-                hour = Integer.valueOf(timeFormatH.format(currentDate));
-                min = Integer.valueOf(timeFormatM.format(currentDate));
-                sec = Integer.valueOf(timeFormatS.format(currentDate));
+                    hour = Integer.valueOf(timeFormatH.format(currentDate));
+                    min = Integer.valueOf(timeFormatM.format(currentDate));
+                    sec = Integer.valueOf(timeFormatS.format(currentDate));
 
-                Calendar c = Calendar.getInstance();
-                c.setTimeZone(TimeZone.getDefault());
-                c.setTime(currentDate);
-                int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                UpdateTime(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
-            }
+                    Calendar c = Calendar.getInstance();
+                    c.setTimeZone(TimeZone.getDefault());
+                    c.setTime(currentDate);
+                    int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                    UpdateTime(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
+                }
 
-            @Override
-            public void onFinish() {
+                @Override
+                public void onFinish() {
 
-            }
-        }.start();
+                }
+            }.start();
+        }
         return Service.START_NOT_STICKY;
     }
 

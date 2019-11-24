@@ -2,6 +2,7 @@ package ru.devxem.reminder;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,9 +71,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+            FragmentTransaction transaction;
+            transaction = getFragmentManager().beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            transaction.commit();
             BottomNavigationView navView = findViewById(R.id.nav_view);
             AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                    R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_settings)
                     .build();
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             sss.add(0, id);
             sss.add(1, group);
         } catch (Exception e) {
+            e.printStackTrace();
             Error.setErr(this, e.toString(), getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
         }
     }

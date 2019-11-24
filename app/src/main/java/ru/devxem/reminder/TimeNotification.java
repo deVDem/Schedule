@@ -14,17 +14,17 @@ import java.util.Objects;
 
 import ru.devxem.reminder.api.Error;
 
-public class TimeNotification {
+class TimeNotification {
     private static final String NOTIFICATION_TAG = "Time";
     private static final String CHANNEL_ID = "CHANNEL_ID";
 
-    public static void notify(final Context context,
-                              final String text, final String title, final int number) {
+    static void notify(final Context context,
+                       final String text, final String title, final int number) {
         try {
             Intent intent = new Intent(context, SplashScreen.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_stat_time)
+                    .setSmallIcon(R.drawable.ic_timer)
                     .setContentTitle(title)
                     .setContentText(text)
                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -53,7 +53,7 @@ public class TimeNotification {
         }
     }
 
-    public static void cancel(final Context context) {
+    static void cancel(final Context context) {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         Objects.requireNonNull(nm).cancel(NOTIFICATION_TAG, 0);

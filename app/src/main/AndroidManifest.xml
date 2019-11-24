@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -14,8 +15,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:supportsRtl="false"
+        android:theme="@style/StartApp"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
         <receiver android:name=".BootBroadcast">
@@ -37,10 +38,11 @@
             android:theme="@style/FirstTheme" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_main" />
         <activity
             android:name=".SplashScreen"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/StartApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +52,7 @@
 
         <receiver
             android:name=".widget.MyWidget"
-            android:icon="@android:drawable/star_big_on"
+            android:icon="@drawable/ic_timer"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

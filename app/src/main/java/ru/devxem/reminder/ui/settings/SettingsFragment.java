@@ -1,6 +1,7 @@
 package ru.devxem.reminder.ui.settings;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,15 +24,16 @@ import ru.devxem.reminder.BuildConfig;
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.SplashScreen;
+import ru.devxem.reminder.UpdateNotes;
 import ru.devxem.reminder.api.Error;
 
 public class SettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             final ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-        Context context = getContext();
+        final Context context = getContext();
         try {
             // findViewById() делать через root! root.findViewById(...);
             TextView textView = root.findViewById(R.id.textNowVer);
@@ -54,8 +57,14 @@ public class SettingsFragment extends Fragment {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("nicht", isChecked);
                     editor.apply();
-                    startActivity(new Intent(Objects.requireNonNull(getContext()), SplashScreen.class));
-                    Objects.requireNonNull(getActivity()).finish();
+                    Toast.makeText(context, "Перезапуск..", Toast.LENGTH_LONG).show();
+                    Activity activity = getActivity();
+                    context.startActivity(new Intent(context, SplashScreen.class));
+                    if (activity != null) {
+                        activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                        context.stopService(new Intent(context, UpdateNotes.class));
+                        activity.finish();
+                    }
                 }
             });
             Button bt_cache = root.findViewById(R.id.clear_cache);
