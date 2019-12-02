@@ -3,6 +3,7 @@ package ru.devxem.reminder.ui.settings;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,12 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
 import ru.devxem.reminder.BuildConfig;
-import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.SplashScreen;
 import ru.devxem.reminder.UpdateNotes;
@@ -73,8 +74,6 @@ public class SettingsFragment extends Fragment {
                 public void onClick(View v) {
                     boolean nicht = preferences.getBoolean("nicht", false);
                     boolean notif = preferences.getBoolean("notification", true);
-                    String group = MainActivity.getSss().get(1);
-                    String id = MainActivity.getSss().get(0);
                     String email = preferences.getString("email", "null");
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
@@ -96,6 +95,33 @@ public class SettingsFragment extends Fragment {
                     editor.putString("token", token);
                     editor.putBoolean("first", false);
                     editor.apply();
+                }
+            });
+            Button relog = root.findViewById(R.id.button4);
+            relog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Вы уверены?")
+                            .setTitle("Выйти из аккаунта")
+                            .setNegativeButton("Выйти", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    System.exit(0);
+                                }
+                            })
+                            .setPositiveButton("Продолжить использование", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .setCancelable(true)
+                            .create()
+                            .show();
                 }
             });
         } catch (Exception e) {

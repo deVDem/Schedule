@@ -80,7 +80,7 @@ public class MyWidget extends AppWidgetProvider {
         c.setTimeZone(TimeZone.getDefault());
         c.setTime(currentDate);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        int[] answer = GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec);
+        int[] answer = GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec, true);
         if (answer == null) return;
         if (answer[5] != 2) {
             String string = context.getString(R.string.remain) + context.getString(R.string.pause);

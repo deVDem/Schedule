@@ -35,10 +35,6 @@ public class UpdateNotes extends Service {
         timer.cancel();
         timer = null;
         TimeNotification.cancel(context);
-        TimeNotification.cancel(context);
-        TimeNotification.cancel(context);
-        TimeNotification.cancel(context);
-        TimeNotification.cancel(context);
     }
 
     @Override
@@ -90,7 +86,7 @@ public class UpdateNotes extends Service {
                     c.setTimeZone(TimeZone.getDefault());
                     c.setTime(currentDate);
                     int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                    UpdateTime(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
+                    UpdateTime(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec, true));
                 }
 
                 @Override

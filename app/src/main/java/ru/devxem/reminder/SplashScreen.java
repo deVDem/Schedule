@@ -28,7 +28,6 @@ public class SplashScreen extends AppCompatActivity {
         } else
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
-        //setTheme(R.style.AppTheme_NoActionBar);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash);
         Context context = this;
@@ -77,15 +76,8 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
-        if (settings.getBoolean("fix", true)) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.remove("id");
-            editor.putBoolean("fix", false);
-            editor.apply();
-        }
     }
 
     private void start() {

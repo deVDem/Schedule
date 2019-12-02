@@ -37,7 +37,7 @@ public class GetNear {
         return answer;
     }
 
-    public static void reloadlessons(final Context context, String group, final String id, final String day, final int reason) {
+    public static void reloadlessons(final Context context, String group, final String id, final String day, final int reason, final boolean service) {
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -54,18 +54,20 @@ public class GetNear {
 
                 HomeFragment.noInfo();
                 HomeFragment.setEnabled(false);
-                switch (reason) {
-                    case 0:
-                        Error.setError(context, id);
-                        break;
-                    case 1:
-                        Error.noInfo(context, true);
-                        break;
-                    case 2:
-                        HomeFragment.setEnabled(true);
-                        break;
+                if (!service) {
+                    switch (reason) {
+                        case 0:
+                            Error.setError(context, id);
+                            break;
+                        case 1:
+                            Error.noInfo(context, true);
+                            break;
+                        case 2:
+                            HomeFragment.setEnabled(true);
+                            break;
+                    }
+                    HomeFragment.updateRefresh(false);
                 }
-                HomeFragment.updateRefresh(false);
             }
         };
         GetLessons groupss = new GetLessons(listener, errorListener, id, group, day);
@@ -78,8 +80,11 @@ public class GetNear {
         String data = SaveLoad.LoadAll(context.getSharedPreferences("settings", Context.MODE_PRIVATE));
         if (data == null || reason == 1) {
             getAllLessons(group, context);
-        } else
+        } else {
+            if (reason != 2) MainActivity.onSnack();
             stringArrayAdapter = parseLessons(context);
+        }
+
         return stringArrayAdapter;
     }
 
@@ -92,7 +97,7 @@ public class GetNear {
                 if (!response.contains("null") && !response.contains("\"no_les\":true")) {
                     save[0] = response;
                     SaveLoad.SaveAll(save[0], context.getSharedPreferences("settings", Context.MODE_PRIVATE));
-                    DashboardFragment.reloadLess(updateLessons(group, context, 0));
+                    DashboardFragment.reloadLess(updateLessons(group, context, 2));
                 }
             }
         };
@@ -101,7 +106,7 @@ public class GetNear {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                Error.setError(context, null);
+                Error.noInfo(context, false);
             }
         };
         GetLessons groupss = new GetLessons(listener, errorListener, "2", group, "8");
@@ -161,7 +166,7 @@ public class GetNear {
         return stringArrayAdapter;
     }
 
-    public static int[] updatelessons(Context context, int hour, int min, String day, int sec) {
+    public static int[] updatelessons(Context context, int hour, int min, String day, int sec, boolean service) {
         String[][] lessons = SaveLoad.Load(context, day);
         String id = MainActivity.getSss().get(0);
         String group = MainActivity.getSss().get(1);
@@ -170,7 +175,7 @@ public class GetNear {
         SharedPreferences preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
         if ((lessons == null || preferences.getString("day", null) == null || !Objects.requireNonNull(preferences.getString("day", null)).equals(day))) {
             HomeFragment.updateRefresh(true);
-            GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(day), 1);
+            GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(day), 1, service);
             return null;
         } else {
             if (Objects.requireNonNull(lessons)[0][0].equals("true")) {

@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
                     c.setTimeZone(TimeZone.getDefault());
                     c.setTime(currentDate);
                     int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                    GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2);
+                    GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2, false);
                 }
             });
             final FrameLayout adContainerView = root.findViewById(R.id.adViewHome);
@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment {
                     c.setTimeZone(TimeZone.getDefault());
                     c.setTime(currentDate);
                     int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                    Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
+                    Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec, false));
                 } catch (InterruptedException e) {
                     Error.setError(context, id);
                     e.printStackTrace();
@@ -214,7 +214,7 @@ public class HomeFragment extends Fragment {
             c.setTimeZone(TimeZone.getDefault());
             c.setTime(currentDate);
             int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-            Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec));
+            Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec, false));
         }
     }
 

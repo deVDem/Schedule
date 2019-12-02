@@ -69,10 +69,21 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.NotesViewHolder> {
     private ArrayList<String> text;
 
     RVAdapter(ArrayList<ArrayList<String>> data) {
-        ids = data.get(0);
-        date = data.get(1);
-        head = data.get(2);
-        text = data.get(3);
+        if (!data.isEmpty()) {
+            ids = data.get(0);
+            date = data.get(1);
+            head = data.get(2);
+            text = data.get(3);
+        } else {
+            ids = new ArrayList<>();
+            date = new ArrayList<>();
+            text = new ArrayList<>();
+            head = new ArrayList<>();
+            ids.add("1");
+            date.add(" ");
+            head.add("Нет уведомлений");
+            text.add(" ");
+        }
     }
 
     @NonNull

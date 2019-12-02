@@ -22,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,12 @@ import ru.devxem.reminder.api.Error;
 
 public class MainActivity extends AppCompatActivity {
     public static List<String> sss = new ArrayList<>();
+    @SuppressLint("StaticFieldLeak")
+    static Snackbar snackbar;
 
+    public static void onSnack() {
+        snackbar.show();
+    }
 
     public static List<String> getSss() {
         return sss;
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.AppTheme);
             setContentView(R.layout.activity_main);
             Context context = this;
+            View view_s = findViewById(R.id.nav_host_fragment);
+            snackbar = Snackbar.make(view_s, "Данные в оффлайн режиме. Потяните вниз для обновления.", Snackbar.LENGTH_LONG);
             if (settings.getString("email", "null").equals("null")) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 LayoutInflater inflater = this.getLayoutInflater();

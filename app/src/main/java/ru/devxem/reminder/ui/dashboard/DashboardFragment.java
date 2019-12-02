@@ -1,7 +1,6 @@
 package ru.devxem.reminder.ui.dashboard;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -27,14 +25,12 @@ public class DashboardFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
     private static ListView listView;
-    private static Dialog dialog;
     private static CountDownTimer timer;
     private static boolean loaded;
     @SuppressLint("StaticFieldLeak")
     private static SwipeRefreshLayout swipeRefreshLayout;
 
     public static void reloadLess(ArrayAdapter<String> adp2) {
-        if (dialog != null) dialog.cancel();
         swipeRefreshLayout.setRefreshing(false);
         loaded = true;
         timer.cancel();
@@ -66,17 +62,10 @@ public class DashboardFragment extends Fragment {
                 @Override
                 public void onFinish() {
                     if (!loaded) {
-                        dialog.cancel();
                         Error.setError(context, id);
                     }
                 }
             }.start();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage("Пожалуйста, подождите")
-                    .setTitle("Загрузка..")
-                    .setCancelable(false);
-            dialog = builder.create();
-            dialog.show();
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override

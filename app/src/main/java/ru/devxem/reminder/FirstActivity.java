@@ -150,7 +150,7 @@ public class FirstActivity extends AppCompatActivity {
                             .setCancelable(false);
                     final Dialog dialog = builder.create();
                     dialog.show();
-                    Account.Register(context, login, name, email, password, group, spam, ver);
+                    Account.Register(context, login, name, email, password, group, spam, ver, dialog);
                 }
             });
             mainProcessing();

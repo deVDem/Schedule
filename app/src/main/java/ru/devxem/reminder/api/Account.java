@@ -1,5 +1,6 @@
 package ru.devxem.reminder.api;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ import ru.devxem.reminder.FirstActivity;
 
 public class Account {
 
-    public static void Register(final Context context, String login, String name, String email, String password, String group, String spam, String ver) {
+    public static void Register(final Context context, String login, String name, String email, String password, String group, String spam, String ver, final Dialog dialog) {
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -27,7 +28,10 @@ public class Account {
                     JSONObject jsonResponse = new JSONObject(response);
                     if (jsonResponse.getBoolean("success")) {
                         FirstActivity.Registered();
-                    } else Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+                    } else {
+                        dialog.cancel();
+                        Toast.makeText(context, "Ошибка регистрации. Такой аккаунт существует либо произошла внутренняя ошибка сервера.", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     Error.setErr(context, e.toString(), context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
@@ -54,7 +58,10 @@ public class Account {
                     JSONObject jsonResponse = new JSONObject(response);
                     if (jsonResponse.getBoolean("success")) {
                         FirstActivity.Logined(response);
-                    } else Toast.makeText(context, "Ошибка входа", Toast.LENGTH_LONG).show();
+                    } else {
+                        FirstActivity.reloadDialog(false);
+                        Toast.makeText(context, "Ошибка входа", Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Error.setErr(context, e.toString(), context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
