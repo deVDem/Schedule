@@ -2,7 +2,6 @@ package ru.devxem.reminder;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -18,7 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class SplashScreen extends AppCompatActivity {
-    private SharedPreferences settings;
+    SharedPreferences settings;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,18 +46,8 @@ public class SplashScreen extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final Dialog dialog = builder.setMessage("Каким-то чудом вы получили тестовую версию приложения. В нём отключена реклама и могут быть ошибки в коде.")
                 .setTitle("Тестовая версия приложения")
-                .setNegativeButton(context.getString(R.string.Exit), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        System.exit(0);
-                    }
-                })
-                .setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        start();
-                    }
-                })
+                .setNegativeButton(context.getString(R.string.Exit), (dialogInterface, i) -> System.exit(0))
+                .setPositiveButton("Продолжить", (dialog1, which) -> start())
                 .setCancelable(false)
                 .create();
         anim_count.setAnimationListener(new Animation.AnimationListener() {

@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import ru.devxem.reminder.BuildConfig;
 import ru.devxem.reminder.R;
-import ru.devxem.reminder.SplashScreen;
 import ru.devxem.reminder.UpdateNotes;
 import ru.devxem.reminder.api.Error;
 
@@ -60,7 +59,7 @@ public class SettingsFragment extends Fragment {
                     editor.apply();
                     Toast.makeText(context, "Перезапуск..", Toast.LENGTH_LONG).show();
                     Activity activity = getActivity();
-                    context.startActivity(new Intent(context, SplashScreen.class));
+                    //context.startActivity(new Intent(context, SplashScreen.class));
                     if (activity != null) {
                         activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                         context.stopService(new Intent(context, UpdateNotes.class));
@@ -110,7 +109,7 @@ public class SettingsFragment extends Fragment {
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.clear();
                                     editor.apply();
-                                    System.exit(0);
+                                    Objects.requireNonNull(getActivity()).finish();
                                 }
                             })
                             .setPositiveButton("Продолжить использование", new DialogInterface.OnClickListener() {

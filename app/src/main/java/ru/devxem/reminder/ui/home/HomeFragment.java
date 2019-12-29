@@ -28,8 +28,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -101,18 +99,12 @@ public class HomeFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
         context = getContext();
         try {
-            MobileAds.initialize(context, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                }
+            MobileAds.initialize(context, initializationStatus -> {
             });
-            Response.Listener<String> listener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    int curVer = BuildConfig.VERSION_CODE;
-                    int nowVer = Integer.parseInt(response);
-                    setUpdate(nowVer > curVer);
-                }
+            Response.Listener<String> listener = response -> {
+                int curVer = BuildConfig.VERSION_CODE;
+                int nowVer = Integer.parseInt(response);
+                setUpdate(nowVer > curVer);
             };
             getVer getVer = new getVer(listener);
             RequestQueue queue = Volley.newRequestQueue(context);
@@ -127,16 +119,16 @@ public class HomeFragment extends Fragment {
             group = MainActivity.getSss().get(1);
             Thread threads = new Thread(null, doBackgroundThreadProcessing,
                     "Main");
-            threads.start();
+            //threads.start();
             swipeRefreshLayout = root.findViewById(R.id.swipe_container);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     Calendar c = Calendar.getInstance();
                     c.setTimeZone(TimeZone.getDefault());
-                    c.setTime(currentDate);
+                    //c.setTime(currentDate);
                     int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-                    GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2, false);
+                    //GetNear.reloadlessons(context, group, String.valueOf(id), String.valueOf(dayOfWeek), 2, false);
                 }
             });
             final FrameLayout adContainerView = root.findViewById(R.id.adViewHome);
@@ -214,7 +206,7 @@ public class HomeFragment extends Fragment {
             c.setTimeZone(TimeZone.getDefault());
             c.setTime(currentDate);
             int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-            Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec, false));
+            //Update(GetNear.updatelessons(context, hour, min, String.valueOf(dayOfWeek), sec, false));
         }
     }
 

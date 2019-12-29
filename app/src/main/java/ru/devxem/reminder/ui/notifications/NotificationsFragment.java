@@ -21,7 +21,6 @@ import java.util.Objects;
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.api.Error;
-import ru.devxem.reminder.api.GetNotes;
 
 public class NotificationsFragment extends Fragment {
     private static RecyclerView rv;
@@ -48,12 +47,9 @@ public class NotificationsFragment extends Fragment {
             rv.setLayoutManager(llm);
             swipeRefreshLayout.setRefreshing(true);
             String group = MainActivity.getSss().get(1);
-            GetNotes.updateNotes(Objects.requireNonNull(context), group);
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1));
-                }
+            //GetNotes.updateNotes(Objects.requireNonNull(context), group);
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                //GetNotes.updateNotes(Objects.requireNonNull(context), MainActivity.getSss().get(1));
             });
         } catch (Exception e) {
             Error.setErr(context, e.toString(), Objects.requireNonNull(context).getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));

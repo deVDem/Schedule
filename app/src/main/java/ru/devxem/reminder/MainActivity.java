@@ -1,35 +1,27 @@
 package ru.devxem.reminder;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.FragmentManager;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.devxem.reminder.api.Error;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private static final String DIALOG = "DialogNewYear2020";
+
     public static List<String> sss = new ArrayList<>();
     @SuppressLint("StaticFieldLeak")
     static Snackbar snackbar;
@@ -42,16 +34,20 @@ public class MainActivity extends AppCompatActivity {
         return sss;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            final SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+            final SharedPreferences settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
             String id = "5";
             String group = settings.getString("groups", null);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            setTheme(R.style.AppTheme);
-            setContentView(R.layout.activity_main);
+            setTheme(R.style.AppTheme_NoActionBar);
+            FragmentManager manager = getSupportFragmentManager();
+            DialogNewYear dialog = DialogNewYear.newInstance();
+            dialog.show(Objects.requireNonNull(manager), DIALOG);
+            /*setContentView(R.layout.activity_main);
             Context context = this;
             View view_s = findViewById(R.id.nav_host_fragment);
             snackbar = Snackbar.make(view_s, "Данные в оффлайн режиме. Потяните вниз для обновления.", Snackbar.LENGTH_LONG);
@@ -93,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(navView, navController);
             startService(new Intent(this, UpdateNotes.class));
             sss.add(0, id);
-            sss.add(1, group);
+            sss.add(1, group); */
         } catch (Exception e) {
             e.printStackTrace();
             Error.setErr(this, e.toString(), getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));

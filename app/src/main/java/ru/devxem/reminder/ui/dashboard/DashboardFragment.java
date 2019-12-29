@@ -19,7 +19,6 @@ import java.util.Objects;
 import ru.devxem.reminder.MainActivity;
 import ru.devxem.reminder.R;
 import ru.devxem.reminder.api.Error;
-import ru.devxem.reminder.api.GetNear;
 
 public class DashboardFragment extends Fragment {
 
@@ -51,7 +50,7 @@ public class DashboardFragment extends Fragment {
             //swipeRefreshLayout.canChildScrollUp() = true;
             final Context context = Objects.requireNonNull(getContext());
             loaded = false;
-            timer = new CountDownTimer(15000, 250) {
+            /*timer = new CountDownTimer(15000, 250) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     if (loaded) {
@@ -65,15 +64,15 @@ public class DashboardFragment extends Fragment {
                         Error.setError(context, id);
                     }
                 }
-            }.start();
+            }.start(); */
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    reloadLess(GetNear.updateLessons(group, getContext(), 1));
+                    // reloadLess(GetNear.updateLessons(group, getContext(), 1));
                 }
             });
-            reloadLess(GetNear.updateLessons(group, getContext(), 0));
+            //reloadLess(GetNear.updateLessons(group, getContext(), 0));
         } catch (Exception e) {
             Error.setErr(getContext(), e.toString(), Objects.requireNonNull(getContext()).getSharedPreferences("settings", Context.MODE_PRIVATE).getString("email", null));
         }
