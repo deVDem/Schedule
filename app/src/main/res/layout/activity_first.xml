@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/hello"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/hello"
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/firstBtNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/shape_corn"
+            android:backgroundTint="@color/white"
+            android:text="@string/next"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/shape_corn"
+            android:backgroundTint="@color/colorPrimary"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/login"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/welcome_to_app"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/loginETLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_or_email"
+                app:met_baseColor="@color/white"
+                app:met_errorColor="#ddaa00"
+                app:met_floatingLabel="highlight"
+                app:met_helperText="@string/helperLogin"
+                app:met_minCharacters="6"
+                app:met_primaryColor="@color/white" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/loginETPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                app:met_baseColor="@color/white"
+                app:met_errorColor="#ddaa00"
+                app:met_floatingLabel="highlight"
+                app:met_helperText="@string/helperPass"
+                app:met_minCharacters="6"
+                app:met_primaryColor="@color/white" />
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/login"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/loginTVNotReg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/not_registered"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutRegister"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/colorPrimary"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/registration"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/login_et"
+                    app:met_baseColor="@color/white"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperLogin"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/white" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_and_last_name"
+                    app:met_baseColor="@color/white"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/real_data_please"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/white" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    app:met_baseColor="@color/white"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/real_data_please"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/white"
+                    tools:ignore="HardcodedText" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    app:met_baseColor="@color/white"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperPass"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/white" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_password"
+                    app:met_baseColor="@color/white"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperPass"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/white" />
+
+                <Spinner
+                    android:id="@+id/registerSpGroups"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_bg" />
+
+                <CheckBox
+                    android:id="@+id/registerChBxSpam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:checked="true"
+                    android:text="@string/i_agree_to_send_email_messages_with_news_and_technical_notifications"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/registerBtnRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/shape_corn"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="@string/register"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>

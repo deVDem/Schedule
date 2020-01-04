@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item>
-        <color android:color="#fff" />
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <solid android:color="#fff" />
+        </shape>
     </item>
     <item android:gravity="center_vertical|right" android:right="8dp">
         <layer-list>

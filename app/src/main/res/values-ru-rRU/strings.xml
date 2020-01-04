@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Расписание</string>
-    <string name="title_activity_main">Расписание</string>
-    <string name="title_dashboard">Расписание</string>
-    <string name="title_home">Таймер</string>
-    <string name="title_notifications">Уведомления</string>
-    <string name="welcometoast">Добро пожаловать в моё приложение! :)</string>
-    <string name="hello">Привет</string>
-    <string name="hello2">Перед запуском требуются ваши данные</string>
-    <string name="name">Имя и фамилия</string>
-    <string name="spam">Я согласен получать информационные сообщения на почту</string>
-    <string name="privacy">Я согласен на обработку персональных данных</string>
-    <string name="Accept">Готово</string>
-    <string name="error">Ошибка</string>
-    <string name="Exit">Выход из приложения</string>
-    <string name="error_text">Произошла неожиданная ошибка. Однако, не переживайте, о ней уже известно, если у вас есть интернет :)</string>
-    <string name="choose">Выберите</string>
-    <string name="spamc">Подтвердите обработку данных</string>
-    <string name="groupc">Выберите группу</string>
-    <string name="emailc">Введите E-mail</string>
-    <string name="namec">Введите ваше имя и фамилию</string>
-    <string name="remain">Осталось до </string>
-    <string name="lesson">" урока"</string>
-    <string name="pause">" перемены"</string>
-    <string name="noles">Сегодня нет уроков</string>
-    <string name="rest">Отдых!</string>
-    <string name="settings">Настройки</string>
-    <string name="register_text"><u>Нет аккаунта? Зарегистрироваться</u></string>
+    <string name="hello">Привет!</string>
+    <string name="next">Далее</string>
+    <string name="helperLogin">Логин должен содержать минимум 6 символов</string>
+    <string name="helperPass">Пароль должен содержать минимум 6 символов</string>
+    <string name="login">Вход</string>
+    <string name="login_or_email">Логин или Email</string>
+    <string name="password">Пароль</string>
+    <string name="welcome_to_app">Добро пожаловать в приложение!</string>
+    <string name="not_registered">Не зарегистрированы?</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="first_and_last_name">Имя и Фамилия</string>
+    <string name="i_agree_to_send_email_messages_with_news_and_technical_notifications">Я согласен на рассылку Email-сообщениями новостями и техническими уведомлениями</string>
+    <string name="login_et">Логин</string>
+    <string name="real_data_please">Пожалуйста, введите настоящие данные</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="registration">Регистрация</string>
 </resources>
