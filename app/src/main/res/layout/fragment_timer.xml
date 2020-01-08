@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/countText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/counterText"
+        android:gravity="center"
+        android:text="Осталось до перемены"
+        android:textColor="@color/dark"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/counterText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/line1"
+        android:gravity="center"
+        android:text="0:23:09"
+        android:textColor="@color/dark"
+        android:textSize="34sp" />
+
+    <ImageView
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/shape_corn"
+        android:backgroundTint="#6A000000" />
+
+    <TextView
+        android:id="@+id/lessonNextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line1"
+        android:gravity="center"
+        android:text="Следующий урок:"
+        android:textColor="@color/dark"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lessonNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lessonNextText"
+        android:gravity="center"
+        android:text="МДК 01.01"
+        android:textColor="@color/dark"
+        android:textSize="32sp" />
+</RelativeLayout>

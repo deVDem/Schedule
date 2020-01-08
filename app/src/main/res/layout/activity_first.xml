@@ -40,7 +40,7 @@
         android:id="@+id/relativeLayoutLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:visibility="gone">
 
         <LinearLayout
@@ -75,7 +75,9 @@
                 android:id="@+id/loginETLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:hint="@string/login_or_email"
+                android:inputType="textPersonName"
                 app:met_baseColor="@color/white"
                 app:met_errorColor="#ddaa00"
                 app:met_floatingLabel="highlight"
@@ -87,7 +89,9 @@
                 android:id="@+id/loginETPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:hint="@string/password"
+                android:inputType="textPassword"
                 app:met_baseColor="@color/white"
                 app:met_errorColor="#ddaa00"
                 app:met_floatingLabel="highlight"
@@ -100,6 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/shape_corn"
                 android:backgroundTint="@color/colorAccent"
                 android:text="@string/login"
@@ -121,7 +126,7 @@
         android:id="@+id/relativeLayoutRegister"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:visibility="visible">
 
         <ScrollView
@@ -156,6 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_et"
+                    android:inputType="textPersonName"
                     app:met_baseColor="@color/white"
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
@@ -168,6 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/first_and_last_name"
+                    android:inputType="textPersonName"
                     app:met_baseColor="@color/white"
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
@@ -180,11 +187,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
+                    android:inputType="textEmailAddress"
                     app:met_baseColor="@color/white"
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
                     app:met_helperText="@string/real_data_please"
-                    app:met_minCharacters="6"
+                    app:met_minCharacters="9"
                     app:met_primaryColor="@color/white"
                     tools:ignore="HardcodedText" />
 
@@ -193,6 +201,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
+                    android:inputType="textPassword"
                     app:met_baseColor="@color/white"
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
@@ -205,6 +214,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
                     app:met_baseColor="@color/white"
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"

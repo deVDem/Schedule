@@ -16,4 +16,8 @@
     <string name="real_data_please">Please enter your real data</string>
     <string name="register">Register</string>
     <string name="registration">Register</string>
+    <string name="choose">Choose your group</string>
+    <string name="errornetwork">An error occurred while connecting to the server.</string>
+    <string name="detail">More detailed: </string>
+    <string name="retry">Retry</string>
 </resources>

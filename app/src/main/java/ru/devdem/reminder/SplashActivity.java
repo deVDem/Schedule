@@ -37,9 +37,9 @@ public class SplashActivity extends AppCompatActivity {
         arrow.setAnimation(anim_arrow);
         Animation anim_button = AnimationUtils.loadAnimation(this, R.anim.button);
         button.setAnimation(anim_button);
-        Animation anim_count = AnimationUtils.loadAnimation(this, R.anim.circle);
+        Animation anim_count = AnimationUtils.loadAnimation(this, R.anim.count);
         count.setAnimation(anim_count);
-        anim_text.setAnimationListener(new Animation.AnimationListener() {
+        anim_count.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 

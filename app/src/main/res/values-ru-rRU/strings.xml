@@ -17,4 +17,8 @@
     <string name="real_data_please">Пожалуйста, введите настоящие данные</string>
     <string name="register">Зарегистрироваться</string>
     <string name="registration">Регистрация</string>
+    <string name="choose">Выберите вашу группу</string>
+    <string name="errornetwork">Произошла ошибка при подключении к серверу.</string>
+    <string name="detail">Подробнее: </string>
+    <string name="retry">Повторить</string>
 </resources>

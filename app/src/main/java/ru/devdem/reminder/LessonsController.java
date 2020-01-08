@@ -1,0 +1,118 @@
+package ru.devdem.reminder;
+
+import android.content.Context;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import static java.util.UUID.randomUUID;
+
+public class LessonsController {
+
+
+    private static LessonsController sLessonsController;
+
+    // сам контроллер
+    private static List<Lesson> mLessons;
+    private Context mContext;
+
+    private LessonsController(Context context) {
+        mContext = context.getApplicationContext();
+    }
+
+    public static LessonsController get(Context context) {
+        if (sLessonsController == null) sLessonsController = new LessonsController(context);
+        return sLessonsController;
+    }
+
+    public void addLesson(String name, String numberText, int day, Date start, Date end) {
+        Lesson l = new Lesson();
+        l.setName(name);
+        l.setNumberText(numberText);
+        l.setDay(day);
+        l.setStart(start);
+        l.setNumber(mLessons.size());
+        l.setEnd(end);
+        mLessons.add(l);
+    }
+
+    public void removeLessons() {
+        mLessons.clear();
+    }
+
+    public List<Lesson> getLessons() {
+        return mLessons;
+    }
+
+    // объект урока
+    public class Lesson {
+        private UUID mId;
+        private int mNumber;
+        private String mNumberText;
+        private int mDay;
+        private String mName;
+        private Date mStart;
+        private Date mEnd;
+
+        public Lesson() {
+            this(randomUUID());
+        }
+
+        public Lesson(UUID uuid) {
+            mId = uuid;
+        }
+
+        public String getNumberText() {
+            return mNumberText;
+        }
+
+        public void setNumberText(String numberText) {
+            mNumberText = numberText;
+        }
+
+        public UUID getId() {
+            return mId;
+        }
+
+        public int getNumber() {
+            return mNumber;
+        }
+
+        public void setNumber(int number) {
+            mNumber = number;
+        }
+
+        public int getDay() {
+            return mDay;
+        }
+
+        public void setDay(int day) {
+            mDay = day;
+        }
+
+        public String getName() {
+            return mName;
+        }
+
+        public void setName(String name) {
+            mName = name;
+        }
+
+        public Date getStart() {
+            return mStart;
+        }
+
+        public void setStart(Date start) {
+            mStart = start;
+        }
+
+        public Date getEnd() {
+            return mEnd;
+        }
+
+        public void setEnd(Date end) {
+            mEnd = end;
+        }
+    }
+}
