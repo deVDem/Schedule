@@ -9,12 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        app:itemHorizontalTranslationEnabled="true"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_main" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_above="@+id/bottom_nav_view">
 
     </androidx.viewpager.widget.ViewPager>

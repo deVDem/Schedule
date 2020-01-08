@@ -2,8 +2,8 @@ package ru.devdem.reminder;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -14,19 +14,19 @@ public class LessonsController {
     private static LessonsController sLessonsController;
 
     // сам контроллер
-    private static List<Lesson> mLessons;
+    private static ArrayList<Lesson> mLessons = new ArrayList<>();
     private Context mContext;
 
     private LessonsController(Context context) {
         mContext = context.getApplicationContext();
     }
 
-    public static LessonsController get(Context context) {
+    static LessonsController get(Context context) {
         if (sLessonsController == null) sLessonsController = new LessonsController(context);
         return sLessonsController;
     }
 
-    public void addLesson(String name, String numberText, int day, Date start, Date end) {
+    void addLesson(String name, String numberText, int day, Date start, Date end) {
         Lesson l = new Lesson();
         l.setName(name);
         l.setNumberText(numberText);
@@ -41,7 +41,7 @@ public class LessonsController {
         mLessons.clear();
     }
 
-    public List<Lesson> getLessons() {
+    ArrayList<Lesson> getLessons() {
         return mLessons;
     }
 
@@ -55,19 +55,19 @@ public class LessonsController {
         private Date mStart;
         private Date mEnd;
 
-        public Lesson() {
+        Lesson() {
             this(randomUUID());
         }
 
-        public Lesson(UUID uuid) {
+        Lesson(UUID uuid) {
             mId = uuid;
         }
 
-        public String getNumberText() {
+        String getNumberText() {
             return mNumberText;
         }
 
-        public void setNumberText(String numberText) {
+        void setNumberText(String numberText) {
             mNumberText = numberText;
         }
 
@@ -79,15 +79,15 @@ public class LessonsController {
             return mNumber;
         }
 
-        public void setNumber(int number) {
+        void setNumber(int number) {
             mNumber = number;
         }
 
-        public int getDay() {
+        int getDay() {
             return mDay;
         }
 
-        public void setDay(int day) {
+        void setDay(int day) {
             mDay = day;
         }
 
@@ -99,19 +99,19 @@ public class LessonsController {
             mName = name;
         }
 
-        public Date getStart() {
+        Date getStart() {
             return mStart;
         }
 
-        public void setStart(Date start) {
+        void setStart(Date start) {
             mStart = start;
         }
 
-        public Date getEnd() {
+        Date getEnd() {
             return mEnd;
         }
 
-        public void setEnd(Date end) {
+        void setEnd(Date end) {
             mEnd = end;
         }
     }

@@ -5,4 +5,7 @@
     <color name="colorAccent">#E91E63</color>
     <color name="dark">#303030</color>
     <color name="white">#ffffff</color>
+    <color name="card_color_lessons">#9FA8DA</color>
+    <color name="card_color">#7986CB</color>
+    <color name="card_color_this_day">#4DB6AC</color>
 </resources>
