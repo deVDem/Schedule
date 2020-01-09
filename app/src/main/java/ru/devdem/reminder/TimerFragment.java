@@ -1,5 +1,6 @@
 package ru.devdem.reminder;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ public class TimerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_timer, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_timer, null);
         mCountText = view.findViewById(R.id.countText);
         mCounterText = view.findViewById(R.id.counterText);
         mLessonNextText = view.findViewById(R.id.lessonNextText);

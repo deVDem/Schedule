@@ -1,10 +1,12 @@
 package ru.devdem.reminder;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,23 +22,29 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+
 public class DashboardFragment extends Fragment {
 
-    private LessonsController mLessonsController;
     private String[] days;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_dashboard, null);
+        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_dashboard, null);
         Context context = Objects.requireNonNull(getContext());
         days = getResources().getStringArray(R.array.days);
-        mLessonsController = LessonsController.get(context);
+        LessonsController lessonsController = LessonsController.get(context);
         RecyclerView recyclerView = v.findViewById(R.id.recyclerViewDash);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(new RVAdapter(prepareArrayFromArray(mLessonsController.getLessons())));
+        RVAdapter adapter = new RVAdapter(prepareArrayFromArray(lessonsController.getLessons()));
+        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(adapter);
+        animationAdapter.setDuration(500);
+        animationAdapter.setFirstOnly(false);
+        animationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+        recyclerView.setAdapter(animationAdapter);
         return v;
     }
 

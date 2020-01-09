@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,23 +82,23 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(1);
         AppCompatActivity appCompatActivity = this;
         ActionBar actionBar = Objects.requireNonNull(appCompatActivity.getSupportActionBar());
-        actionBar.setSubtitle("Timer");
+        actionBar.setSubtitle(getResources().getString(R.string.timer));
         mBottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.main_dashboard:
-                    actionBar.setSubtitle("Dashboard");
+                    actionBar.setSubtitle(getResources().getString(R.string.dashboard));
                     mViewPager.setCurrentItem(0);
                     break;
                 case R.id.main_timer:
-                    actionBar.setSubtitle("Timer");
+                    actionBar.setSubtitle(getResources().getString(R.string.timer));
                     mViewPager.setCurrentItem(1);
                     break;
                 case R.id.main_notifications:
-                    actionBar.setSubtitle("Notifications");
+                    actionBar.setSubtitle(getResources().getString(R.string.notifications));
                     mViewPager.setCurrentItem(2);
                     break;
                 case R.id.main_settings:
-                    actionBar.setSubtitle("Settings");
+                    actionBar.setSubtitle(getResources().getString(R.string.settings));
                     mViewPager.setCurrentItem(3);
                     break;
             }
@@ -107,30 +108,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static class MainViewPagerAdapter extends FragmentStatePagerAdapter {
+        ArrayList<Fragment> mFragments = new ArrayList<>();
         MainViewPagerAdapter(FragmentManager fm) {
             super(fm);
+            mFragments.add(new DashboardFragment());
+            mFragments.add(new TimerFragment());
+            mFragments.add(new NotificationsFragment());
+            mFragments.add(new SettingsFragment());
         }
 
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new DashboardFragment();
-                case 1:
-                    return new TimerFragment();
-                case 2:
-                    return new NotificationsFragment();
-                case 3:
-                    return new SettingsFragment();
-                default:
-                    return new Fragment();
-            }
+            return mFragments.get(position);
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return mFragments.size();
         }
     }
 }

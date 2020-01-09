@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +23,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Random;
+
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class NotificationsFragment extends Fragment {
+    private String DIALOG_PHOTO = "fullphoto";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,7 +40,12 @@ public class NotificationsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(llm);
-        mRecyclerView.setAdapter(new RVAdapter(createNotifications()));
+        RVAdapter adapter = new RVAdapter(createNotifications());
+        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(adapter);
+        animationAdapter.setDuration(500);
+        animationAdapter.setFirstOnly(false);
+        animationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+        mRecyclerView.setAdapter(animationAdapter);
         return v;
     }
 
@@ -45,7 +58,10 @@ public class NotificationsFragment extends Fragment {
             notification.setTitle("Заголовок " + i);
             notification.setSubTitle("Мы просто намбер " + i + "и..\nмного-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много текса");
             notification.setDate(new Date());
-            notification.setUrlImage("https://pbs.twimg.com/media/DGVoayKU0AEr-k7.jpg:large");
+            if (new Random().nextBoolean())
+                notification.setUrlImage("https://pbs.twimg.com/media/DGVoayKU0AEr-k7.jpg:large");
+            else
+                notification.setUrlImage("https://cs6.pikabu.ru/post_img/big/2014/05/12/10/1399912497_442275426.JPG");
             mNotifications.add(notification);
         }
 
@@ -72,7 +88,7 @@ public class NotificationsFragment extends Fragment {
             mId = id;
         }
 
-        public String getTitle() {
+        String getTitle() {
             return mTitle;
         }
 
@@ -80,7 +96,7 @@ public class NotificationsFragment extends Fragment {
             mTitle = title;
         }
 
-        public String getSubTitle() {
+        String getSubTitle() {
             return mSubTitle;
         }
 
@@ -88,7 +104,7 @@ public class NotificationsFragment extends Fragment {
             mSubTitle = subTitle;
         }
 
-        public String getUrlImage() {
+        String getUrlImage() {
             return mUrlImage;
         }
 
@@ -96,7 +112,7 @@ public class NotificationsFragment extends Fragment {
             mUrlImage = urlImage;
         }
 
-        public Date getDate() {
+        Date getDate() {
             return mDate;
         }
 
@@ -130,7 +146,12 @@ public class NotificationsFragment extends Fragment {
             String urlImage = notification.getUrlImage();
             if (urlImage != null) {
                 Picasso.get().load(urlImage).into(holder.mImageView);
-            }
+                holder.mImageView.setOnClickListener(v -> {
+                    FragmentManager manager = getFragmentManager();
+                    DialogFullImageFragment dialog = DialogFullImageFragment.newInstance(notification.getUrlImage());
+                    dialog.show(Objects.requireNonNull(manager), DIALOG_PHOTO);
+                });
+            } else holder.mImageView.setVisibility(View.GONE);
         }
 
         @Override

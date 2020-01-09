@@ -37,4 +37,6 @@
         <item>Суббота</item>
         <item>Воскресенье</item>
     </string-array>
+    <string name="close">Закрыть</string>
+    <string name="fullimage">Полное изображение</string>
 </resources>

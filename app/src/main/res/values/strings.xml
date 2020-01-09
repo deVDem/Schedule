@@ -27,6 +27,8 @@
     <string name="notifications">Notifications</string>
     <string name="settings">Settings</string>
     <string name="dashboard">Schedule</string>
+    <string name="close">Close</string>
+    <string name="fullimage">Full Image</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>
