@@ -70,7 +70,7 @@ public class NotificationsFragment extends Fragment {
         return mNotifications;
     }
 
-    public class Notification {
+    class Notification {
         private int mId;
         private String mTitle;
         private String mSubTitle;
@@ -81,11 +81,11 @@ public class NotificationsFragment extends Fragment {
 
         }
 
-        public int getId() {
+        int getId() {
             return mId;
         }
 
-        public void setId(int id) {
+        void setId(int id) {
             mId = id;
         }
 

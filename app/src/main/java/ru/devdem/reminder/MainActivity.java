@@ -22,15 +22,13 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SharedPreferences mSettings;
-    private String NAME_PREFS = "settings";
-
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
+        String NAME_PREFS = "settings";
+        SharedPreferences settings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         View view = View.inflate(this, R.layout.activity_main, null);
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static class MainViewPagerAdapter extends FragmentStatePagerAdapter {
+    static class MainViewPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> mFragments = new ArrayList<>();
         MainViewPagerAdapter(FragmentManager fm) {
             super(fm);

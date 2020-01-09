@@ -19,12 +19,9 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
-public class SettingsFragment extends Fragment {
+class SettingsFragment extends Fragment {
 
-    private Switch mSwitchNight;
-    private Switch mSwitchNotification;
     private SharedPreferences mSettings;
-    private String NAME_PREFS = "settings";
 
     @Nullable
     @Override
@@ -32,9 +29,10 @@ public class SettingsFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_settings, null);
         Context context = Objects.requireNonNull(getContext());
+        String NAME_PREFS = "settings";
         mSettings = context.getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
-        mSwitchNight = view.findViewById(R.id.switchNightTheme);
-        mSwitchNotification = view.findViewById(R.id.switchNotification);
+        Switch switchNight = view.findViewById(R.id.switchNightTheme);
+        Switch switchNotification = view.findViewById(R.id.switchNotification);
         int[][] states = new int[][]{
                 new int[]{android.R.attr.state_checked},
                 new int[]{-android.R.attr.state_checked}
@@ -44,12 +42,12 @@ public class SettingsFragment extends Fragment {
                 getResources().getColor(R.color.white)
         };
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mSwitchNight.setThumbTintList(new ColorStateList(states, colors));
-            mSwitchNotification.setThumbTintList(new ColorStateList(states, colors));
+            switchNight.setThumbTintList(new ColorStateList(states, colors));
+            switchNotification.setThumbTintList(new ColorStateList(states, colors));
         }
-        mSwitchNight.setChecked(mSettings.getBoolean("night", false));
-        mSwitchNotification.setChecked(mSettings.getBoolean("notification", true));
-        mSwitchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        switchNight.setChecked(mSettings.getBoolean("night", false));
+        switchNotification.setChecked(mSettings.getBoolean("notification", true));
+        switchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
             mSettings.edit().putBoolean("night", isChecked).apply();
             Activity activity = Objects.requireNonNull(getActivity());
             activity.startActivity(new Intent(activity, SplashActivity.class));

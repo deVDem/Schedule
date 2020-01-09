@@ -30,24 +30,23 @@ import org.json.JSONObject;
 
 public class FirstActivity extends AppCompatActivity {
 
-    RelativeLayout helloRl;
-    RelativeLayout loginRl;
-    RelativeLayout registerRl;
-    TextView loginTVNotReg;
-    Button mLoginButton;
-    Button mRegisterButton;
-    EditText mLLoginEt;
-    EditText mLPasswordEt;
-    Context mContext;
-    Spinner mSpinner;
-    SharedPreferences mSettings;
+    private RelativeLayout helloRl;
+    private RelativeLayout loginRl;
+    private RelativeLayout registerRl;
+    private Button mLoginButton;
+    private Button mRegisterButton;
+    private EditText mLLoginEt;
+    private EditText mLPasswordEt;
+    private Context mContext;
+    private Spinner mSpinner;
+    private SharedPreferences mSettings;
 
-    EditText mRLoginEt;
-    EditText mRNameEt;
-    EditText mREmailEt;
-    EditText mRPassEt;
-    EditText mRConPassEt;
-    CheckBox mRCheckSpam;
+    private EditText mRLoginEt;
+    private EditText mRNameEt;
+    private EditText mREmailEt;
+    private EditText mRPassEt;
+    private EditText mRConPassEt;
+    private CheckBox mRCheckSpam;
 
     private int ANIM_DURATION = 500;
     private String PREFS_FIRST = "first";
@@ -74,7 +73,7 @@ public class FirstActivity extends AppCompatActivity {
         helloRl = findViewById(R.id.hello);
         loginRl = findViewById(R.id.relativeLayoutLogin);
         registerRl = findViewById(R.id.relativeLayoutRegister);
-        loginTVNotReg = findViewById(R.id.loginTVNotReg);
+        TextView loginTVNotReg = findViewById(R.id.loginTVNotReg);
         loginTVNotReg.setOnClickListener(this::onClickNotReg);
         findViewById(R.id.firstBtNext).setOnClickListener(this::onClickNext);
         mLoginButton = findViewById(R.id.loginBtn);
@@ -216,7 +215,7 @@ public class FirstActivity extends AppCompatActivity {
         });
     }
 
-    public void onClickNotReg(View v) {
+    private void onClickNotReg(View v) {
         YoYo.with(Techniques.TakingOff).duration(ANIM_DURATION)
                 .interpolate(new AccelerateDecelerateInterpolator())
                 .onEnd(animator -> {
@@ -226,7 +225,7 @@ public class FirstActivity extends AppCompatActivity {
                 }).playOn(loginRl);
     }
 
-    public void onClickNext(View v) {
+    private void onClickNext(View v) {
         int cx = helloRl.getWidth() / 2;
         int cy = helloRl.getHeight() / 2;
         float radius = helloRl.getWidth();
