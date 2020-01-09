@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:gravity="center_vertical"
+                android:gravity="start"
                 android:textColor="@color/text_bold_color"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -39,9 +39,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="end"
                 android:textColor="@color/text_color"
-                tools:text="09.01 16:30" />
+                tools:text="09 января 16:30:30" />
         </LinearLayout>
 
         <ImageView

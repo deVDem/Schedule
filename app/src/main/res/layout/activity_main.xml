@@ -19,8 +19,7 @@
         style="@style/AppTheme"
         app:itemHorizontalTranslationEnabled="true"
         android:background="@drawable/bottom_nav_background"
-        android:translationZ="2dp"
-        app:elevation="50dp"
+        app:itemTextColor="@color/colorAccent"
         app:labelVisibilityMode="selected"
         app:menu="@menu/menu_main" />
 </RelativeLayout>

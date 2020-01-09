@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class NotificationsFragment extends Fragment {
@@ -42,10 +43,13 @@ public class NotificationsFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(llm);
         RVAdapter adapter = new RVAdapter(createNotifications());
-        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(adapter);
-        animationAdapter.setDuration(500);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+        scaleInAnimationAdapter.setDuration(500);
+        scaleInAnimationAdapter.setFirstOnly(false);
+        scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
+        animationAdapter.setDuration(1000);
         animationAdapter.setFirstOnly(false);
-        animationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
         mRecyclerView.setAdapter(animationAdapter);
         return v;
     }

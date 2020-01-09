@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class DashboardFragment extends Fragment {
@@ -41,10 +42,13 @@ public class DashboardFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(llm);
         RVAdapter adapter = new RVAdapter(prepareArrayFromArray(lessonsController.getLessons()));
-        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(adapter);
-        animationAdapter.setDuration(500);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+        scaleInAnimationAdapter.setDuration(500);
+        scaleInAnimationAdapter.setFirstOnly(false);
+        scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
+        animationAdapter.setDuration(1000);
         animationAdapter.setFirstOnly(false);
-        animationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
         recyclerView.setAdapter(animationAdapter);
         return v;
     }
