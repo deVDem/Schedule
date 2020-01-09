@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
-class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
     private SharedPreferences mSettings;
 

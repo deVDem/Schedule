@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-class TimerFragment extends Fragment {
+public class TimerFragment extends Fragment {
 
     @Nullable
     @Override
