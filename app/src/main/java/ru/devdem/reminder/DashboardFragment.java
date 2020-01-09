@@ -30,12 +30,6 @@ public class DashboardFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_dashboard, null);
         Context context = getContext();
         mLessonsController = LessonsController.get(context);
-        //TODO: удалить код
-        for (int i = 0; i < 7; i++) {
-            for (int j = 1; j <= 8; j++) {
-                mLessonsController.addLesson("Урок", String.valueOf(j), i, new Date(), new Date());
-            }
-        }
         RecyclerView recyclerView = v.findViewById(R.id.recyclerViewDash);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(context);

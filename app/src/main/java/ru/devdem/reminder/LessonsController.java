@@ -19,6 +19,12 @@ public class LessonsController {
 
     private LessonsController(Context context) {
         mContext = context.getApplicationContext();
+        //TODO: удалить код
+        for (int i = 0; i < 7; i++) {
+            for (int j = 1; j <= 8; j++) {
+                this.addLesson("Урок", String.valueOf(j), i, new Date(), new Date());
+            }
+        }
     }
 
     static LessonsController get(Context context) {

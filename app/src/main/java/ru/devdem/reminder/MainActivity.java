@@ -1,6 +1,7 @@
 package ru.devdem.reminder;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         View view = View.inflate(this, R.layout.activity_main, null);
         setContentView(view);
