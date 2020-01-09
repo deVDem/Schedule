@@ -37,7 +37,7 @@ public class DialogFullImageFragment extends DialogFragment {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_full_image, null);
         ImageView imageView = view.findViewById(R.id.imageFull);
         Picasso.get().load(Objects.requireNonNull(getArguments()).getString(ARG_URL)).into(imageView);
-        return new AlertDialog.Builder(context).setPositiveButton(R.string.close, (dialog, which) -> {
+        return new AlertDialog.Builder(context, R.style.Dialog).setPositiveButton(R.string.close, (dialog, which) -> {
             dialog.cancel();
             System.gc();
         }).setTitle(R.string.fullimage).setView(view).create();

@@ -2,8 +2,7 @@ package ru.devdem.reminder;
 
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.os.Build;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 
@@ -41,12 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(0);
         mViewPager.setPageTransformer(true, (v, pos) -> {
             final float opacity = Math.abs(Math.abs(pos) - 1);
-            v.setScaleX(opacity);
-            v.setScaleY(opacity);
             v.setRotation(pos * 10000 / 360);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                v.setBackgroundColor(Color.argb(1 - opacity, 0, 0, 0));
-            }
             v.setAlpha(opacity);
         });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -80,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigationView = findViewById(R.id.bottom_nav_view);
         mBottomNavigationView.setSelectedItemId(R.id.main_timer);
         mViewPager.setCurrentItem(1);
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_checked},
+                new int[]{android.R.attr.state_enabled}
+        };
+        int[] colors = new int[]{
+                getResources().getColor(R.color.colorAccent),
+                getResources().getColor(R.color.text_color)
+        };
+        mBottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
         AppCompatActivity appCompatActivity = this;
         ActionBar actionBar = Objects.requireNonNull(appCompatActivity.getSupportActionBar());
         actionBar.setSubtitle(getResources().getString(R.string.timer));

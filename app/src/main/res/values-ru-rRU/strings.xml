@@ -39,4 +39,6 @@
     </string-array>
     <string name="close">Закрыть</string>
     <string name="fullimage">Полное изображение</string>
+    <string name="night_theme">Ночная тема</string>
+    <string name="notification">Уведомление</string>
 </resources>

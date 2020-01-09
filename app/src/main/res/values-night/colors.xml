@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#806217</color>
+    <color name="colorPrimaryDark">#664E12</color>
+    <color name="colorAccent">#99751C</color>
+    <color name="dark">#303030</color>
+    <color name="white">#ffffff</color>
+    <color name="card_color_lessons">#404040</color>
+    <color name="card_color">#333333</color>
+    <color name="card_color_this_day">#153330</color>
+    <color name="text_bold_color">#E6E6E6</color>
+    <color name="text_color">#CCCCCC</color>
+    <color name="window_background">#1A1A1A</color>
+    <color name="line_color">#6B808080</color>
+</resources>

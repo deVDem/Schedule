@@ -4,21 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:itemHorizontalTranslationEnabled="true"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_main" />
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/bottom_nav_view">
+        android:background="@color/window_background" />
 
-    </androidx.viewpager.widget.ViewPager>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        style="@style/AppTheme"
+        app:itemHorizontalTranslationEnabled="true"
+        android:background="@drawable/bottom_nav_background"
+        android:translationZ="2dp"
+        app:elevation="50dp"
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/menu_main" />
 </RelativeLayout>

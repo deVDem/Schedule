@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -103,6 +104,9 @@ public class DashboardFragment extends Fragment {
                 holder.mRelativeLayout.removeAllViews();
                 holder.mRelativeLayout.setVisibility(View.GONE);
             }
+            if (position + 1 == getItemCount()) {
+                holder.mSpace.setVisibility(View.VISIBLE);
+            }
         }
 
         private int countItems() {
@@ -123,12 +127,14 @@ public class DashboardFragment extends Fragment {
             RelativeLayout mRelativeLayout;
             TextView mDayOfWeekText;
             TextView mLessonsText;
+            Space mSpace;
 
             LessonsViewer(View itemView) {
                 super(itemView);
                 mRelativeLayout = itemView.findViewById(R.id.relativeLayoutCard);
                 mDayOfWeekText = itemView.findViewById(R.id.textDay);
                 mLessonsText = itemView.findViewById(R.id.textLessons);
+                mSpace = itemView.findViewById(R.id.space);
             }
         }
     }

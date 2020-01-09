@@ -3,4 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scrview"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="@string/settings"
+        android:textColor="@color/text_bold_color"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:id="@+id/scrview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/switchNightTheme"
+                style="@style/MySwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/card_color_lessons"
+                android:padding="10dp"
+                android:text="@string/night_theme"
+                android:textColor="@color/text_color" />
+
+            <Switch
+                android:id="@+id/switchNotification"
+                style="@style/MySwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/card_color_lessons"
+                android:checked="true"
+                android:padding="10dp"
+                android:text="@string/notification"
+                android:textColor="@color/text_color" />
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

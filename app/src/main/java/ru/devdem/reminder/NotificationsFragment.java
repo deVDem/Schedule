@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -152,6 +153,9 @@ public class NotificationsFragment extends Fragment {
                     dialog.show(Objects.requireNonNull(manager), DIALOG_PHOTO);
                 });
             } else holder.mImageView.setVisibility(View.GONE);
+            if (position + 1 == getItemCount()) {
+                holder.mSpace.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -165,6 +169,7 @@ public class NotificationsFragment extends Fragment {
             TextView mTitleView;
             TextView mSubTitleView;
             TextView mDateView;
+            Space mSpace;
 
             NotificationViewer(View v) {
                 super(v);
@@ -172,6 +177,7 @@ public class NotificationsFragment extends Fragment {
                 mTitleView = v.findViewById(R.id.textViewTitle);
                 mSubTitleView = v.findViewById(R.id.textViewSubTitle);
                 mDateView = v.findViewById(R.id.textViewDate);
+                mSpace = v.findViewById(R.id.space);
             }
         }
     }

@@ -1,70 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    app:cardBackgroundColor="@color/card_color"
+    app:cardCornerRadius="10dp">
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/card_color"
-        app:cardCornerRadius="10dp">
+        android:padding="16dp">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/lltext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <LinearLayout
-                android:id="@+id/lltext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textViewTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Тут типо заголовок уведомленя" />
-
-                <TextView
-                    android:id="@+id/textViewDate"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    tools:text="09.01 16:30" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageViewNotificationImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lltext"
-                android:background="@drawable/box_shape"
-                android:backgroundTintMode="screen"
-                android:contentDescription="@string/image"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/cat" />
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textViewSubTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/imageViewNotificationImage"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/white"
-                tools:text="Задонатьте плс" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+                android:id="@+id/textViewTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_bold_color"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Тут типо заголовок уведомленя" />
+
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/text_color"
+                tools:text="09.01 16:30" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageViewNotificationImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lltext"
+            android:background="@drawable/box_shape"
+            android:backgroundTintMode="screen"
+            android:contentDescription="@string/image"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/cat" />
+
+        <TextView
+            android:id="@+id/textViewSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageViewNotificationImage"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/text_color"
+            tools:text="Задонатьте плс" />
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_below="@id/textViewSubTitle"
+            android:visibility="gone" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

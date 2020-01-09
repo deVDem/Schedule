@@ -29,6 +29,8 @@
     <string name="dashboard">Schedule</string>
     <string name="close">Close</string>
     <string name="fullimage">Full Image</string>
+    <string name="night_theme">Night Theme</string>
+    <string name="notification">Notification</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

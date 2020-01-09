@@ -22,11 +22,11 @@ public class SplashActivity extends AppCompatActivity {
         String NAME_PREFS = "settings";
         mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
         String PREFS_NIGHT = "night";
+        super.onCreate(savedInstanceState);
         if (mSettings.getBoolean(PREFS_NIGHT, false))
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ImageView arrow = findViewById(R.id.arrow);
         ImageView button = findViewById(R.id.button);
