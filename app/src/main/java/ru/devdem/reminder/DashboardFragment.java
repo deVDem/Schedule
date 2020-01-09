@@ -18,17 +18,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class DashboardFragment extends Fragment {
 
     private LessonsController mLessonsController;
-    private String[] days = {"Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"};
+    private String[] days;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dashboard, null);
-        Context context = getContext();
+        Context context = Objects.requireNonNull(getContext());
+        days = getResources().getStringArray(R.array.days);
         mLessonsController = LessonsController.get(context);
         RecyclerView recyclerView = v.findViewById(R.id.recyclerViewDash);
         recyclerView.setHasFixedSize(true);

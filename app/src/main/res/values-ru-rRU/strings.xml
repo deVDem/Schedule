@@ -21,4 +21,20 @@
     <string name="errornetwork">Произошла ошибка при подключении к серверу.</string>
     <string name="detail">Подробнее: </string>
     <string name="retry">Повторить</string>
+    <string name="image">Изображение</string>
+    <string name="left_to_lesson">Осталось до урока</string>
+    <string name="next_lesson">Следующий урок</string>
+    <string name="timer">Таймер</string>
+    <string name="notifications">Уведомления</string>
+    <string name="settings">Настройки</string>
+    <string name="dashboard">Расписание</string>
+    <string-array name="days">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
 </resources>
