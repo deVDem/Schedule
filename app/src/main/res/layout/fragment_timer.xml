@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/counterText"
         android:gravity="center"
-        android:text="@string/left_to_lesson"
+        android:text="@string/left_before_lesson"
         android:textColor="@color/text_bold_color"
         android:textSize="26sp"
         android:textStyle="bold" />

@@ -21,7 +21,7 @@
     <string name="detail">More detailed: </string>
     <string name="retry">Retry</string>
     <string name="image">Image</string>
-    <string name="left_to_lesson">Left to lesson</string>
+    <string name="left_before_lesson">Осталось до урока</string>
     <string name="next_lesson">Next Lesson</string>
     <string name="timer">Timer</string>
     <string name="notifications">Notifications</string>
@@ -35,6 +35,9 @@
     <string name="profile">Profile</string>
     <string name="temporarily_not_available">Temporarily not available</string>
     <string name="loading">Loading</string>
+    <string name="left_before_the_break">Left before the break</string>
+    <string name="end_week">The week was over</string>
+    <string name="good_rest">Have a good rest</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

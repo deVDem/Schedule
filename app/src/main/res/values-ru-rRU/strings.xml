@@ -22,7 +22,7 @@
     <string name="detail">Подробнее: </string>
     <string name="retry">Повторить</string>
     <string name="image">Изображение</string>
-    <string name="left_to_lesson">Осталось до урока</string>
+    <string name="left_before_lesson">Осталось до урока</string>
     <string name="next_lesson">Следующий урок</string>
     <string name="timer">Таймер</string>
     <string name="notifications">Уведомления</string>
@@ -45,4 +45,7 @@
     <string name="profile">Профиль</string>
     <string name="temporarily_not_available">Временно не доступно</string>
     <string name="loading">Загрузка</string>
+    <string name="left_before_the_break">Осталось до перерыва</string>
+    <string name="end_week">Неделя закончилась</string>
+    <string name="good_rest">Хорошего вам отдыха!</string>
 </resources>

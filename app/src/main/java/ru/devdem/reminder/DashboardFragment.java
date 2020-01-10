@@ -2,8 +2,8 @@ package ru.devdem.reminder;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +31,7 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 public class DashboardFragment extends Fragment {
 
     private String[] days;
+    private TimeController mTimeController;
 
     @Nullable
     @Override
@@ -38,6 +39,7 @@ public class DashboardFragment extends Fragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_dashboard, null);
         Context context = Objects.requireNonNull(getContext());
         days = getResources().getStringArray(R.array.days);
+        mTimeController = TimeController.get(getContext());
         LessonsController lessonsController = LessonsController.get(context);
         RecyclerView recyclerView = v.findViewById(R.id.recyclerViewDash);
         recyclerView.setHasFixedSize(true);
@@ -116,20 +118,52 @@ public class DashboardFragment extends Fragment {
                         dayOfWeek = 6;
                         break;
                 }
-                Log.d("DAYOFWEEK", String.valueOf(dayOfWeek));
                 holder.mDayOfWeekText.setText(days[position]);
                 String dayOfWeekText = days[position] + " (сегодня)";
                 if (dayOfWeek == position) holder.mDayOfWeekText.setText(dayOfWeekText);
                 for (int i = 0; i < lessons.size(); i++) {
+                    // 0 - урок или перемена
+                    // 1 - номер урока которого считать
+                    // 2 - номер след.урока
+                    // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
+                    int[] params = mTimeController.getNumberlesson();
                     LessonsController.Lesson lesson = lessons.get(i);
-                    String startString = new SimpleDateFormat("H:mm", Locale.getDefault()).format(lesson.getStart());
-                    String endString = new SimpleDateFormat("H:mm", Locale.getDefault()).format(lesson.getEnd());
+                    String startString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getStart());
+                    String endString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getEnd());
                     String timeString = startString + "-" + endString;
                     @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
+                    RelativeLayout relativeLayout = view.findViewById(R.id.rlLesson);
+                    int[][] states = new int[][]{
+                            new int[]{android.R.attr.state_enabled}
+                    };
+                    int[] colors = new int[]{
+                            getResources().getColor(R.color.card_color_this_day)
+                    };
                     TextView numberLesson = view.findViewById(R.id.numberLesson);
                     TextView nameLesson = view.findViewById(R.id.textLesson);
                     TextView dateText = view.findViewById(R.id.textDate);
                     TextView cabText = view.findViewById(R.id.textCab);
+                    if (params[3] != 3 && params[3] != 0)
+                        switch (params[0]) {
+                            case 0:
+                                if (lesson.getNumber() == params[1]) {
+                                    relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                    numberLesson.setTextColor(getResources().getColor(R.color.white));
+                                    nameLesson.setTextColor(getResources().getColor(R.color.white));
+                                    dateText.setTextColor(getResources().getColor(R.color.white));
+                                    cabText.setTextColor(getResources().getColor(R.color.white));
+                                }
+                                break;
+                            case 1:
+                                if (lesson.getNumber() == params[1] || lesson.getNumber() == params[2]) {
+                                    relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                    numberLesson.setTextColor(getResources().getColor(R.color.white));
+                                    nameLesson.setTextColor(getResources().getColor(R.color.white));
+                                    dateText.setTextColor(getResources().getColor(R.color.white));
+                                    cabText.setTextColor(getResources().getColor(R.color.white));
+                                }
+                                break;
+                        }
                     numberLesson.setText(lesson.getNumberText());
                     nameLesson.setText(lesson.getName());
                     dateText.setText(timeString);

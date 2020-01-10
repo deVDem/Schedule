@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
-public class LessonsController {
+class LessonsController {
 
 
     private static LessonsController sLessonsController;
@@ -31,7 +31,7 @@ public class LessonsController {
         return sLessonsController;
     }
 
-    void addLesson(String name, String numberText, int day, String cab, Date start, Date end) {
+    private void addLesson(String name, String numberText, int day, String cab, Date start, Date end) {
         Lesson l = new Lesson();
         l.setName(name);
         l.setNumberText(numberText);
@@ -54,8 +54,8 @@ public class LessonsController {
                 String cab = jsonObject.getString("cab");
                 String numberText = jsonObject.getString("n");
                 int day = jsonObject.getInt("day");
-                Date start = new SimpleDateFormat("h:mm:ss", Locale.getDefault()).parse(jsonObject.getString("start"));
-                Date end = new SimpleDateFormat("h:mm:ss", Locale.getDefault()).parse(jsonObject.getString("end"));
+                Date start = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("start"));
+                Date end = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("end"));
                 addLesson(name, numberText, day, cab, start, end);
             }
         } catch (Exception e) {
@@ -68,16 +68,21 @@ public class LessonsController {
         parseLessons(mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).getString("lessons", null));
     }
 
-    void saveLessons(String json) {
+    private void saveLessons(String json) {
         mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().putString("lessons", json).apply();
     }
 
-    void removeLessons() {
+    private void removeLessons() {
+        mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().clear().apply();
         mLessons.clear();
     }
 
     ArrayList<Lesson> getLessons() {
         return mLessons;
+    }
+
+    void destroy() {
+        sLessonsController = null;
     }
 
     // объект урока
@@ -91,11 +96,11 @@ public class LessonsController {
         private Date mEnd;
         private String mCab;
 
-        public String getCab() {
+        String getCab() {
             return mCab;
         }
 
-        public void setCab(String cab) {
+        void setCab(String cab) {
             mCab = cab;
         }
 
@@ -116,11 +121,11 @@ public class LessonsController {
             mNumberText = numberText;
         }
 
-        public UUID getId() {
+        UUID getId() {
             return mId;
         }
 
-        public int getNumber() {
+        int getNumber() {
             return mNumber;
         }
 

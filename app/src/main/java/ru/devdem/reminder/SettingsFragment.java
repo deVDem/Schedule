@@ -55,6 +55,7 @@ public class SettingsFragment extends Fragment {
         Button mLogOffButton = view.findViewById(R.id.buttonLogOff);
         mLogOffButton.setOnClickListener(v -> {
             mSettings.edit().clear().apply();
+            context.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
             restart();
         });
         return view;
@@ -65,5 +66,6 @@ public class SettingsFragment extends Fragment {
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         activity.finish();
+        System.gc();
     }
 }

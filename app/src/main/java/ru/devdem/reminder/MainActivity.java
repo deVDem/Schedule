@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
     private LessonsController mLessonsController;
+    private TimeController mTimeController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,11 +34,23 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
+        mLessonsController = LessonsController.get(this);
+        mLessonsController.loadLessons();
+        if (mLessonsController.getLessons().size() == 0) {
+            Response.Listener<String> listener = response -> {
+                mLessonsController.parseLessons(response);
+                start();
+            };
+            NetworkController.getLessons(this, listener, settings.getString("group", "0"));
+        } else start();
+    }
+
+    private void start() {
         View view = View.inflate(this, R.layout.activity_main, null);
         setContentView(view);
-        mLessonsController = LessonsController.get(this);
+        mTimeController = TimeController.get(this);
         mViewPager = findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager(), 0));
         mViewPager.setCurrentItem(0);
         mViewPager.setPageTransformer(true, (v, pos) -> {
             final float opacity = Math.abs(Math.abs(pos) - 1);
@@ -75,11 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mLessonsController.loadLessons();
-        if (mLessonsController.getLessons().size() == 0) {
-            Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
-            NetworkController.getLessons(this, listener, settings.getString("group", "0"));
-        }
         mBottomNavigationView = findViewById(R.id.bottom_nav_view);
         mBottomNavigationView.setSelectedItemId(R.id.main_timer);
         mViewPager.setCurrentItem(2);
@@ -122,12 +130,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLessonsController.destroy();
+        mTimeController.destroy();
+    }
 
     static class MainViewPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> mFragments = new ArrayList<>();
 
-        MainViewPagerAdapter(FragmentManager fm) {
-            super(fm);
+        MainViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
             mFragments.add(new ProfileFragment());
             mFragments.add(new DashboardFragment());
             mFragments.add(new TimerFragment());
