@@ -75,8 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
-        NetworkController.getLessons(this, listener, settings.getString("group", "0"));
+        mLessonsController.loadLessons();
+        if (mLessonsController.getLessons().size() == 0) {
+            Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
+            NetworkController.getLessons(this, listener, settings.getString("group", "0"));
+        }
         mBottomNavigationView = findViewById(R.id.bottom_nav_view);
         mBottomNavigationView.setSelectedItemId(R.id.main_timer);
         mViewPager.setCurrentItem(2);
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     static class MainViewPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> mFragments = new ArrayList<>();
+
         MainViewPagerAdapter(FragmentManager fm) {
             super(fm);
             mFragments.add(new ProfileFragment());

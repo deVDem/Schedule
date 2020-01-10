@@ -16,6 +16,7 @@ public class LessonsController {
 
 
     private static LessonsController sLessonsController;
+    private static String NAME_PREFS_JSONS = "jsondata";
 
     // сам контроллер
     private static ArrayList<Lesson> mLessons = new ArrayList<>();
@@ -43,6 +44,7 @@ public class LessonsController {
     }
 
     void parseLessons(String response) {
+        removeLessons();
         try {
             JSONObject object = new JSONObject(response);
             int all = object.getInt("all");
@@ -59,9 +61,18 @@ public class LessonsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        saveLessons(response);
     }
 
-    public void removeLessons() {
+    void loadLessons() {
+        parseLessons(mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).getString("lessons", null));
+    }
+
+    void saveLessons(String json) {
+        mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().putString("lessons", json).apply();
+    }
+
+    void removeLessons() {
         mLessons.clear();
     }
 

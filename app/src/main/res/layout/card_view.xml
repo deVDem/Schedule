@@ -26,8 +26,8 @@
             android:textStyle="bold"
             tools:text="День недели" />
 
-        <TextView
-            android:id="@+id/textLessons"
+        <LinearLayout
+            android:id="@+id/llLessons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textDay"
@@ -36,15 +36,13 @@
             android:backgroundTint="@color/card_color_lessons"
             android:gravity="start"
             android:padding="10dp"
-            android:textColor="@color/text_color"
-            android:textSize="18sp"
-            tools:text="Урок" />
+            android:orientation="vertical" />
 
         <Space
             android:id="@+id/space"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:layout_below="@id/textLessons"
+            android:layout_below="@id/llLessons"
             android:visibility="gone" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

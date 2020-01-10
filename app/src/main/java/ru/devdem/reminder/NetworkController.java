@@ -96,7 +96,7 @@ class NetworkController {
     }
 
     static void getNotifications(Context context, Response.Listener<String> listener) {
-        SendRequest sendLoginRequest = new SendRequest(listener, getErrorListener(context), URL_NOTIFICATIONS, new HashMap<>());
+        SendRequest sendLoginRequest = new SendRequest(listener, null, URL_NOTIFICATIONS, new HashMap<>());
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendLoginRequest);
     }

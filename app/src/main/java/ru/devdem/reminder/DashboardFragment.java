@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
@@ -93,17 +94,22 @@ public class DashboardFragment extends Fragment {
                 holder.mDayOfWeekText.setText(days[position]);
                 String dayOfWeekText = days[position] + " (сегодня)";
                 if (dayOfWeek == position) holder.mDayOfWeekText.setText(dayOfWeekText);
-
-                StringBuilder lessonsString = new StringBuilder();
                 for (int i = 0; i < lessons.size(); i++) {
                     LessonsController.Lesson lesson = lessons.get(i);
                     String startString = new SimpleDateFormat("H:mm", Locale.getDefault()).format(lesson.getStart());
                     String endString = new SimpleDateFormat("H:mm", Locale.getDefault()).format(lesson.getEnd());
-                    lessonsString.append(lesson.getNumberText()).append(" | ")
-                            .append(lesson.getName()).append(" | ").append(startString).append("->").append(endString);
-                    if (i + 1 != lessons.size()) lessonsString.append("\n");
+                    String timeString = startString + "-" + endString;
+                    View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
+                    TextView numberLesson = view.findViewById(R.id.numberLesson);
+                    TextView nameLesson = view.findViewById(R.id.textLesson);
+                    TextView dateText = view.findViewById(R.id.textDate);
+                    TextView cabText = view.findViewById(R.id.textCab);
+                    numberLesson.setText(lesson.getNumberText());
+                    nameLesson.setText(lesson.getName());
+                    dateText.setText(timeString);
+                    cabText.setText(lesson.getCab());
+                    holder.mLessonsLL.addView(view);
                 }
-                holder.mLessonsText.setText(lessonsString.toString());
             } else {
                 holder.mRelativeLayout.removeAllViews();
                 holder.mRelativeLayout.setVisibility(View.GONE);
@@ -130,14 +136,14 @@ public class DashboardFragment extends Fragment {
         class LessonsViewer extends RecyclerView.ViewHolder {
             RelativeLayout mRelativeLayout;
             TextView mDayOfWeekText;
-            TextView mLessonsText;
+            LinearLayout mLessonsLL;
             Space mSpace;
 
             LessonsViewer(View itemView) {
                 super(itemView);
                 mRelativeLayout = itemView.findViewById(R.id.relativeLayoutCard);
                 mDayOfWeekText = itemView.findViewById(R.id.textDay);
-                mLessonsText = itemView.findViewById(R.id.textLessons);
+                mLessonsLL = itemView.findViewById(R.id.llLessons);
                 mSpace = itemView.findViewById(R.id.space);
             }
         }

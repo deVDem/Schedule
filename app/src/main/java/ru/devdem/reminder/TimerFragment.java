@@ -22,6 +22,7 @@ public class TimerFragment extends Fragment {
         TextView counterText = view.findViewById(R.id.counterText);
         TextView lessonNextText = view.findViewById(R.id.lessonNextText);
         TextView lessonNext = view.findViewById(R.id.lessonNext);
+
         return view;
     }
 }
