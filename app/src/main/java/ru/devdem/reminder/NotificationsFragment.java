@@ -3,6 +3,7 @@ package ru.devdem.reminder;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,61 +18,93 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.Response;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Random;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class NotificationsFragment extends Fragment {
-    private String DIALOG_PHOTO = "fullphoto";
+    private SharedPreferences mSettings;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RVAdapter mRVAdapter;
 
+    @SuppressLint("InflateParams")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_notifications, null);
+        View view = inflater.inflate(R.layout.fragment_notifications, null);
         Context context = getContext();
-        RecyclerView mRecyclerView = v.findViewById(R.id.recyclerViewNotifications);
+        String NAME_PREFS = "settings";
+        mSettings = Objects.requireNonNull(context).getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
+        mRecyclerView = view.findViewById(R.id.recyclerViewNotifications);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(llm);
-        RVAdapter adapter = new RVAdapter(createNotifications());
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
-        scaleInAnimationAdapter.setDuration(500);
-        scaleInAnimationAdapter.setFirstOnly(false);
-        scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
-        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
-        animationAdapter.setDuration(1000);
-        animationAdapter.setFirstOnly(false);
-        mRecyclerView.setAdapter(animationAdapter);
-        return v;
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(this::createNotifications);
+        createNotifications();
+        return view;
     }
 
-    private ArrayList<Notification> createNotifications() {
-        ArrayList<Notification> mNotifications = new ArrayList<>();
+    @Override
+    public void onPause() {
+        super.onPause();
+        mRVAdapter = null;
+    }
 
-        for (int i = 0; i < 5; i++) {
-            Notification notification = new Notification();
-            notification.setId(i);
-            notification.setTitle("Заголовок " + i);
-            notification.setSubTitle("Мы просто намбер " + i + "и..\nмного-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много--много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много-много текса");
-            notification.setDate(new Date());
-            if (new Random().nextBoolean())
-                notification.setUrlImage("https://pbs.twimg.com/media/DGVoayKU0AEr-k7.jpg:large");
-            else
-                notification.setUrlImage("https://cs6.pikabu.ru/post_img/big/2014/05/12/10/1399912497_442275426.JPG");
-            mNotifications.add(notification);
-        }
-
-
-        return mNotifications;
+    private void createNotifications() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        Response.Listener<String> listener = response -> {
+            ArrayList<Notification> mNotifications = new ArrayList<>();
+            try {
+                JSONObject object = new JSONObject(response);
+                int all = object.getInt("all");
+                for (int i = 0; i < all; i++) {
+                    JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
+                    int group = jsonObject.getInt("group");
+                    if (group == Integer.parseInt(mSettings.getString("group", "-1")) || group == -1) {
+                        Notification notification = new Notification();
+                        notification.setId(i);
+                        notification.setTitle(jsonObject.getString("Title"));
+                        notification.setSubTitle(jsonObject.getString("Subtitle"));
+                        notification.setUrlImage(jsonObject.getString("URLImage"));
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        notification.setDate(format.parse(jsonObject.getString("date")));
+                        mNotifications.add(notification);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (mRVAdapter == null) {
+                mRVAdapter = new RVAdapter(mNotifications);
+                ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mRVAdapter);
+                scaleInAnimationAdapter.setDuration(500);
+                scaleInAnimationAdapter.setFirstOnly(true);
+                scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+                AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
+                animationAdapter.setDuration(1000);
+                animationAdapter.setFirstOnly(true);
+                mRecyclerView.setAdapter(animationAdapter);
+            } else {
+                mRVAdapter.setNotifications(mNotifications);
+                mRVAdapter.notifyDataSetChanged();
+            }
+            mSwipeRefreshLayout.setRefreshing(false);
+        };
+        NetworkController.getNotifications(getContext(), listener);
     }
 
     class Notification {
@@ -133,6 +166,10 @@ public class NotificationsFragment extends Fragment {
             this.mNotifications = notifications;
         }
 
+        void setNotifications(ArrayList<Notification> notifications) {
+            mNotifications = notifications;
+        }
+
         @NonNull
         @Override
         public NotificationsFragment.RVAdapter.NotificationViewer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -146,11 +183,11 @@ public class NotificationsFragment extends Fragment {
             holder.mTitleView.setText(notification.getTitle());
             holder.mSubTitleView.setText(notification.getSubTitle());
             Date date = notification.getDate();
-            String dateString = new SimpleDateFormat("d MMMM HH:mm:ss", Locale.getDefault()).format(date);
+            String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
             holder.mDateView.setText(dateString);
             String urlImage = notification.getUrlImage();
-            if (urlImage != null) {
-                Picasso.get().load(urlImage).into(holder.mImageView);
+            if (urlImage.length() > 0) {
+                Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
                 holder.mImageView.setOnClickListener(v -> {
                     Activity activity = Objects.requireNonNull(getActivity());
                     startActivity(FullImageActivity.newInstance(getActivity(), urlImage));

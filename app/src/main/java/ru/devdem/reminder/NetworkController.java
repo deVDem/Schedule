@@ -23,6 +23,7 @@ class NetworkController {
     private static String URL_LOGIN = "https://api.devdem.ru/apps/schedule/accounts/login.php";
     private static String URL_REGISTER = "https://api.devdem.ru/apps/schedule/accounts/register.php";
     private static String URL_GETGROUPS = "https://api.devdem.ru/apps/schedule/getgroups.php";
+    private static String URL_NOTIFICATIONS = "https://api.devdem.ru/apps/schedule/notifications.php";
 
     private static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
@@ -73,6 +74,26 @@ class NetworkController {
         SendRequest sendGetGroupsRequest = new SendRequest(listener, getErrorListener(context));
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendGetGroupsRequest);
+    }
+
+    static void getNotifications(Context context, Response.Listener<String> listener) {
+        SendRequestNotifications notifications = new SendRequestNotifications(listener, getErrorListener(context));
+        if (queue == null) queue = Volley.newRequestQueue(context);
+        queue.add(notifications);
+    }
+
+    private static class SendRequestNotifications extends StringRequest {
+        private Map<String, String> params;
+
+        SendRequestNotifications(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+            super(Method.POST, URL_NOTIFICATIONS, listener, errorListener);
+            params = new HashMap<>();
+        }
+
+        @Override
+        public Map<String, String> getParams() {
+            return params;
+        }
     }
 
     private static class SendRequest extends StringRequest {

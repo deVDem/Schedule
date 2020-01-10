@@ -44,4 +44,5 @@
     <string name="logoff">Выйти из аккаунта</string>
     <string name="profile">Профиль</string>
     <string name="temporarily_not_available">Временно не доступно</string>
+    <string name="loading">Загрузка</string>
 </resources>
