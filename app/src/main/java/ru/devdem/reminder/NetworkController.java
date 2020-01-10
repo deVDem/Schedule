@@ -27,7 +27,7 @@ class NetworkController {
     private static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setTitle(R.string.errornetwork)
+                    .setTitle(R.string.errorNetwork)
                     .setMessage(context.getString(R.string.detail) + " " + error.toString())
                     .setCancelable(false)
                     .setPositiveButton(R.string.retry, (dialog1, which) -> {

@@ -50,15 +50,18 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        mBottomNavigationView.setSelectedItemId(R.id.main_dashboard);
+                        mBottomNavigationView.setSelectedItemId(R.id.main_profile);
                         break;
                     case 1:
-                        mBottomNavigationView.setSelectedItemId(R.id.main_timer);
+                        mBottomNavigationView.setSelectedItemId(R.id.main_dashboard);
                         break;
                     case 2:
-                        mBottomNavigationView.setSelectedItemId(R.id.main_notifications);
+                        mBottomNavigationView.setSelectedItemId(R.id.main_timer);
                         break;
                     case 3:
+                        mBottomNavigationView.setSelectedItemId(R.id.main_notifications);
+                        break;
+                    case 4:
                         mBottomNavigationView.setSelectedItemId(R.id.main_settings);
                         break;
                 }
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         });
         mBottomNavigationView = findViewById(R.id.bottom_nav_view);
         mBottomNavigationView.setSelectedItemId(R.id.main_timer);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(2);
         int[][] states = new int[][]{
                 new int[]{android.R.attr.state_checked},
                 new int[]{android.R.attr.state_enabled}
@@ -86,21 +89,25 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setSubtitle(getResources().getString(R.string.timer));
         mBottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
+                case R.id.main_profile:
+                    actionBar.setSubtitle(getResources().getString(R.string.profile));
+                    mViewPager.setCurrentItem(0);
+                    break;
                 case R.id.main_dashboard:
                     actionBar.setSubtitle(getResources().getString(R.string.dashboard));
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(1);
                     break;
                 case R.id.main_timer:
                     actionBar.setSubtitle(getResources().getString(R.string.timer));
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(2);
                     break;
                 case R.id.main_notifications:
                     actionBar.setSubtitle(getResources().getString(R.string.notifications));
-                    mViewPager.setCurrentItem(2);
+                    mViewPager.setCurrentItem(3);
                     break;
                 case R.id.main_settings:
                     actionBar.setSubtitle(getResources().getString(R.string.settings));
-                    mViewPager.setCurrentItem(3);
+                    mViewPager.setCurrentItem(4);
                     break;
             }
             return true;
@@ -112,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Fragment> mFragments = new ArrayList<>();
         MainViewPagerAdapter(FragmentManager fm) {
             super(fm);
+            mFragments.add(new ProfileFragment());
             mFragments.add(new DashboardFragment());
             mFragments.add(new TimerFragment());
             mFragments.add(new NotificationsFragment());

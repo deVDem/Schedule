@@ -40,6 +40,6 @@ public class DialogFullImageFragment extends DialogFragment {
         return new AlertDialog.Builder(context, R.style.Dialog).setPositiveButton(R.string.close, (dialog, which) -> {
             dialog.cancel();
             System.gc();
-        }).setTitle(R.string.fullimage).setView(view).create();
+        }).setTitle(R.string.fullImage).setView(view).create();
     }
 }
