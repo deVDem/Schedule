@@ -41,4 +41,5 @@
     <string name="fullimage">Полное изображение</string>
     <string name="night_theme">Ночная тема</string>
     <string name="notification">Уведомление</string>
+    <string name="logoff">Выйти из аккаунта</string>
 </resources>

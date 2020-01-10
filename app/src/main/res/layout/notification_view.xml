@@ -46,13 +46,14 @@
 
         <ImageView
             android:id="@+id/imageViewNotificationImage"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/lltext"
             android:background="@drawable/box_shape"
             android:backgroundTintMode="screen"
             android:contentDescription="@string/image"
-            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             tools:src="@drawable/cat" />
 
         <TextView

@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,6 +121,19 @@
                 android:text="@string/not_registered"
                 android:textColor="@color/white" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewLogin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/box_shape"
+            android:backgroundTint="@color/colorAccent"
+            android:gravity="center"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="@android:dimen/app_icon_size"
+            android:textStyle="bold"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -128,7 +141,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -252,6 +265,19 @@
                     android:textColor="@color/white" />
             </LinearLayout>
         </ScrollView>
+
+        <TextView
+            android:id="@+id/textViewRegister"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/box_shape"
+            android:backgroundTint="@color/colorAccent"
+            android:gravity="center"
+            android:text="@string/registration"
+            android:textColor="@color/white"
+            android:textSize="@android:dimen/app_icon_size"
+            android:textStyle="bold"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 </RelativeLayout>

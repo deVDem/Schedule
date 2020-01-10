@@ -50,6 +50,16 @@
                 android:padding="10dp"
                 android:text="@string/notification"
                 android:textColor="@color/text_color" />
+
+            <Button
+                android:id="@+id/buttonLogOff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/card_color_lessons"
+                android:text="@string/logoff"
+                android:textColor="@android:color/holo_red_light" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

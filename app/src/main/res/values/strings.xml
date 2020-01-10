@@ -31,6 +31,7 @@
     <string name="fullimage">Full Image</string>
     <string name="night_theme">Night Theme</string>
     <string name="notification">Notification</string>
+    <string name="logoff">Logoff</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

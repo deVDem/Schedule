@@ -37,6 +37,8 @@ public class FirstActivity extends AppCompatActivity {
     private Button mRegisterButton;
     private EditText mLLoginEt;
     private EditText mLPasswordEt;
+    private TextView mLTextView;
+
     private Context mContext;
     private Spinner mSpinner;
     private SharedPreferences mSettings;
@@ -47,6 +49,7 @@ public class FirstActivity extends AppCompatActivity {
     private EditText mRPassEt;
     private EditText mRConPassEt;
     private CheckBox mRCheckSpam;
+    private TextView mRTextView;
 
     private int ANIM_DURATION = 500;
     private String PREFS_FIRST = "first";
@@ -79,7 +82,7 @@ public class FirstActivity extends AppCompatActivity {
         mLoginButton = findViewById(R.id.loginBtn);
         mLLoginEt = findViewById(R.id.loginETLogin);
         mLPasswordEt = findViewById(R.id.loginETPassword);
-
+        mLTextView = findViewById(R.id.textViewLogin);
         mSpinner = findViewById(R.id.registerSpGroups);
         mRLoginEt = findViewById(R.id.registerEtLogin);
         mRNameEt = findViewById(R.id.registerEtName);
@@ -88,6 +91,7 @@ public class FirstActivity extends AppCompatActivity {
         mRConPassEt = findViewById(R.id.registerEtConfirm);
         mRCheckSpam = findViewById(R.id.registerChBxSpam);
         mRegisterButton = findViewById(R.id.registerBtnRegister);
+        mRTextView = findViewById(R.id.textViewRegister);
 
         mContext = this;
         LoginFuncs();
@@ -152,6 +156,11 @@ public class FirstActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 };
+                mRTextView.setVisibility(View.VISIBLE);
+                Animator animator = ViewAnimationUtils.createCircularReveal(mRTextView, Math.round(registerRl.getX()), Math.round(registerRl.getY()), 0, Math.max(registerRl.getWidth() * 2, registerRl.getHeight() * 2));
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(ANIM_DURATION * 3);
+                animator.start();
                 NetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
             } else
                 Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
@@ -208,6 +217,11 @@ public class FirstActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 };
+                mLTextView.setVisibility(View.VISIBLE);
+                Animator animator = ViewAnimationUtils.createCircularReveal(mLTextView, Math.round(registerRl.getX()), Math.round(registerRl.getY()), 0, Math.max(registerRl.getWidth() * 2, registerRl.getHeight() * 2));
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(ANIM_DURATION * 3);
+                animator.start();
                 NetworkController.Login(mContext, login, password, listener);
             } else {
                 Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();

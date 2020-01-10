@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-class DialogFullImageFragment extends DialogFragment {
+public class DialogFullImageFragment extends DialogFragment {
 
     private static String ARG_URL = "url_photo";
 
