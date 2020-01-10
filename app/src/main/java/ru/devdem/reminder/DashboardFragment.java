@@ -3,6 +3,7 @@ package ru.devdem.reminder;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -90,7 +91,32 @@ public class DashboardFragment extends Fragment {
         public void onBindViewHolder(@NonNull LessonsViewer holder, int position) {
             ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
             if (lessons.size() != 0) {
-                int dayOfWeek = new Date().getDay() - 1;
+                Calendar calendar = Calendar.getInstance();
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                switch (dayOfWeek) {
+                    case Calendar.MONDAY:
+                        dayOfWeek = 0;
+                        break;
+                    case Calendar.TUESDAY:
+                        dayOfWeek = 1;
+                        break;
+                    case Calendar.WEDNESDAY:
+                        dayOfWeek = 2;
+                        break;
+                    case Calendar.THURSDAY:
+                        dayOfWeek = 3;
+                        break;
+                    case Calendar.FRIDAY:
+                        dayOfWeek = 4;
+                        break;
+                    case Calendar.SATURDAY:
+                        dayOfWeek = 5;
+                        break;
+                    case Calendar.SUNDAY:
+                        dayOfWeek = 6;
+                        break;
+                }
+                Log.d("DAYOFWEEK", String.valueOf(dayOfWeek));
                 holder.mDayOfWeekText.setText(days[position]);
                 String dayOfWeekText = days[position] + " (сегодня)";
                 if (dayOfWeek == position) holder.mDayOfWeekText.setText(dayOfWeekText);
@@ -99,7 +125,7 @@ public class DashboardFragment extends Fragment {
                     String startString = new SimpleDateFormat("H:mm", Locale.getDefault()).format(lesson.getStart());
                     String endString = new SimpleDateFormat("H:mm", Locale.getDefault()).format(lesson.getEnd());
                     String timeString = startString + "-" + endString;
-                    View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
+                    @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
                     TextView numberLesson = view.findViewById(R.id.numberLesson);
                     TextView nameLesson = view.findViewById(R.id.textLesson);
                     TextView dateText = view.findViewById(R.id.textDate);
