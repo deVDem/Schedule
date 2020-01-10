@@ -33,6 +33,7 @@
     <string name="notification">Notification</string>
     <string name="logoff">Logoff</string>
     <string name="profile">Profile</string>
+    <string name="temporarily_not_available">Temporarily not available</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

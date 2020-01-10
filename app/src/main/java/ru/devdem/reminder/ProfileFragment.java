@@ -1,5 +1,6 @@
 package ru.devdem.reminder;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_profile, null);
+        return v;
     }
 }
