@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#806217</color>
     <color name="colorPrimaryDark">#664E12</color>
-    <color name="colorAccent">#99751C</color>
+    <color name="colorAccent">#CC9D25</color>
     <color name="dark">#303030</color>
     <color name="white">#ffffff</color>
     <color name="card_color_lessons">#404040</color>

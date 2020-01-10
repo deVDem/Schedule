@@ -32,4 +32,9 @@
         <item name="colorSwitchThumbNormal">@color/window_background</item>
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
+
+    <style name="FullImage" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#000</item>
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
 </resources>

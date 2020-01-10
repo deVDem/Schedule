@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:scaleType="fitCenter"
     tools:ignore="ContentDescription"
-    tools:src="@drawable/cat">
+    android:fitsSystemWindows="true"
+    android:src="@drawable/cat">
 
 </ImageView>

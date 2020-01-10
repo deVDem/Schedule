@@ -1,6 +1,7 @@
 package ru.devdem.reminder;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -152,9 +152,9 @@ public class NotificationsFragment extends Fragment {
             if (urlImage != null) {
                 Picasso.get().load(urlImage).into(holder.mImageView);
                 holder.mImageView.setOnClickListener(v -> {
-                    FragmentManager manager = getFragmentManager();
-                    DialogFullImageFragment dialog = DialogFullImageFragment.newInstance(notification.getUrlImage());
-                    dialog.show(Objects.requireNonNull(manager), DIALOG_PHOTO);
+                    Activity activity = Objects.requireNonNull(getActivity());
+                    startActivity(FullImageActivity.newInstance(getActivity(), urlImage));
+                    activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                 });
             } else holder.mImageView.setVisibility(View.GONE);
             if (position + 1 == getItemCount()) {
