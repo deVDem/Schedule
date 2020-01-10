@@ -24,6 +24,7 @@ class NetworkController {
     private static String URL_REGISTER = "https://api.devdem.ru/apps/schedule/accounts/register.php";
     private static String URL_GETGROUPS = "https://api.devdem.ru/apps/schedule/getgroups.php";
     private static String URL_NOTIFICATIONS = "https://api.devdem.ru/apps/schedule/notifications.php";
+    private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
 
     private static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
@@ -42,15 +43,33 @@ class NetworkController {
     }
 
     static void Login(Context context, String login, String password, Response.Listener<String> listener) {
-        SendRequest sendLoginRequest = new SendRequest(login, password, listener, getErrorListener(context));
+        Map<String, String> map = new HashMap<>();
+        map.put("login", login);
+        map.put("password", password);
+        SendRequest sendLoginRequest = new SendRequest(listener, getErrorListener(context), URL_LOGIN, map);
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendLoginRequest);
     }
 
     static void Register(Context context, String login, String name, String email, String password, String group, String spam, Response.Listener<String> listener) {
-        SendRequest sendLoginRequest = new SendRequest(login, name, email, password, group, spam, listener, getErrorListener(context));
+        Map<String, String> map = new HashMap<>();
+        map.put("login", login);
+        map.put("name", name);
+        map.put("email", email);
+        map.put("password", password);
+        map.put("group", group);
+        map.put("spam", spam);
+        SendRequest sendRequest = new SendRequest(listener, getErrorListener(context), URL_REGISTER, map);
         if (queue == null) queue = Volley.newRequestQueue(context);
-        queue.add(sendLoginRequest);
+        queue.add(sendRequest);
+    }
+
+    static void getLessons(Context context, Response.Listener<String> listener, String group) {
+        Map<String, String> map = new HashMap<>();
+        map.put("group", group);
+        SendRequest sendRequest = new SendRequest(listener, getErrorListener(context), URL_LESSONS, map);
+        if (queue == null) queue = Volley.newRequestQueue(context);
+        queue.add(sendRequest);
     }
 
     static void GetGroups(Context context, Spinner spinner) {
@@ -71,60 +90,27 @@ class NetworkController {
             }
             spinner.setAdapter(adapter);
         };
-        SendRequest sendGetGroupsRequest = new SendRequest(listener, getErrorListener(context));
+        SendRequest sendGetGroupsRequest = new SendRequest(listener, getErrorListener(context), URL_GETGROUPS, new HashMap<>());
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendGetGroupsRequest);
     }
 
     static void getNotifications(Context context, Response.Listener<String> listener) {
-        SendRequestNotifications notifications = new SendRequestNotifications(listener, getErrorListener(context));
+        SendRequest sendLoginRequest = new SendRequest(listener, getErrorListener(context), URL_NOTIFICATIONS, new HashMap<>());
         if (queue == null) queue = Volley.newRequestQueue(context);
-        queue.add(notifications);
-    }
-
-    private static class SendRequestNotifications extends StringRequest {
-        private Map<String, String> params;
-
-        SendRequestNotifications(Response.Listener<String> listener, Response.ErrorListener errorListener) {
-            super(Method.POST, URL_NOTIFICATIONS, listener, errorListener);
-            params = new HashMap<>();
-        }
-
-        @Override
-        public Map<String, String> getParams() {
-            return params;
-        }
+        queue.add(sendLoginRequest);
     }
 
     private static class SendRequest extends StringRequest {
-        private Map<String, String> params;
+        private Map<String, String> mParams;
 
-        SendRequest(Response.Listener<String> listener, Response.ErrorListener errorListener) {
-            super(Method.POST, URL_GETGROUPS, listener, errorListener);
-            params = new HashMap<>();
+        SendRequest(Response.Listener<String> listener, Response.ErrorListener errorListener, String url, Map<String, String> params) {
+            super(Method.POST, url, listener, errorListener);
+            mParams = params;
         }
-
-        SendRequest(String login, String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-            super(Method.POST, URL_LOGIN, listener, errorListener);
-            params = new HashMap<>();
-            params.put("login", login);
-            params.put("password", password);
-        }
-
-        SendRequest(String login, String name, String email, String password, String group, String spam, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-            super(Method.POST, URL_REGISTER, listener, errorListener);
-            params = new HashMap<>();
-            params.put("login", login);
-            params.put("name", name);
-            params.put("email", email);
-            params.put("password", password);
-            params.put("group", group);
-            params.put("spam", spam);
-        }
-
         @Override
         public Map<String, String> getParams() {
-            return params;
+            return mParams;
         }
     }
 }

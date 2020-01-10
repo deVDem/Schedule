@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.Response;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
+    private LessonsController mLessonsController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         View view = View.inflate(this, R.layout.activity_main, null);
         setContentView(view);
+        mLessonsController = LessonsController.get(this);
         mViewPager = findViewById(R.id.viewPager);
         mViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
         mViewPager.setCurrentItem(0);
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
+        NetworkController.getLessons(this, listener, settings.getString("group", "0"));
         mBottomNavigationView = findViewById(R.id.bottom_nav_view);
         mBottomNavigationView.setSelectedItemId(R.id.main_timer);
         mViewPager.setCurrentItem(2);

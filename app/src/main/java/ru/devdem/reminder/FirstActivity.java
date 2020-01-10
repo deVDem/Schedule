@@ -146,25 +146,46 @@ public class FirstActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
+                                    showHide(mRTextView, registerRl, true);
                                 }
-                            } else
+                            } else {
                                 Toast.makeText(mContext, "Такой пользователь уже зарегистрирован", Toast.LENGTH_SHORT).show();
-                        } else
+                                showHide(mRTextView, registerRl, true);
+                            }
+                        } else {
                             Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                            showHide(mRTextView, registerRl, false);
+                        }
                     } catch (Exception e) {
                         Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 };
-                mRTextView.setVisibility(View.VISIBLE);
-                Animator animator = ViewAnimationUtils.createCircularReveal(mRTextView, Math.round(registerRl.getX()), Math.round(registerRl.getY()), 0, Math.max(registerRl.getWidth() * 2, registerRl.getHeight() * 2));
-                animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                animator.setDuration(ANIM_DURATION * 3);
-                animator.start();
+                showHide(mRTextView, registerRl, true);
                 NetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
             } else
                 Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
         });
+    }
+
+    void showHide(View view, View relativeView, boolean show) {
+        view.setVisibility(View.VISIBLE);
+        Animator animator;
+        if (show)
+            animator = ViewAnimationUtils.createCircularReveal(view, Math.round(relativeView.getX()), Math.round(relativeView.getY()), 0, Math.max(relativeView.getWidth() * 2, relativeView.getHeight() * 2));
+        else
+            animator = ViewAnimationUtils.createCircularReveal(view, Math.round(relativeView.getX()), Math.round(relativeView.getY()), Math.max(relativeView.getWidth() * 2, relativeView.getHeight() * 2), 0);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(ANIM_DURATION);
+        animator.start();
+        if (!show)
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
     }
 
     private void LoginFuncs() {
@@ -207,21 +228,22 @@ public class FirstActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
+                                    showHide(mLTextView, loginRl, false);
                                 }
-                            } else
+                            } else {
                                 Toast.makeText(mContext, "Wrong password.", Toast.LENGTH_SHORT).show();
-                        } else
+                                showHide(mLTextView, loginRl, false);
+                            }
+                        } else {
                             Toast.makeText(mContext, "Wrong login or email.", Toast.LENGTH_SHORT).show();
+                            showHide(mLTextView, loginRl, false);
+                        }
                     } catch (Exception e) {
                         Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 };
-                mLTextView.setVisibility(View.VISIBLE);
-                Animator animator = ViewAnimationUtils.createCircularReveal(mLTextView, Math.round(registerRl.getX()), Math.round(registerRl.getY()), 0, Math.max(registerRl.getWidth() * 2, registerRl.getHeight() * 2));
-                animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                animator.setDuration(ANIM_DURATION * 3);
-                animator.start();
+                showHide(mLTextView, loginRl, true);
                 NetworkController.Login(mContext, login, password, listener);
             } else {
                 Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();

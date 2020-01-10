@@ -2,8 +2,12 @@ package ru.devdem.reminder;
 
 import android.content.Context;
 
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -26,7 +30,7 @@ public class LessonsController {
         return sLessonsController;
     }
 
-    void addLesson(String name, String numberText, int day, Date start, Date end) {
+    void addLesson(String name, String numberText, int day, String cab, Date start, Date end) {
         Lesson l = new Lesson();
         l.setName(name);
         l.setNumberText(numberText);
@@ -34,7 +38,27 @@ public class LessonsController {
         l.setStart(start);
         l.setNumber(mLessons.size());
         l.setEnd(end);
+        l.setCab(cab);
         mLessons.add(l);
+    }
+
+    void parseLessons(String response) {
+        try {
+            JSONObject object = new JSONObject(response);
+            int all = object.getInt("all");
+            for (int i = 0; i < all; i++) {
+                JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
+                String name = jsonObject.getString("text");
+                String cab = jsonObject.getString("cab");
+                String numberText = jsonObject.getString("n");
+                int day = jsonObject.getInt("day");
+                Date start = new SimpleDateFormat("h:mm:ss", Locale.getDefault()).parse(jsonObject.getString("start"));
+                Date end = new SimpleDateFormat("h:mm:ss", Locale.getDefault()).parse(jsonObject.getString("end"));
+                addLesson(name, numberText, day, cab, start, end);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeLessons() {
@@ -54,6 +78,16 @@ public class LessonsController {
         private String mName;
         private Date mStart;
         private Date mEnd;
+        private String mCab;
+
+        public String getCab() {
+            return mCab;
+        }
+
+        public void setCab(String cab) {
+            mCab = cab;
+        }
+
 
         Lesson() {
             this(randomUUID());
