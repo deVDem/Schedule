@@ -46,6 +46,9 @@
     <string name="newpassword">New password</string>
     <string name="newlogin">Enter a new login</string>
     <string name="newEmail">Enter a new email</string>
+    <string name="a_new_version_of_the_app_is_available">A new version of the app is available</string>
+    <string name="download">Download</string>
+    <string name="error">Error: </string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

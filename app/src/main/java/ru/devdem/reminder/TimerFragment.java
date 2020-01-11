@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -101,9 +99,6 @@ public class TimerFragment extends Fragment {
                         // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
                         int[] params = mTimeController.getNumberlesson();
                         ArrayList<Lesson> mLessons = mLessonsController.getLessons();
-                        Log.d("paramsLesson", Arrays.toString(params));
-                        String forlog = "[" + params[0] + ", " + params[1] + ": " + mLessons.get(params[1]).getName() + " " + mLessons.get(params[1]).getDay() + ", " + params[2] + ": " + mLessons.get(params[2]).getName() + " " + mLessons.get(params[2]).getDay() + ", " + params[3] + "]";
-                        Log.d("paramsLesson", forlog);
                         switch (params[0]) {
                             case 0:
                                 countString = mContext.getString(R.string.left_before_the_break);

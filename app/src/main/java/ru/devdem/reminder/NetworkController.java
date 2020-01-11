@@ -25,6 +25,7 @@ class NetworkController {
     private static String URL_GETGROUPS = "https://api.devdem.ru/apps/schedule/getgroups.php";
     private static String URL_NOTIFICATIONS = "https://api.devdem.ru/apps/schedule/notifications.php";
     private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
+    private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
 
     private static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
@@ -99,6 +100,12 @@ class NetworkController {
         SendRequest sendLoginRequest = new SendRequest(listener, null, URL_NOTIFICATIONS, new HashMap<>());
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendLoginRequest);
+    }
+
+    static void getLastVerInt(Context context, Response.Listener<String> listener) {
+        SendRequest sendRequest = new SendRequest(listener, null, URL_GET_VER_INT, new HashMap<>());
+        if (queue == null) queue = Volley.newRequestQueue(context);
+        queue.add(sendRequest);
     }
 
     private static class SendRequest extends StringRequest {

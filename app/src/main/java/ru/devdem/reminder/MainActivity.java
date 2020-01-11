@@ -1,22 +1,37 @@
 package ru.devdem.reminder;
 
+import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Response;
+import com.downloader.Error;
+import com.downloader.OnDownloadListener;
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private LessonsController mLessonsController;
     private TimeController mTimeController;
+    private RelativeLayout mRelativeLayout;
+    private Snackbar snackbar;
+    private String mUrlNewVersion;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void start() {
         View view = View.inflate(this, R.layout.activity_main, null);
+        mRelativeLayout = view.findViewById(R.id.main_relative_layout);
         setContentView(view);
         mTimeController = TimeController.get(this);
         mViewPager = findViewById(R.id.viewPager);
@@ -128,6 +147,66 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+        getVerInt();
+    }
+
+    private void downloadNewVer(String url) {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            String filename = "test.apk";
+            PRDownloader.initialize(getApplicationContext());
+            PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+                    .setDatabaseEnabled(false)
+                    .build();
+            PRDownloader.initialize(getApplicationContext(), config);
+            Log.d("downloader", "start");
+            PRDownloader.download(url, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), filename)
+                    .build()
+                    .start(new OnDownloadListener() {
+                        @Override
+                        public void onDownloadComplete() {
+                            Toast.makeText(MainActivity.this, "Установочный файл скачан. Пожалуйста, откройте его вручную в папке загрузки: " + filename, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onError(Error error) {
+                            Toast.makeText(MainActivity.this, R.string.errorNetwork, Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } else {
+            mUrlNewVersion = url;
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    123);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                downloadNewVer(mUrlNewVersion);
+            }
+        }
+    }
+
+    private void getVerInt() {
+        Response.Listener<String> listener = response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                int lastVer = jsonObject.getInt("ver");
+                String url = jsonObject.getString("url");
+                if (lastVer > BuildConfig.VERSION_CODE) {
+                    snackbar = Snackbar.make(mRelativeLayout, R.string.a_new_version_of_the_app_is_available, Snackbar.LENGTH_LONG);
+                    snackbar.setAction(R.string.download, v -> downloadNewVer(url))
+                            .show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+        NetworkController.getLastVerInt(this, listener);
     }
 
     @Override
