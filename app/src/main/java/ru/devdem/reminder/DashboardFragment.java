@@ -32,6 +32,7 @@ public class DashboardFragment extends Fragment {
 
     private String[] days;
     private TimeController mTimeController;
+    private static RVAdapter mRVAdapter;
 
     @Nullable
     @Override
@@ -45,8 +46,8 @@ public class DashboardFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(llm);
-        RVAdapter adapter = new RVAdapter(prepareArrayFromArray(lessonsController.getLessons()));
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
+        mRVAdapter = new RVAdapter(prepareArrayFromArray(lessonsController.getLessons()));
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mRVAdapter);
         scaleInAnimationAdapter.setDuration(500);
         scaleInAnimationAdapter.setFirstOnly(false);
         scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -77,6 +78,10 @@ public class DashboardFragment extends Fragment {
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LessonsViewer> {
         ArrayList<ArrayList<LessonsController.Lesson>> mLessons;
+
+        void setLessons(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
+            mLessons = lessons;
+        }
 
         RVAdapter(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
             this.mLessons = lessons;
@@ -134,10 +139,12 @@ public class DashboardFragment extends Fragment {
                     @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
                     RelativeLayout relativeLayout = view.findViewById(R.id.rlLesson);
                     int[][] states = new int[][]{
-                            new int[]{android.R.attr.state_enabled}
+                            new int[]{android.R.attr.state_enabled},
+                            new int[]{-android.R.attr.state_enabled}
                     };
                     int[] colors = new int[]{
-                            getResources().getColor(R.color.card_color_this_day)
+                            getResources().getColor(R.color.colorAccent),
+                            getResources().getColor(R.color.card_color),
                     };
                     TextView numberLesson = view.findViewById(R.id.numberLesson);
                     TextView nameLesson = view.findViewById(R.id.textLesson);
@@ -148,6 +155,7 @@ public class DashboardFragment extends Fragment {
                             case 0:
                                 if (lesson.getNumber() == params[1]) {
                                     relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                    relativeLayout.setEnabled(true);
                                     numberLesson.setTextColor(getResources().getColor(R.color.white));
                                     nameLesson.setTextColor(getResources().getColor(R.color.white));
                                     dateText.setTextColor(getResources().getColor(R.color.white));
@@ -155,13 +163,17 @@ public class DashboardFragment extends Fragment {
                                 }
                                 break;
                             case 1:
-                                if (lesson.getNumber() == params[1] || lesson.getNumber() == params[2]) {
+                                if (lesson.getNumber() == params[2]) {
                                     relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                    relativeLayout.setEnabled(true);
                                     numberLesson.setTextColor(getResources().getColor(R.color.white));
                                     nameLesson.setTextColor(getResources().getColor(R.color.white));
                                     dateText.setTextColor(getResources().getColor(R.color.white));
                                     cabText.setTextColor(getResources().getColor(R.color.white));
                                 }
+                                break;
+                            default:
+                                relativeLayout.setEnabled(true);
                                 break;
                         }
                     numberLesson.setText(lesson.getNumberText());

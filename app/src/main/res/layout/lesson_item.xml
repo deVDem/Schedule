@@ -33,7 +33,7 @@
                 android:id="@+id/textLesson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_bold_color"
+                android:textColor="@color/text_color"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Название урока" />

@@ -61,7 +61,7 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    void restart() {
+    private void restart() {
         Activity activity = Objects.requireNonNull(getActivity());
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);

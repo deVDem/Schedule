@@ -1,7 +1,6 @@
 package ru.devdem.reminder;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,28 +16,35 @@ class TimeController {
     private static TimeController sTimeController;
     private Context mContext;
     private LessonsController mLessonsController;
-    private SharedPreferences mPreferences;
 
     private TimeController(Context context) {
         String NAME_PREFS = "settings";
         mContext = context;
-        mPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
         mLessonsController = LessonsController.get(context);
     }
 
     static TimeController get(Context context) {
-        if (sTimeController == null) sTimeController = new TimeController(context);
+        if (sTimeController == null)
+            sTimeController = new TimeController(context.getApplicationContext());
         return sTimeController;
     }
 
     String getRemainText(Date date1, Date date2) {
+        String hour;
+        String min;
+        String sec;
         long milliseconds = date1.getTime() - date2.getTime();
         int hours = (int) (milliseconds / (60 * 60 * 1000));
         milliseconds -= (60 * 60 * 1000) * hours;
         int minutes = (int) (milliseconds / (60 * 1000));
         milliseconds -= (60 * 1000) * minutes;
         int seconds = (int) (milliseconds / (1000));
-        return hours + ":" + minutes + ":" + seconds;
+        hour = String.valueOf(hours);
+        min = String.valueOf(minutes);
+        sec = String.valueOf(seconds);
+        if (minutes < 10) min = "0" + min;
+        if (seconds < 10) sec = "0" + sec;
+        return hour + ":" + min + ":" + sec;
     }
 
     int[] getNumberlesson() {
@@ -116,6 +122,12 @@ class TimeController {
                     answer[3] = 3;
                     break;
                 }
+            }
+            if (answer[3] == -1) {
+                answer[0] = 0;
+                answer[1] = 0;
+                answer[2] = 0;
+                answer[3] = 3;
             }
         }
         return answer;
