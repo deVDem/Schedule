@@ -48,4 +48,18 @@
     <string name="left_before_the_break">Осталось до перерыва</string>
     <string name="end_week">Неделя закончилась</string>
     <string name="good_rest">Хорошего вам отдыха!</string>
+    <string name="change_password">Сменить пароль</string>
+    <string name="change_email">Сменить Email</string>
+    <string name="change_login">Сменить логин</string>
+    <string name="disable_the_mailing_list">Отключить рассылку</string>
+    <string name="enable_the_mailing_list">Включить рассылку</string>
+    <string name="newpassword">Новый пароль</string>
+    <string name="newlogin">Введите ваш новый логин</string>
+    <string name="newEmail">Введите новый Email</string>
+    <string-array name="permissions">
+        <item>Пользователь</item>
+        <item>Редактор</item>
+        <item>Модератор</item>
+        <item>Администратор</item>
+    </string-array>
 </resources>

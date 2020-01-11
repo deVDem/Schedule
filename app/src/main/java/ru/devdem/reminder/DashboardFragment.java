@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ public class DashboardFragment extends Fragment {
 
     private String[] days;
     private TimeController mTimeController;
-    private static RVAdapter mRVAdapter;
+    private LessonsController mLessonsController;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -41,21 +44,28 @@ public class DashboardFragment extends Fragment {
         Context context = Objects.requireNonNull(getContext());
         days = getResources().getStringArray(R.array.days);
         mTimeController = TimeController.get(getContext());
-        LessonsController lessonsController = LessonsController.get(context);
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerViewDash);
-        recyclerView.setHasFixedSize(true);
+        mLessonsController = LessonsController.get(context);
+        mRecyclerView = v.findViewById(R.id.recyclerViewDash);
+        mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(llm);
-        mRVAdapter = new RVAdapter(prepareArrayFromArray(lessonsController.getLessons()));
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mRVAdapter);
+        mRecyclerView.setLayoutManager(llm);
+        swipeRefreshLayout = v.findViewById(R.id.swipeContainer);
+        swipeRefreshLayout.setOnRefreshListener(() -> update());
+        update();
+        return v;
+    }
+
+    private void update() {
+        RVAdapter RVAdapter = new RVAdapter(prepareArrayFromArray(mLessonsController.getLessons()));
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(RVAdapter);
         scaleInAnimationAdapter.setDuration(500);
         scaleInAnimationAdapter.setFirstOnly(false);
         scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
         animationAdapter.setDuration(1000);
         animationAdapter.setFirstOnly(false);
-        recyclerView.setAdapter(animationAdapter);
-        return v;
+        mRecyclerView.setAdapter(animationAdapter);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private ArrayList<ArrayList<LessonsController.Lesson>> prepareArrayFromArray(ArrayList<LessonsController.Lesson> lessons) {
@@ -78,10 +88,6 @@ public class DashboardFragment extends Fragment {
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LessonsViewer> {
         ArrayList<ArrayList<LessonsController.Lesson>> mLessons;
-
-        void setLessons(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
-            mLessons = lessons;
-        }
 
         RVAdapter(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
             this.mLessons = lessons;

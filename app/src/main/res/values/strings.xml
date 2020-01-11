@@ -38,6 +38,14 @@
     <string name="left_before_the_break">Left before the break</string>
     <string name="end_week">The week was over</string>
     <string name="good_rest">Have a good rest</string>
+    <string name="change_password">Change password</string>
+    <string name="change_email">Change Email</string>
+    <string name="change_login">Change login</string>
+    <string name="disable_the_mailing_list">Disable the mailing list</string>
+    <string name="enable_the_mailing_list">Enable the mailing list</string>
+    <string name="newpassword">New password</string>
+    <string name="newlogin">Enter a new login</string>
+    <string name="newEmail">Enter a new email</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>
@@ -46,5 +54,11 @@
         <item>Friday</item>
         <item>Saturday</item>
         <item>Sunday</item>
+    </string-array>
+    <string-array name="permissions">
+        <item>User</item>
+        <item>Editor</item>
+        <item>Moderator</item>
+        <item>Administrator</item>
     </string-array>
 </resources>

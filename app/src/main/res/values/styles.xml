@@ -23,7 +23,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Dialog" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="Dialog" parent="Theme.AppCompat.Dialog">
         <item name="android:background">@color/window_background</item>
     </style>
 

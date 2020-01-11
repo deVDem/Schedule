@@ -1,12 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_corn"
+        android:backgroundTint="@color/card_color"
+        android:src="@drawable/ic_profle"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:id="@+id/lllnNameProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/temporarily_not_available" />
+        android:layout_alignTop="@+id/profileImage"
+        android:layout_alignBottom="@+id/profileImage"
+        android:layout_toEndOf="@+id/profileImage"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Роман Медведев" />
+
+        <TextView
+            android:id="@+id/profileLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="\@devdem" />
+
+        <TextView
+            android:id="@+id/profileEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: "
+            tools:ignore="HardcodedText"
+            tools:text="Email: devdem.ru@yandex.ru" />
+
+        <TextView
+            android:id="@+id/profilePermission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Пользователь" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lllnNameProfile"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/buttonProfileChangePass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_corn"
+            android:backgroundTint="@color/card_color_lessons"
+            android:text="@string/change_password" />
+
+        <Button
+            android:id="@+id/buttonProfileChangeEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_corn"
+            android:backgroundTint="@color/card_color_lessons"
+            android:text="@string/change_email" />
+
+        <Button
+            android:id="@+id/buttonProfileChangeLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_corn"
+            android:backgroundTint="@color/card_color_lessons"
+            android:text="@string/change_login" />
+
+        <Button
+            android:id="@+id/buttonProfileChangeSpam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_corn"
+            android:backgroundTint="@color/card_color_lessons"
+            android:text="@string/disable_the_mailing_list" />
+    </LinearLayout>
 </RelativeLayout>
