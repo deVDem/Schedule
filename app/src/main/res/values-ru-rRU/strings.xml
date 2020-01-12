@@ -59,6 +59,7 @@
     <string name="a_new_version_of_the_app_is_available">Доступна новая версия приложения</string>
     <string name="download">Скачать</string>
     <string name="error">Ошибка: </string>
+    <string name="ok">ОК</string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>

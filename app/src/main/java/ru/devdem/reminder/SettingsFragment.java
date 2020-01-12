@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import java.util.Objects;
 public class SettingsFragment extends Fragment {
 
     private SharedPreferences mSettings;
+    private boolean can = true;
 
     @Nullable
     @Override
@@ -47,14 +49,21 @@ public class SettingsFragment extends Fragment {
             switchNotification.setThumbTintList(new ColorStateList(states, colors));
         }
         switchNight.setChecked(mSettings.getBoolean("night", false));
-        switchNotification.setChecked(mSettings.getBoolean("notification", true));
+        switchNotification.setChecked(mSettings.getBoolean("notification", false));
+        switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Toast.makeText(context, getString(R.string.temporarily_not_available) + " :(", Toast.LENGTH_SHORT).show();
+            buttonView.setChecked(false);
+        });
         switchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mSettings.edit().putBoolean("night", isChecked).apply();
-            restart();
+            if (can) {
+                mSettings.edit().putBoolean("night", isChecked).apply();
+                restart();
+            }
         });
         Button mLogOffButton = view.findViewById(R.id.buttonLogOff);
         mLogOffButton.setOnClickListener(v -> {
-            mSettings.edit().clear().apply();
+            can = false;
+            mSettings.edit().remove("night").clear().apply();
             context.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
             restart();
         });
@@ -66,6 +75,5 @@ public class SettingsFragment extends Fragment {
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         activity.finish();
-        System.gc();
     }
 }

@@ -50,7 +50,7 @@ public class DashboardFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(llm);
         swipeRefreshLayout = v.findViewById(R.id.swipeContainer);
-        swipeRefreshLayout.setOnRefreshListener(() -> update());
+        swipeRefreshLayout.setOnRefreshListener(this::update);
         update();
         return v;
     }

@@ -27,7 +27,7 @@ public class FullImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_image);
         ImageView imageView = findViewById(R.id.imageFull);
         String urlImage = getIntent().getStringExtra(ARG_PATH);
-        Picasso.get().load(urlImage).into(imageView);
+        Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(imageView);
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);

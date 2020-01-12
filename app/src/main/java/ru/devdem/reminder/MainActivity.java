@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -45,11 +46,12 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout mRelativeLayout;
     private Snackbar snackbar;
     private String mUrlNewVersion;
+    private SharedPreferences mSettings;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         String NAME_PREFS = "settings";
-        SharedPreferences settings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
+        mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         mLessonsController = LessonsController.get(this);
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 mLessonsController.parseLessons(response);
                 start();
             };
-            NetworkController.getLessons(this, listener, settings.getString("group", "0"));
+            NetworkController.getLessons(this, listener, mSettings.getString("group", "0"));
         } else start();
     }
 
@@ -147,7 +149,32 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        getVerInt();
+        if (BuildConfig.VERSION_CODE > mSettings.getInt("version", 0)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("Добро пожаловать! :)")
+                    .setMessage("Ну, наконец-таки я доделал приложения до рабочего состояния\n" +
+                            "однако пока что недоступны уведомления, но совсем скоро я их доделаю\n" +
+                            "и всё будет оооок. Короче, хз, что сюда написать. Спасибо, что скачали\n" +
+                            "надеюсь вам приложение понравится. Ах да, прошлую версию приложения не забудьте удалить\n" +
+                            "В общем, хорошего учебного года. Немного о фишках: \n" +
+                            "1) свайпайте пальцем влево или вправо для переключения между страницами приложения\n" +
+                            "2) Чтобы открыть картинку на весь экран - просто нажмите на неё.\n" +
+                            "3) Текущий или следующий урок на экране \"Расписание\" выделяется.\n" +
+                            "4) Чтобы обновить уведомления или расписание уроков - свайпните вверх")
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        getVerInt();
+                        mSettings.edit().putInt("version", BuildConfig.VERSION_CODE).apply();
+                        dialog.cancel();
+                    })
+                    .setOnCancelListener(dialog -> {
+                        getVerInt();
+                        mSettings.edit().putInt("version", BuildConfig.VERSION_CODE).apply();
+                        dialog.cancel();
+                    });
+            builder.create().show();
+        } else {
+            getVerInt();
+        }
     }
 
     private void downloadNewVer(String url) {
