@@ -2,6 +2,7 @@ package ru.devdem.reminder;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.Response;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,26 +39,39 @@ public class DashboardFragment extends Fragment {
     private LessonsController mLessonsController;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private SharedPreferences mSettings;
+    private Context mContext;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_dashboard, null);
-        Context context = Objects.requireNonNull(getContext());
+        mContext = Objects.requireNonNull(getContext());
+        mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
         days = getResources().getStringArray(R.array.days);
         mTimeController = TimeController.get(getContext());
-        mLessonsController = LessonsController.get(context);
+        mLessonsController = LessonsController.get(mContext);
         mRecyclerView = v.findViewById(R.id.recyclerViewDash);
         mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(context);
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(llm);
         swipeRefreshLayout = v.findViewById(R.id.swipeContainer);
-        swipeRefreshLayout.setOnRefreshListener(this::update);
-        update();
+        swipeRefreshLayout.setOnRefreshListener(() -> update(1));
+        update(0);
         return v;
     }
 
-    private void update() {
+    private void update(int why) {
+        if (why == 1) {
+            Response.Listener<String> listener = response -> {
+                mLessonsController.parseLessons(response);
+                updateUI();
+            };
+            NetworkController.getLessons(mContext, listener, mSettings.getString("group", "0"));
+        } else updateUI();
+    }
+
+    private void updateUI() {
         RVAdapter RVAdapter = new RVAdapter(prepareArrayFromArray(mLessonsController.getLessons()));
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(RVAdapter);
         scaleInAnimationAdapter.setDuration(500);

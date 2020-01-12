@@ -7,8 +7,8 @@ android {
         applicationId "ru.devdem.reminder"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 30
-        versionName "0.9 beta"
+        versionCode 31
+        versionName "0.9 beta hotfix"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
