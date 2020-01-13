@@ -184,7 +184,7 @@ public class DashboardFragment extends Fragment {
                                     cabText.setTextColor(getResources().getColor(R.color.white));
                                 }
                                 break;
-                            case 1:
+                            /*case 1:
                                 if (lesson.getNumber() == params[2]) {
                                     relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
                                     relativeLayout.setEnabled(true);
@@ -193,7 +193,7 @@ public class DashboardFragment extends Fragment {
                                     dateText.setTextColor(getResources().getColor(R.color.white));
                                     cabText.setTextColor(getResources().getColor(R.color.white));
                                 }
-                                break;
+                                break;*/
                             default:
                                 relativeLayout.setEnabled(true);
                                 break;
