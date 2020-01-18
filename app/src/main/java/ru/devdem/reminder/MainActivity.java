@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                         Notification notification = Objects.requireNonNull(nb).addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
                         notificationUtils.getManager().notify(102, notification);
                     }
-                    snackbar = Snackbar.make(mView, R.string.a_new_version_of_the_app_is_available, Snackbar.LENGTH_LONG);
+                    snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
                     snackbar.setAction(R.string.download, v -> {
                         Intent updateIntent1 = DownloadActivity.newIntent(MainActivity.this, url);
                         startActivity(updateIntent1);
