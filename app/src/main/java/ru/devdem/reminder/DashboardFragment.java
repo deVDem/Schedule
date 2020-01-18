@@ -67,7 +67,7 @@ public class DashboardFragment extends Fragment {
                 mLessonsController.parseLessons(response);
                 updateUI();
             };
-            NetworkController.getLessons(mContext, listener, mSettings.getString("group", "0"));
+            NetworkController.getLessons(mContext, listener, NetworkController.getErrorListener(mContext), mSettings.getString("group", "0"));
         } else updateUI();
     }
 
@@ -173,30 +173,17 @@ public class DashboardFragment extends Fragment {
                     TextView dateText = view.findViewById(R.id.textDate);
                     TextView cabText = view.findViewById(R.id.textCab);
                     if (params[3] != 3 && params[3] != 0)
-                        switch (params[0]) {
-                            case 0:
-                                if (lesson.getNumber() == params[1]) {
-                                    relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
-                                    relativeLayout.setEnabled(true);
-                                    numberLesson.setTextColor(getResources().getColor(R.color.white));
-                                    nameLesson.setTextColor(getResources().getColor(R.color.white));
-                                    dateText.setTextColor(getResources().getColor(R.color.white));
-                                    cabText.setTextColor(getResources().getColor(R.color.white));
-                                }
-                                break;
-                            /*case 1:
-                                if (lesson.getNumber() == params[2]) {
-                                    relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
-                                    relativeLayout.setEnabled(true);
-                                    numberLesson.setTextColor(getResources().getColor(R.color.white));
-                                    nameLesson.setTextColor(getResources().getColor(R.color.white));
-                                    dateText.setTextColor(getResources().getColor(R.color.white));
-                                    cabText.setTextColor(getResources().getColor(R.color.white));
-                                }
-                                break;*/
-                            default:
+                        if (params[0] == 0) {
+                            if (lesson.getNumber() == params[1]) {
+                                relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
                                 relativeLayout.setEnabled(true);
-                                break;
+                                numberLesson.setTextColor(getResources().getColor(R.color.white));
+                                nameLesson.setTextColor(getResources().getColor(R.color.white));
+                                dateText.setTextColor(getResources().getColor(R.color.white));
+                                cabText.setTextColor(getResources().getColor(R.color.white));
+                            }
+                        } else {
+                            relativeLayout.setEnabled(true);
                         }
                     numberLesson.setText(lesson.getNumberText());
                     nameLesson.setText(lesson.getName());

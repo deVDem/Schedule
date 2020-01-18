@@ -48,11 +48,12 @@
     <string name="newEmail">Enter a new email</string>
     <string name="a_new_version_of_the_app_is_available">A new version of the app is available</string>
     <string name="download">Download</string>
-    <string name="error">Error: </string>
+    <string name="error">Error</string>
     <string name="ok">OK</string>
     <string name="downloadTitle">Downloading update</string>
     <string name="click_to_download">Click to download</string>
     <string name="preparing_to_download">Preparing to download…</string>
+    <string name="what_s_new">What\'s new?</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

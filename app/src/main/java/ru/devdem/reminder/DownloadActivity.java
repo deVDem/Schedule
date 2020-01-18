@@ -11,7 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.androidanimations.library.specials.in.LandingAnimator;
+import com.daimajia.androidanimations.library.specials.out.TakingOffAnimator;
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
 import com.downloader.PRDownloader;
@@ -40,6 +46,9 @@ public class DownloadActivity extends AppCompatActivity {
     private TextView mTextView;
     private int downloadId;
     private NotificationUtils mNotificationUtils;
+    private RelativeLayout mDownloadingLayout;
+    private RelativeLayout mErrorLayout;
+    private int ANIM_DURATION = 500;
 
     public static Intent newIntent(Context context, String url) {
         Intent intent = new Intent(context, DownloadActivity.class);
@@ -69,8 +78,34 @@ public class DownloadActivity extends AppCompatActivity {
         setContentView(view);
         mProgressBar = view.findViewById(R.id.progressBar);
         mTextView = view.findViewById(R.id.detail_download_text);
+        mDownloadingLayout = view.findViewById(R.id.downloading);
+        mErrorLayout = view.findViewById(R.id.errorDownload);
         mProgressBar.setProgress(0);
         mTextView.setText(R.string.preparing_to_download);
+        Button button = view.findViewById(R.id.buttonRetry);
+        button.setOnClickListener(v -> {
+            mDownloadingLayout.setVisibility(View.VISIBLE);
+            YoYo.with(new TakingOffAnimator())
+                    .interpolate(new AccelerateDecelerateInterpolator())
+                    .onEnd(animator -> mErrorLayout.setVisibility(View.GONE))
+                    .duration(ANIM_DURATION)
+                    .playOn(mErrorLayout);
+            YoYo.with(new LandingAnimator())
+                    .interpolate(new AccelerateDecelerateInterpolator())
+                    .duration(ANIM_DURATION)
+                    .onEnd(animator -> {
+                        if (ContextCompat.checkSelfPermission(DownloadActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            mNotificationUtils = new NotificationUtils(DownloadActivity.this);
+                            Update();
+                        } else {
+                            ActivityCompat.requestPermissions(DownloadActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+                        }
+                    })
+                    .playOn(mDownloadingLayout);
+            mProgressBar.setProgress(0);
+            mTextView.setText(R.string.preparing_to_download);
+        });
         if (ContextCompat.checkSelfPermission(DownloadActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             mNotificationUtils = new NotificationUtils(this);
             Update();
@@ -106,7 +141,13 @@ public class DownloadActivity extends AppCompatActivity {
                     float mbCurrent = (float) progress.currentBytes / 1048576;
                     float mbTotal = (float) progress.totalBytes / 1048576;
                     DecimalFormat format = new DecimalFormat("##.00", DecimalFormatSymbols.getInstance(Locale.getDefault()));
-                    String string = format.format(proc) + "% | " + format.format(mbCurrent) + "/" + format.format(mbTotal) + " MB";
+                    String procString = format.format(proc);
+                    if (proc < 1.0) procString = "0" + procString;
+                    String mbCurrentString = format.format(mbCurrent);
+                    if (mbCurrent < 1.0) mbCurrentString = "0" + mbCurrentString;
+                    String mbTotalString = format.format(mbTotal);
+                    if (mbTotal < 1.0) mbTotalString = "0" + mbTotalString;
+                    String string = procString + "% | " + mbCurrentString + "/" + mbTotalString + " MB";
                     mTextView.setText(string);
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         NotificationCompat.Builder nb = mNotificationUtils.getDownloadChannelNotification(progress);
@@ -139,8 +180,16 @@ public class DownloadActivity extends AppCompatActivity {
                     @Override
                     public void onError(Error error) {
                         notificationManager.cancel(101);
-                        Toast.makeText(DownloadActivity.this, R.string.errorNetwork, Toast.LENGTH_LONG).show();
-                        finish();
+                        mErrorLayout.setVisibility(View.VISIBLE);
+                        YoYo.with(new TakingOffAnimator())
+                                .interpolate(new AccelerateDecelerateInterpolator())
+                                .onEnd(animator -> mDownloadingLayout.setVisibility(View.GONE))
+                                .duration(ANIM_DURATION)
+                                .playOn(mDownloadingLayout);
+                        YoYo.with(new LandingAnimator())
+                                .interpolate(new AccelerateDecelerateInterpolator())
+                                .duration(ANIM_DURATION)
+                                .playOn(mErrorLayout);
                     }
                 });
     }

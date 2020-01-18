@@ -27,7 +27,7 @@ class NetworkController {
     private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
     private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
 
-    private static Response.ErrorListener getErrorListener(Context context) {
+    public static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(R.string.errorNetwork)
@@ -65,10 +65,10 @@ class NetworkController {
         queue.add(sendRequest);
     }
 
-    static void getLessons(Context context, Response.Listener<String> listener, String group) {
+    static void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group) {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
-        SendRequest sendRequest = new SendRequest(listener, getErrorListener(context), URL_LESSONS, map);
+        SendRequest sendRequest = new SendRequest(listener, errorListener, URL_LESSONS, map);
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendRequest);
     }

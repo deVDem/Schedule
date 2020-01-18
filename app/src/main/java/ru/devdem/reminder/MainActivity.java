@@ -9,12 +9,10 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
@@ -37,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private LessonsController mLessonsController;
     private TimeController mTimeController;
-    private RelativeLayout mRelativeLayout;
     NotificationUtils notificationUtils;
     private Snackbar snackbar;
     private SharedPreferences mSettings;
@@ -56,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
                 mLessonsController.parseLessons(response);
                 start();
             };
-            NetworkController.getLessons(this, listener, mSettings.getString("group", "0"));
+            Response.ErrorListener errorListener = error -> start();
+            NetworkController.getLessons(this, listener, errorListener, mSettings.getString("group", "0"));
         } else start();
         notificationUtils = new NotificationUtils(this);
     }
 
     private void start() {
         mView = View.inflate(this, R.layout.activity_main, null);
-        mRelativeLayout = mView.findViewById(R.id.main_relative_layout);
         setContentView(mView);
         mTimeController = TimeController.get(this);
         mViewPager = findViewById(R.id.viewPager);
@@ -146,24 +143,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         if (BuildConfig.VERSION_CODE > mSettings.getInt("version", 0)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    .setTitle("Новое обновление " + BuildConfig.VERSION_NAME + "!")
-                    .setMessage("В этом обновлении:\n" +
-                            "-Исправлена ошибка на 0:00:00 до урока/перемены\n" +
-                            "-Убрана индикация следующего урока в списке уроков\n" +
-                            "-Подготовлены иконки для уведомления\n" +
-                            "-Оптимизация фрагментов в ViewPager")
-                    .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        getVerInt();
-                        mSettings.edit().putInt("version", BuildConfig.VERSION_CODE).apply();
-                        dialog.cancel();
-                    })
-                    .setOnCancelListener(dialog -> {
-                        getVerInt();
-                        mSettings.edit().putInt("version", BuildConfig.VERSION_CODE).apply();
-                        dialog.cancel();
-                    });
-            builder.create().show();
+            startActivity(new Intent(this, MOTDActivity.class));
+            getVerInt();
         } else {
             getVerInt();
         }

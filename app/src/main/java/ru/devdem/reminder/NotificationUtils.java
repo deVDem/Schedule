@@ -36,9 +36,15 @@ public class NotificationUtils extends ContextWrapper {
         float mbTotal = (float) progress.totalBytes / 1048576;
         float proc = (float) progress.currentBytes / (float) progress.totalBytes * 100;
         DecimalFormat f = new DecimalFormat("##.00", DecimalFormatSymbols.getInstance(Locale.getDefault()));
+        String procString = f.format(proc);
+        if (proc < 1.0) procString = "0" + procString;
+        String mbCurrentString = f.format(mbCurrent);
+        if (mbCurrent < 1.0) mbCurrentString = "0" + mbCurrentString;
+        String mbTotalString = f.format(mbTotal);
+        if (mbTotal < 1.0) mbTotalString = "0" + mbTotalString;
         return new NotificationCompat.Builder(getApplicationContext(), DOWNLOAD_CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.downloadTitle))
-                .setContentText(f.format(proc) + "% | " + f.format(mbCurrent) + "/" + f.format(mbTotal) + " MB")
+                .setContentText(procString + "% | " + mbCurrentString + "/" + mbTotalString + " MB")
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setProgress((int) progress.totalBytes, (int) progress.currentBytes, false)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)

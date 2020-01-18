@@ -58,11 +58,12 @@
     <string name="newEmail">Введите новый Email</string>
     <string name="a_new_version_of_the_app_is_available">Доступна новая версия приложения</string>
     <string name="download">Скачать</string>
-    <string name="error">Ошибка: </string>
+    <string name="error">Ошибка</string>
     <string name="ok">ОК</string>
     <string name="downloadTitle">Загрузка обновления</string>
     <string name="click_to_download">Нажмите чтобы скачать и установить</string>
     <string name="preparing_to_download">Подготовка к загрузке…</string>
+    <string name="what_s_new">Что нового?</string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>
