@@ -50,6 +50,9 @@
     <string name="download">Download</string>
     <string name="error">Error: </string>
     <string name="ok">OK</string>
+    <string name="downloadTitle">Downloading update</string>
+    <string name="click_to_download">Click to download</string>
+    <string name="preparing_to_download">Preparing to download…</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

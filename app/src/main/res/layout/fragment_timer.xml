@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/box_shape"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/countText"
@@ -21,9 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/line1"
         android:gravity="center"
-        tools:text="0:23:09"
         android:textColor="@color/text_color"
-        android:textSize="34sp" />
+        android:textSize="34sp"
+        tools:text="0:23:09" />
 
     <ImageView
         android:id="@+id/line1"
@@ -53,7 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lessonNextText"
         android:gravity="center"
-        tools:text="МДК 01.01"
         android:textColor="@color/text_color"
-        android:textSize="32sp" />
+        android:textSize="32sp"
+        tools:text="МДК 01.01" />
+
 </RelativeLayout>

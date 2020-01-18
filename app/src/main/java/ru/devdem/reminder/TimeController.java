@@ -101,18 +101,6 @@ class TimeController {
                     answer[3] = 1;
                     break;
                 }
-                if (date.equals(lessonStart)) {
-                    answer[0] = 1;
-                    answer[1] = i;
-                    answer[2] = i;
-                    answer[3] = 2;
-                }
-                if (date.equals(lessonEnd)) {
-                    answer[0] = 0;
-                    answer[1] = i;
-                    answer[2] = i + 1;
-                    answer[3] = 2;
-                }
                 if (date.after(lessonEnd) && i + 1 < mLessons.size() && date.before(mLessons.get(i + 1).getStart())) {
                     answer[0] = 1;
                     answer[1] = i + 1;
@@ -125,6 +113,20 @@ class TimeController {
                     answer[1] = i;
                     answer[2] = i;
                     answer[3] = 0;
+                    break;
+                }
+                if (date.equals(lessonStart)) {
+                    answer[0] = 1;
+                    answer[1] = i;
+                    answer[2] = i;
+                    answer[3] = 2;
+                    break;
+                }
+                if (date.equals(lessonEnd)) {
+                    answer[0] = 0;
+                    answer[1] = i;
+                    answer[2] = i + 1;
+                    answer[3] = 2;
                     break;
                 }
                 if (date.after(lessonEnd) && i + 1 == mLessons.size()) {

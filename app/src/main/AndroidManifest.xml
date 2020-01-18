@@ -18,6 +18,15 @@
         android:supportsRtl="false"
         android:theme="@style/StartApp"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,6 +43,7 @@
         <activity
             android:name=".FullImageActivity"
             android:theme="@style/FullImage" />
+        <activity android:name=".DownloadActivity" />
     </application>
 
 </manifest>
