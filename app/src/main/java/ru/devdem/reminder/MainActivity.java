@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent updateIntent = DownloadActivity.newIntent(this, url);
                     updateIntent.setAction("ru.devdem.reminder.downloadupdate");
                     PendingIntent updatePendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
-                    NotificationCompat.Builder nb = null;
+                    NotificationCompat.Builder nb;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         nb = notificationUtils.getNewUpdateChannelNotification();
                         Notification notification = Objects.requireNonNull(nb).addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
