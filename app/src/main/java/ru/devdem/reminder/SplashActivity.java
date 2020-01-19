@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences mSettings;
-    private String PREFS_FIRST = "first";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +62,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void start() {
+        String PREFS_FIRST = "first";
         if (mSettings.getBoolean(PREFS_FIRST, true)) {
             startActivity(new Intent(SplashActivity.this, FirstActivity.class));
             overridePendingTransition(R.anim.transition_out, R.anim.transition_in);

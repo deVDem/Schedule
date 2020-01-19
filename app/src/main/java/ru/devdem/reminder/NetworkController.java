@@ -96,8 +96,8 @@ class NetworkController {
         queue.add(sendGetGroupsRequest);
     }
 
-    static void getNotifications(Context context, Response.Listener<String> listener) {
-        SendRequest sendLoginRequest = new SendRequest(listener, null, URL_NOTIFICATIONS, new HashMap<>());
+    static void getNotifications(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        SendRequest sendLoginRequest = new SendRequest(listener, errorListener, URL_NOTIFICATIONS, new HashMap<>());
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendLoginRequest);
     }

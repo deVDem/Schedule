@@ -18,6 +18,11 @@
         android:supportsRtl="false"
         android:theme="@style/StartApp"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -27,6 +32,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -104,7 +104,32 @@ public class NotificationsFragment extends Fragment {
             }
             mSwipeRefreshLayout.setRefreshing(false);
         };
-        NetworkController.getNotifications(getContext(), listener);
+        Response.ErrorListener errorListener = error -> {
+            ArrayList<Notification> mNotifications = new ArrayList<>();
+            Notification notification = new Notification();
+            notification.setDate(new Date());
+            notification.setId(0);
+            notification.setUrlImage("");
+            notification.setTitle(getString(R.string.error));
+            notification.setSubTitle(getString(R.string.swipedowntoretry));
+            mNotifications.add(notification);
+            if (mRVAdapter == null) {
+                mRVAdapter = new RVAdapter(mNotifications);
+                ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mRVAdapter);
+                scaleInAnimationAdapter.setDuration(500);
+                scaleInAnimationAdapter.setFirstOnly(true);
+                scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+                AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
+                animationAdapter.setDuration(1000);
+                animationAdapter.setFirstOnly(true);
+                mRecyclerView.setAdapter(animationAdapter);
+            } else {
+                mRVAdapter.setNotifications(mNotifications);
+                mRVAdapter.notifyDataSetChanged();
+            }
+            mSwipeRefreshLayout.setRefreshing(false);
+        };
+        NetworkController.getNotifications(getContext(), listener, errorListener);
     }
 
     class Notification {

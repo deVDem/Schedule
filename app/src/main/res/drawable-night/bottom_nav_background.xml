@@ -5,8 +5,8 @@
     <gradient
         android:angle="90"
         android:centerColor="@color/card_color"
-        android:endColor="#00F2F2F2"
         android:centerY="0.5"
+        android:endColor="#00333333"
         android:startColor="@color/card_color"
         android:useLevel="true" />
 

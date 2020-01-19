@@ -20,8 +20,10 @@ public class NotificationUtils extends ContextWrapper {
 
     public static final String ANDROID_CHANNEL_ID = "ru.devdem.reminder.NOTIFICATIONS";
     public static final String DOWNLOAD_CHANNEL_ID = "ru.devdem.reminder.NOTIFICATIONS_DOWNLOAD";
-    public static final String ANDROID_CHANNEL_NAME = "Main channel";
-    public static final String DOWNLOAD_CHANNEL_NAME = "Download channel";
+    public static final String TIMER_CHANNEL_ID = "ru.devdem.reminder.NOTIFICATIONS_TIMER";
+    public static final String ANDROID_CHANNEL_NAME = "Main";
+    public static final String DOWNLOAD_CHANNEL_NAME = "Downloads";
+    public static final String TIMER_CHANNEL_NAME = "Timer";
     private NotificationManager mManager;
 
     public NotificationUtils(Context base) {
@@ -30,7 +32,14 @@ public class NotificationUtils extends ContextWrapper {
             createChannels();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    public NotificationCompat.Builder getTimerNotification(String remain, String remainText) {
+        return new NotificationCompat.Builder(getApplicationContext(), TIMER_CHANNEL_ID)
+                .setContentTitle(remainText)
+                .setContentText(remain)
+                .setSmallIcon(R.drawable.ic_notification_timer)
+                .setAutoCancel(true);
+    }
+
     public NotificationCompat.Builder getDownloadChannelNotification(Progress progress) {
         float mbCurrent = (float) progress.currentBytes / 1048576;
         float mbTotal = (float) progress.totalBytes / 1048576;
@@ -53,7 +62,6 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public NotificationCompat.Builder getNewUpdateChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), ANDROID_CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.a_new_version_of_the_app_is_available))
@@ -69,6 +77,11 @@ public class NotificationUtils extends ContextWrapper {
         downloadChannel.enableVibration(false);
         downloadChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
+        NotificationChannel timerChannel = new NotificationChannel(TIMER_CHANNEL_ID, TIMER_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+        timerChannel.enableLights(false);
+        timerChannel.enableVibration(false);
+        timerChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
         NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID,
                 ANDROID_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
         androidChannel.enableLights(false);
@@ -77,7 +90,7 @@ public class NotificationUtils extends ContextWrapper {
 
         getManager().createNotificationChannel(androidChannel);
         getManager().createNotificationChannel(downloadChannel);
-
+        getManager().createNotificationChannel(timerChannel);
     }
 
     NotificationManager getManager() {

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,10 +48,15 @@ public class SettingsFragment extends Fragment {
             switchNotification.setThumbTintList(new ColorStateList(states, colors));
         }
         switchNight.setChecked(mSettings.getBoolean("night", false));
-        switchNotification.setChecked(mSettings.getBoolean("notification", false));
+        switchNotification.setChecked(mSettings.getBoolean("notification", true));
         switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Toast.makeText(context, getString(R.string.temporarily_not_available) + " :(", Toast.LENGTH_SHORT).show();
-            buttonView.setChecked(false);
+            if (can)
+                mSettings.edit().putBoolean("notification", isChecked).apply();
+            if (mSettings.getBoolean("notification", true))
+                Objects.requireNonNull(getActivity()).startService(new Intent(getContext(), NotificationService.class));
+            else {
+                Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
+            }
         });
         switchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (can) {
@@ -63,7 +67,7 @@ public class SettingsFragment extends Fragment {
         Button mLogOffButton = view.findViewById(R.id.buttonLogOff);
         mLogOffButton.setOnClickListener(v -> {
             can = false;
-            mSettings.edit().remove("night").clear().apply();
+            mSettings.edit().clear().apply();
             context.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
             restart();
         });
@@ -72,8 +76,9 @@ public class SettingsFragment extends Fragment {
 
     private void restart() {
         Activity activity = Objects.requireNonNull(getActivity());
+        activity.stopService(new Intent(getContext(), NotificationService.class));
+        activity.finish();
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-        activity.finish();
     }
 }

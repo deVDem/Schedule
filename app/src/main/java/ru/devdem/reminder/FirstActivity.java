@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -82,6 +83,12 @@ public class FirstActivity extends AppCompatActivity {
         mLoginButton = findViewById(R.id.loginBtn);
         mLLoginEt = findViewById(R.id.loginETLogin);
         mLPasswordEt = findViewById(R.id.loginETPassword);
+        mLPasswordEt.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                LoginFuncs();
+            }
+            return false;
+        });
         mLTextView = findViewById(R.id.textViewLogin);
         mSpinner = findViewById(R.id.registerSpGroups);
         mRLoginEt = findViewById(R.id.registerEtLogin);
@@ -94,78 +101,76 @@ public class FirstActivity extends AppCompatActivity {
         mRTextView = findViewById(R.id.textViewRegister);
 
         mContext = this;
-        LoginFuncs();
-        RegisterFuncs();
+        mLoginButton.setOnClickListener(v -> LoginFuncs());
+        NetworkController.GetGroups(mContext, mSpinner);
+        mRegisterButton.setOnClickListener(v -> RegisterFuncs());
     }
 
     private void RegisterFuncs() {
-        NetworkController.GetGroups(mContext, mSpinner);
-        mRegisterButton.setOnClickListener(v -> {
-            String login = mRLoginEt.getText().toString();
-            String name = mRNameEt.getText().toString();
-            String email = mREmailEt.getText().toString();
-            String password = mRPassEt.getText().toString();
-            String confirmPassword = mRConPassEt.getText().toString();
-            int group_id = mSpinner.getSelectedItemPosition();
-            String spam;
-            if (mRCheckSpam.isChecked()) spam = "1";
-            else spam = "0";
-            if (login.length() > 5 && name.length() > 5 && email.length() > 8 && password.length() > 5 && password.equals(confirmPassword) && group_id != 0) {
-                Response.Listener<String> listener = response -> {
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        boolean ok = jsonResponse.getBoolean("ok");
-                        if (ok) {
-                            boolean password_ok = jsonResponse.getBoolean("not_registed");
-                            if (password_ok) {
-                                try {
-                                    JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
-                                    int user_id = jsonUserInfo.getInt("id");
-                                    String name1 = jsonUserInfo.getString("name");
-                                    String email1 = jsonUserInfo.getString("email");
-                                    String login1 = jsonUserInfo.getString("login");
-                                    String group = jsonUserInfo.getString("groups");
-                                    boolean spam1 = jsonUserInfo.getString("spam").equals("1");
-                                    int permission = jsonUserInfo.getInt("permission");
-                                    String token = jsonUserInfo.getString("token");
-                                    SharedPreferences.Editor editor = mSettings.edit();
-                                    editor.putInt("user_id", user_id);
-                                    editor.putString("name", name1);
-                                    editor.putString("email", email1);
-                                    editor.putString("login", login1);
-                                    editor.putString("group", group);
-                                    editor.putBoolean("spam", spam1);
-                                    editor.putInt("permission", permission);
-                                    editor.putString("token", token);
-                                    editor.putBoolean(PREFS_FIRST, false);
-                                    editor.apply();
-                                    Toast.makeText(mContext, "Успешная регистрация.", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(FirstActivity.this, MainActivity.class));
-                                    overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                                    finish();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
-                                    showHide(mRTextView, registerRl, true);
-                                }
-                            } else {
-                                Toast.makeText(mContext, "Такой пользователь уже зарегистрирован", Toast.LENGTH_SHORT).show();
+        String login = mRLoginEt.getText().toString();
+        String name = mRNameEt.getText().toString();
+        String email = mREmailEt.getText().toString();
+        String password = mRPassEt.getText().toString();
+        String confirmPassword = mRConPassEt.getText().toString();
+        int group_id = mSpinner.getSelectedItemPosition();
+        String spam;
+        if (mRCheckSpam.isChecked()) spam = "1";
+        else spam = "0";
+        if (login.length() > 5 && name.length() > 5 && email.length() > 8 && password.length() > 5 && password.equals(confirmPassword) && group_id != 0) {
+            Response.Listener<String> listener = response -> {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean ok = jsonResponse.getBoolean("ok");
+                    if (ok) {
+                        boolean password_ok = jsonResponse.getBoolean("not_registed");
+                        if (password_ok) {
+                            try {
+                                JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
+                                int user_id = jsonUserInfo.getInt("id");
+                                String name1 = jsonUserInfo.getString("name");
+                                String email1 = jsonUserInfo.getString("email");
+                                String login1 = jsonUserInfo.getString("login");
+                                String group = jsonUserInfo.getString("groups");
+                                boolean spam1 = jsonUserInfo.getString("spam").equals("1");
+                                int permission = jsonUserInfo.getInt("permission");
+                                String token = jsonUserInfo.getString("token");
+                                SharedPreferences.Editor editor = mSettings.edit();
+                                editor.putInt("user_id", user_id);
+                                editor.putString("name", name1);
+                                editor.putString("email", email1);
+                                editor.putString("login", login1);
+                                editor.putString("group", group);
+                                editor.putBoolean("spam", spam1);
+                                editor.putInt("permission", permission);
+                                editor.putString("token", token);
+                                editor.putBoolean(PREFS_FIRST, false);
+                                editor.apply();
+                                Toast.makeText(mContext, "Успешная регистрация.", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
                                 showHide(mRTextView, registerRl, true);
                             }
                         } else {
-                            Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
-                            showHide(mRTextView, registerRl, false);
+                            Toast.makeText(mContext, "Такой пользователь уже зарегистрирован", Toast.LENGTH_SHORT).show();
+                            showHide(mRTextView, registerRl, true);
                         }
-                    } catch (Exception e) {
+                    } else {
                         Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                        showHide(mRTextView, registerRl, false);
                     }
-                };
-                showHide(mRTextView, registerRl, true);
-                NetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
-            } else
-                Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
-        });
+                } catch (Exception e) {
+                    Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            };
+            showHide(mRTextView, registerRl, true);
+            NetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
+        } else
+            Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
     }
 
     void showHide(View view, View relativeView, boolean show) {
@@ -189,66 +194,64 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void LoginFuncs() {
-        mLoginButton.setOnClickListener(v -> {
-            String login = mLLoginEt.getText().toString();
-            String password = mLPasswordEt.getText().toString();
-            if (login.length() >= 6 || password.length() >= 6) {
-                Response.Listener<String> listener = response -> {
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        boolean ok = jsonResponse.getBoolean("ok");
-                        if (ok) {
-                            boolean password_ok = jsonResponse.getBoolean("password_ok");
-                            if (password_ok) {
-                                try {
-                                    JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
-                                    int user_id = jsonUserInfo.getInt("id");
-                                    String name = jsonUserInfo.getString("name");
-                                    String email = jsonUserInfo.getString("email");
-                                    String login1 = jsonUserInfo.getString("login");
-                                    String group = jsonUserInfo.getString("groups");
-                                    boolean spam = jsonUserInfo.getString("spam").equals("1");
-                                    int permission = jsonUserInfo.getInt("permission");
-                                    String token = jsonUserInfo.getString("token");
-                                    SharedPreferences.Editor editor = mSettings.edit();
-                                    editor.putInt("user_id", user_id);
-                                    editor.putString("name", name);
-                                    editor.putString("email", email);
-                                    editor.putString("login", login1);
-                                    editor.putString("group", group);
-                                    editor.putBoolean("spam", spam);
-                                    editor.putInt("permission", permission);
-                                    editor.putString("token", token);
-                                    editor.putBoolean(PREFS_FIRST, false);
-                                    editor.apply();
-                                    Toast.makeText(mContext, "Успешный вход.", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(FirstActivity.this, MainActivity.class));
-                                    overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                                    finish();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
-                                    showHide(mLTextView, loginRl, false);
-                                }
-                            } else {
-                                Toast.makeText(mContext, "Wrong password.", Toast.LENGTH_SHORT).show();
+        String login = mLLoginEt.getText().toString();
+        String password = mLPasswordEt.getText().toString();
+        if (login.length() >= 6 || password.length() >= 6) {
+            Response.Listener<String> listener = response -> {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean ok = jsonResponse.getBoolean("ok");
+                    if (ok) {
+                        boolean password_ok = jsonResponse.getBoolean("password_ok");
+                        if (password_ok) {
+                            try {
+                                JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
+                                int user_id = jsonUserInfo.getInt("id");
+                                String name = jsonUserInfo.getString("name");
+                                String email = jsonUserInfo.getString("email");
+                                String login1 = jsonUserInfo.getString("login");
+                                String group = jsonUserInfo.getString("groups");
+                                boolean spam = jsonUserInfo.getString("spam").equals("1");
+                                int permission = jsonUserInfo.getInt("permission");
+                                String token = jsonUserInfo.getString("token");
+                                SharedPreferences.Editor editor = mSettings.edit();
+                                editor.putInt("user_id", user_id);
+                                editor.putString("name", name);
+                                editor.putString("email", email);
+                                editor.putString("login", login1);
+                                editor.putString("group", group);
+                                editor.putBoolean("spam", spam);
+                                editor.putInt("permission", permission);
+                                editor.putString("token", token);
+                                editor.putBoolean(PREFS_FIRST, false);
+                                editor.apply();
+                                Toast.makeText(mContext, "Успешный вход.", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
                                 showHide(mLTextView, loginRl, false);
                             }
                         } else {
-                            Toast.makeText(mContext, "Wrong login or email.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Wrong password.", Toast.LENGTH_SHORT).show();
                             showHide(mLTextView, loginRl, false);
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                    } else {
+                        Toast.makeText(mContext, "Wrong login or email.", Toast.LENGTH_SHORT).show();
+                        showHide(mLTextView, loginRl, false);
                     }
-                };
-                showHide(mLTextView, loginRl, true);
-                NetworkController.Login(mContext, login, password, listener);
-            } else {
-                Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();
-            }
-        });
+                } catch (Exception e) {
+                    Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            };
+            showHide(mLTextView, loginRl, true);
+            NetworkController.Login(mContext, login, password, listener);
+        } else {
+            Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void onClickNotReg(View v) {

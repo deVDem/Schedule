@@ -28,6 +28,8 @@
     <string name="notifications">Уведомления</string>
     <string name="settings">Настройки</string>
     <string name="dashboard">Расписание</string>
+    <string name="swipedowntoretry">Проведите пальцем вниз, чтобы повторить попытку</string>
+    <string name="reload">Обновить</string>
     <string-array name="days">
         <item>Понедельник</item>
         <item>Вторник</item>
@@ -64,6 +66,9 @@
     <string name="click_to_download">Нажмите чтобы скачать и установить</string>
     <string name="preparing_to_download">Подготовка к загрузке…</string>
     <string name="what_s_new">Что нового?</string>
+    <string name="service_stopped">Сервис остановлен</string>
+    <string name="click_to_restart">Нажмите, чтобы перезапустить</string>
+    <string name="left_before">Осталось до </string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>

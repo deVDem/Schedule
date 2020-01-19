@@ -21,7 +21,7 @@
     <string name="detail">More detailed: </string>
     <string name="retry">Retry</string>
     <string name="image">Image</string>
-    <string name="left_before_lesson">Осталось до урока</string>
+    <string name="left_before_lesson">Left before lesson</string>
     <string name="next_lesson">Next Lesson</string>
     <string name="timer">Timer</string>
     <string name="notifications">Notifications</string>
@@ -54,6 +54,11 @@
     <string name="click_to_download">Click to download</string>
     <string name="preparing_to_download">Preparing to download…</string>
     <string name="what_s_new">What\'s new?</string>
+    <string name="service_stopped">The service is stopped</string>
+    <string name="click_to_restart">Click to restart</string>
+    <string name="left_before">Left before </string>
+    <string name="swipedowntoretry">Swipe down to retry</string>
+    <string name="reload">Reload</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,7 +68,11 @@ public class DashboardFragment extends Fragment {
                 mLessonsController.parseLessons(response);
                 updateUI();
             };
-            NetworkController.getLessons(mContext, listener, NetworkController.getErrorListener(mContext), mSettings.getString("group", "0"));
+            Response.ErrorListener errorListener = error -> {
+                Toast.makeText(mContext, R.string.errorNetwork, Toast.LENGTH_LONG).show();
+                swipeRefreshLayout.setRefreshing(false);
+            };
+            NetworkController.getLessons(mContext, listener, errorListener, mSettings.getString("group", "0"));
         } else updateUI();
     }
 

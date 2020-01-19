@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
-        if (mLessonsController.getLessons().size() == 0) {
+        if (mLessonsController.getLessons().size() == 0 && !mSettings.getBoolean("first", true)) {
             Response.Listener<String> listener = response -> {
                 mLessonsController.parseLessons(response);
                 start();
@@ -148,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getVerInt();
         }
+        if (mSettings.getBoolean("notification", true))
+            startService(new Intent(this, NotificationService.class));
     }
 
     private void getVerInt() {
@@ -160,12 +162,10 @@ public class MainActivity extends AppCompatActivity {
                     Intent updateIntent = DownloadActivity.newIntent(this, url);
                     updateIntent.setAction("ru.devdem.reminder.downloadupdate");
                     PendingIntent updatePendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
-                    NotificationCompat.Builder nb;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        nb = notificationUtils.getNewUpdateChannelNotification();
-                        Notification notification = Objects.requireNonNull(nb).addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
-                        notificationUtils.getManager().notify(102, notification);
-                    }
+                    NotificationCompat.Builder nb = notificationUtils.getNewUpdateChannelNotification();
+                    Notification notification = nb.addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
+                    notification.contentIntent = updatePendingIntent;
+                    notificationUtils.getManager().notify(102, notification);
                     snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
                     snackbar.setAction(R.string.download, v -> {
                         Intent updateIntent1 = DownloadActivity.newIntent(MainActivity.this, url);
