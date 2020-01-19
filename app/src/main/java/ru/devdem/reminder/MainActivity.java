@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-
+    // test
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
     private LessonsController mLessonsController;
