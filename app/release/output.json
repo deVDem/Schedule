@@ -6,8 +6,8 @@
     "apkData": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 32,
-      "versionName": "0.9.1 beta",
+      "versionCode": 33,
+      "versionName": "0.9.3 beta",
       "enabled": true,
       "outputFile": "app-release.apk",
       "fullName": "release",

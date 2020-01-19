@@ -27,7 +27,7 @@ class NetworkController {
     private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
     private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
 
-    public static Response.ErrorListener getErrorListener(Context context) {
+    private static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(R.string.errorNetwork)

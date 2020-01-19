@@ -34,8 +34,6 @@ public class FirstActivity extends AppCompatActivity {
     private RelativeLayout helloRl;
     private RelativeLayout loginRl;
     private RelativeLayout registerRl;
-    private Button mLoginButton;
-    private Button mRegisterButton;
     private EditText mLLoginEt;
     private EditText mLPasswordEt;
     private TextView mLTextView;
@@ -78,9 +76,9 @@ public class FirstActivity extends AppCompatActivity {
         loginRl = findViewById(R.id.relativeLayoutLogin);
         registerRl = findViewById(R.id.relativeLayoutRegister);
         TextView loginTVNotReg = findViewById(R.id.loginTVNotReg);
-        loginTVNotReg.setOnClickListener(this::onClickNotReg);
-        findViewById(R.id.firstBtNext).setOnClickListener(this::onClickNext);
-        mLoginButton = findViewById(R.id.loginBtn);
+        loginTVNotReg.setOnClickListener(v1 -> onClickNotReg());
+        findViewById(R.id.firstBtNext).setOnClickListener(v1 -> onClickNext());
+        Button loginButton = findViewById(R.id.loginBtn);
         mLLoginEt = findViewById(R.id.loginETLogin);
         mLPasswordEt = findViewById(R.id.loginETPassword);
         mLPasswordEt.setOnEditorActionListener((v, actionId, event) -> {
@@ -97,13 +95,13 @@ public class FirstActivity extends AppCompatActivity {
         mRPassEt = findViewById(R.id.registerEtPassword);
         mRConPassEt = findViewById(R.id.registerEtConfirm);
         mRCheckSpam = findViewById(R.id.registerChBxSpam);
-        mRegisterButton = findViewById(R.id.registerBtnRegister);
+        Button registerButton = findViewById(R.id.registerBtnRegister);
         mRTextView = findViewById(R.id.textViewRegister);
 
         mContext = this;
-        mLoginButton.setOnClickListener(v -> LoginFuncs());
+        loginButton.setOnClickListener(v -> LoginFuncs());
         NetworkController.GetGroups(mContext, mSpinner);
-        mRegisterButton.setOnClickListener(v -> RegisterFuncs());
+        registerButton.setOnClickListener(v -> RegisterFuncs());
     }
 
     private void RegisterFuncs() {
@@ -254,7 +252,7 @@ public class FirstActivity extends AppCompatActivity {
         }
     }
 
-    private void onClickNotReg(View v) {
+    private void onClickNotReg() {
         YoYo.with(Techniques.TakingOff).duration(ANIM_DURATION)
                 .interpolate(new AccelerateDecelerateInterpolator())
                 .onEnd(animator -> {
@@ -264,7 +262,7 @@ public class FirstActivity extends AppCompatActivity {
                 }).playOn(loginRl);
     }
 
-    private void onClickNext(View v) {
+    private void onClickNext() {
         int cx = helloRl.getWidth() / 2;
         int cy = helloRl.getHeight() / 2;
         float radius = helloRl.getWidth();

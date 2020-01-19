@@ -1,5 +1,6 @@
 package ru.devdem.reminder;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import java.text.ParseException;
@@ -13,6 +14,7 @@ import ru.devdem.reminder.LessonsController.Lesson;
 
 class TimeController {
 
+    @SuppressLint("StaticFieldLeak")
     private static TimeController sTimeController;
     private Context mContext;
     private LessonsController mLessonsController;
