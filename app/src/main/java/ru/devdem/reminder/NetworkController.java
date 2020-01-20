@@ -46,7 +46,7 @@ class NetworkController {
 
     static void serviceDebug(Context context, int count) {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getInt("userid", 0)));
+        map.put("user_id", String.valueOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getInt("user_id", 0)));
         map.put("token", context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("token", "null"));
         map.put("count", String.valueOf(count));
         SendRequest sendRequest = new SendRequest(null, null, URL_SERVICE_DEBUG, map);
