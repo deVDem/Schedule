@@ -4,14 +4,21 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +44,13 @@ public class TimerFragment extends Fragment {
     private TextView lessonNextText;
     private TextView lessonNext;
     private Thread mThread;
+    private MainActivity mainActivity;
+    private AdView adView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -51,7 +65,38 @@ public class TimerFragment extends Fragment {
         counterText = view.findViewById(R.id.counterText);
         lessonNextText = view.findViewById(R.id.lessonNextText);
         lessonNext = view.findViewById(R.id.lessonNext);
+        adView = new AdView(mContext);
+        if (!BuildConfig.DEBUG)
+            adView.setAdUnitId("ca-app-pub-7389415060915567/7081052515");
+        else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        RelativeLayout relativeLayout = view.findViewById(R.id.relativeTimer);
+        mainActivity = (MainActivity) mActivity;
+        adView.setAdSize(getAdSize());
+        updatePosAd();
+        relativeLayout.addView(adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
         return view;
+    }
+
+    private void updatePosAd() {
+        float[] params = mainActivity.getHeightAndEndYMenu();
+        adView.setTranslationY(params[1]-params[0]*1.5f);
+    }
+
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        Display display = Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(mContext, adWidth);
     }
 
     private Thread createThread() {
@@ -128,6 +173,7 @@ public class TimerFragment extends Fragment {
                                 e.printStackTrace();
                             }
                         });
+                        updatePosAd();
                         Thread.sleep(250);
                     } catch (InterruptedException ignored) {
                     }

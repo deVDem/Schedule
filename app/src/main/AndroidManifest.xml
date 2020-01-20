@@ -18,6 +18,9 @@
         android:supportsRtl="false"
         android:theme="@style/StartApp"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7389415060915567~2742847091"/>
         <service
             android:name=".NotificationService"
             android:enabled="true"

@@ -21,6 +21,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Response;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -39,7 +42,13 @@ public class MainActivity extends AppCompatActivity {
     private Snackbar snackbar;
     private SharedPreferences mSettings;
     private View mView;
+    public float[] getHeightAndEndYMenu() {
+        float[] answer = new float[2];
+        answer[0] = mBottomNavigationView.getHeight();
+        answer[1] = mBottomNavigationView.getY();
 
+        return answer;
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         String NAME_PREFS = "settings";
@@ -62,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private void start() {
         mView = View.inflate(this, R.layout.activity_main, null);
         setContentView(mView);
+        MobileAds.initialize(this, initializationStatus -> {
+
+        });
         mTimeController = TimeController.get(this);
         mViewPager = findViewById(R.id.viewPager);
         mViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager(), 0));
