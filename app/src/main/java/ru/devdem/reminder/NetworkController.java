@@ -26,6 +26,7 @@ class NetworkController {
     private static String URL_NOTIFICATIONS = "https://api.devdem.ru/apps/schedule/notifications.php";
     private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
     private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
+    private static String URL_SERVICE_DEBUG = "https://api.devdem.ru/apps/schedule/service_debug.php";
 
     private static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
@@ -41,6 +42,16 @@ class NetworkController {
                     .create();
             dialog.show();
         };
+    }
+
+    static void serviceDebug(Context context, int count) {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", String.valueOf(context.getSharedPreferences("settings", Context.MODE_PRIVATE).getInt("userid", 0)));
+        map.put("token", context.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("token", "null"));
+        map.put("count", String.valueOf(count));
+        SendRequest sendRequest = new SendRequest(null, null, URL_SERVICE_DEBUG, map);
+        if (queue == null) queue = Volley.newRequestQueue(context);
+        queue.add(sendRequest);
     }
 
     static void Login(Context context, String login, String password, Response.Listener<String> listener) {

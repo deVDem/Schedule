@@ -25,6 +25,7 @@ public class NotificationService extends Service {
     private LessonsController mLessonsController;
     private Thread sThread;
     private boolean canGo = true;
+    private int count = 0;
 
     @Override
     public void onCreate() {
@@ -106,6 +107,7 @@ public class NotificationService extends Service {
                         notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
                         if (canGo)
                             mNotificationUtils.getManager().notify(103, notification);
+                        count++;
                         Thread.sleep(500);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -129,6 +131,7 @@ public class NotificationService extends Service {
             reloadIntent.setAction("ru.devdem.reminder.reloadservice");
             notification.contentIntent = PendingIntent.getActivity(this, 0, reloadIntent, 0);
             mNotificationUtils.getManager().notify(103, notification);
+            NetworkController.serviceDebug(getApplicationContext(), count);
         }
         sThread = null;
     }

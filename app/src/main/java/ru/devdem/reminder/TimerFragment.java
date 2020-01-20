@@ -80,8 +80,12 @@ public class TimerFragment extends Fragment {
     }
 
     private void updatePosAd() {
-        float[] params = mainActivity.getHeightAndEndYMenu();
-        adView.setTranslationY(params[1]-params[0]*1.5f);
+        try {
+            float[] params = mainActivity.getHeightAndEndYMenu();
+            adView.setTranslationY(params[1]-params[0]*1.5f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private AdSize getAdSize() {
