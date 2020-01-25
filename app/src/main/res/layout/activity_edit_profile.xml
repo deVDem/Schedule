@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/first_and_last_name"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:textColor="@color/text_color"
+                app:met_baseColor="@color/text_color"
+                app:met_errorColor="@color/colorAccent"
+                app:met_floatingLabel="highlight"
+                app:met_minCharacters="6"
+                app:met_primaryColor="@color/colorAccent" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E-Mail"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/text_color"
+                app:met_baseColor="@color/text_color"
+                app:met_errorColor="@color/colorAccent"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="@color/colorAccent"
+                tools:ignore="HardcodedText" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_et"
+                android:imeOptions="actionDone"
+                android:inputType="textNoSuggestions"
+                app:met_baseColor="@color/text_color"
+                app:met_errorColor="@color/colorAccent"
+                app:met_floatingLabel="highlight"
+                app:met_helperTextColor="@color/colorAccent"
+                app:met_minCharacters="6"
+                app:met_primaryColor="@color/colorAccent"
+                tools:text="devdem" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/ic_done" />
+</RelativeLayout>

@@ -54,6 +54,7 @@
             android:theme="@style/FullImage" />
         <activity android:name=".DownloadActivity" />
         <activity android:name=".MOTDActivity" />
+        <activity android:name=".EditProfileActivity" />
     </application>
 
 </manifest>

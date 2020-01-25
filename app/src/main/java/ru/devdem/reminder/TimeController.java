@@ -110,13 +110,6 @@ class TimeController {
                     answer[3] = 2;
                     break;
                 }
-                if (date.before(lessonStart) && i == 0) {
-                    answer[0] = 1;
-                    answer[1] = i;
-                    answer[2] = i;
-                    answer[3] = 0;
-                    break;
-                }
                 if (date.equals(lessonStart)) {
                     answer[0] = 1;
                     answer[1] = i;
@@ -136,6 +129,13 @@ class TimeController {
                     answer[1] = 0;
                     answer[2] = 0;
                     answer[3] = 3;
+                    break;
+                }
+                if (date.before(lessonStart)) {
+                    answer[0] = 1;
+                    answer[1] = i;
+                    answer[2] = i;
+                    answer[3] = 0;
                     break;
                 }
             }

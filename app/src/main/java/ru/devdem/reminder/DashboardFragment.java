@@ -151,8 +151,10 @@ public class DashboardFragment extends Fragment {
                         break;
                 }
                 holder.mDayOfWeekText.setText(days[position]);
-                String dayOfWeekText = days[position] + " (сегодня)";
-                if (dayOfWeek == position) holder.mDayOfWeekText.setText(dayOfWeekText);
+                String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
+                if (dayOfWeek == position) {
+                    holder.mDayOfWeekText.setText(dayOfWeekText);
+                }
                 for (int i = 0; i < lessons.size(); i++) {
                     // 0 - урок или перемена
                     // 1 - номер урока которого считать
@@ -190,7 +192,10 @@ public class DashboardFragment extends Fragment {
                         } else {
                             relativeLayout.setEnabled(true);
                         }
-                    numberLesson.setText(lesson.getNumberText());
+                    String numberText = lesson.getNumberText();
+                    if (lesson.isZamena())
+                        numberText = numberText + " " + getResources().getString(R.string.replacement);
+                    numberLesson.setText(numberText);
                     nameLesson.setText(lesson.getName());
                     dateText.setText(timeString);
                     cabText.setText(lesson.getCab());

@@ -8,4 +8,12 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:navigationBarColor">@color/window_background</item>
     </style>
+
+    <style name="EditProfile" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/card_color</item>
+        <item name="colorPrimaryDark">@color/card_color_lessons</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:navigationBarColor">@color/window_background</item>
+    </style>
 </resources>

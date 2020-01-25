@@ -8,6 +8,7 @@
         <item name="android:navigationBarColor">@color/window_background</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:textColor">@color/text_color</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -16,6 +17,7 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:navigationBarColor">@color/card_color</item>
     </style>
+
     <style name="FirstTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#000</item>
@@ -36,5 +38,14 @@
     <style name="FullImage" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">#000</item>
         <item name="android:fitsSystemWindows">false</item>
+    </style>
+
+    <style name="EditProfile" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/card_color</item>
+        <item name="colorPrimaryDark">@color/card_color_lessons</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:navigationBarColor">@color/window_background</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 </resources>

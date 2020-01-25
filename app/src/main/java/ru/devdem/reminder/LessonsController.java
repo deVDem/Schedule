@@ -31,7 +31,7 @@ class LessonsController {
         return sLessonsController;
     }
 
-    private void addLesson(String name, String numberText, int day, String cab, Date start, Date end) {
+    private void addLesson(String name, String numberText, int day, String cab, Date start, Date end, boolean zamena) {
         Lesson l = new Lesson();
         l.setName(name);
         l.setNumberText(numberText);
@@ -40,6 +40,7 @@ class LessonsController {
         l.setNumber(mLessons.size());
         l.setEnd(end);
         l.setCab(cab);
+        l.setZamena(zamena);
         mLessons.add(l);
     }
 
@@ -56,7 +57,8 @@ class LessonsController {
                 int day = jsonObject.getInt("day");
                 Date start = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("start"));
                 Date end = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("end"));
-                addLesson(name, numberText, day, cab, start, end);
+                boolean isZamena = jsonObject.getBoolean("zamena");
+                addLesson(name, numberText, day, cab, start, end, isZamena);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +97,15 @@ class LessonsController {
         private Date mStart;
         private Date mEnd;
         private String mCab;
+        private boolean mZamena;
+
+        public boolean isZamena() {
+            return mZamena;
+        }
+
+        public void setZamena(boolean zamena) {
+            mZamena = zamena;
+        }
 
         String getCab() {
             return mCab;
