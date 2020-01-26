@@ -75,6 +75,9 @@
     <string name="editing_a_profile">Редактирование профиля</string>
     <string name="enter_the_correct_address">Введите корректный адрес</string>
     <string name="type_first_and_last_name">Введите имя и фамилию</string>
+    <string name="sort_by">Сортировать по</string>
+    <string name="current_day">текущему дню</string>
+    <string name="week">неделе</string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>

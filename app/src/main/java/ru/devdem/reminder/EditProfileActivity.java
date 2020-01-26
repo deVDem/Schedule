@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,6 +27,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private MaterialEditText mEtLogin;
     private SharedPreferences mPreferences;
     private FloatingActionButton mActionButton;
+    private ScrollView mScrollView;
+    private RelativeLayout mRelativeLayout;
     private String name;
     private String email;
     private String login;
@@ -40,6 +44,8 @@ public class EditProfileActivity extends AppCompatActivity {
         mEtName = v.findViewById(R.id.etName);
         mEtEmail = v.findViewById(R.id.etEmail);
         mEtLogin = v.findViewById(R.id.etLogin);
+        mScrollView = v.findViewById(R.id.scrollView);
+        mRelativeLayout = v.findViewById(R.id.loading);
         mActionButton = v.findViewById(R.id.floatingActionButton);
         mActionButton.setOnClickListener(v1 -> {
             if (mEtName.validate(".{6,1024}$", getResources().getString(R.string.type_first_and_last_name)) && mEtEmail.validate(emailRegex, getResources().getString(R.string.enter_the_correct_address)) && mEtLogin.validate(".{6,255}$", getResources().getString(R.string.helperLogin))) {
@@ -47,6 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 email = Objects.requireNonNull(mEtEmail.getText()).toString();
                 login = Objects.requireNonNull(mEtLogin.getText()).toString();
                 // TODO: 25.01.2020 Add visual
+                mActionButton.hide();
                 updateProfile();
             } else Toast.makeText(this, "NOT OK", Toast.LENGTH_SHORT).show();
         });
@@ -108,16 +115,56 @@ public class EditProfileActivity extends AppCompatActivity {
         check();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
     private void updateProfile() {
+        mRelativeLayout.setVisibility(View.VISIBLE);
+        mScrollView.setAlpha(0.2f);
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject object = new JSONObject(response);
+                if (object.getBoolean("ok")) {
+                    Toast.makeText(EditProfileActivity.this, R.string.ok, Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    int user_id = object.getInt("id");
+                    String name1 = object.getString("name");
+                    String email1 = object.getString("email");
+                    String login1 = object.getString("login");
+                    String group = object.getString("groups");
+                    boolean spam1 = object.getString("spam").equals("1");
+                    int permission = object.getInt("permission");
+                    String token = object.getString("token");
+                    editor.putInt("user_id", user_id);
+                    editor.putString("name", name1);
+                    editor.putString("email", email1);
+                    editor.putString("login", login1);
+                    editor.putString("group", group);
+                    editor.putBoolean("spam", spam1);
+                    editor.putInt("permission", permission);
+                    editor.putString("token", token);
+                    editor.apply();
+                    finish();
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
+                mRelativeLayout.setVisibility(View.GONE);
+                mScrollView.setAlpha(1f);
+                Toast.makeText(EditProfileActivity.this, R.string.error, Toast.LENGTH_LONG).show();
+                check();
             }
         };
         Response.ErrorListener errorListener = error -> {
             // TODO: 25.01.2020 Add visual
+            mRelativeLayout.setVisibility(View.GONE);
+            mScrollView.setAlpha(1f);
+            Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.error) + ": " + error.getMessage(), Toast.LENGTH_LONG).show();
+            check();
         };
         NetworkController.editProfile(this, listener, errorListener, name, email, login, mPreferences.getString("token", "null"));
     }

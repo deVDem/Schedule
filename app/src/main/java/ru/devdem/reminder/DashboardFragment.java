@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -42,6 +45,7 @@ public class DashboardFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private SharedPreferences mSettings;
     private Context mContext;
+    private boolean sort_by_week = false;
 
     @Nullable
     @Override
@@ -59,6 +63,8 @@ public class DashboardFragment extends Fragment {
         swipeRefreshLayout = v.findViewById(R.id.swipeContainer);
         swipeRefreshLayout.setOnRefreshListener(() -> update(1));
         update(0);
+        setHasOptionsMenu(true);
+        sort_by_week = mSettings.getBoolean("sort_by_week", false);
         return v;
     }
 
@@ -106,6 +112,37 @@ public class DashboardFragment extends Fragment {
         return mArrayFromArray;
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_dashboard, menu);
+        MenuItem item = menu.findItem(R.id.menu_sort);
+        if (sort_by_week) {
+            item.setIcon(R.drawable.ic_reorder);
+            item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
+        } else {
+            item.setIcon(R.drawable.ic_sort_by_alpha);
+            item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_sort) {
+            if (!sort_by_week) {
+                item.setIcon(R.drawable.ic_reorder);
+                item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
+            } else {
+                item.setIcon(R.drawable.ic_sort_by_alpha);
+                item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
+            }
+            sort_by_week = !sort_by_week;
+            mSettings.edit().putBoolean("sort_by_week", sort_by_week).apply();
+            update(0);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LessonsViewer> {
         ArrayList<ArrayList<LessonsController.Lesson>> mLessons;
@@ -150,17 +187,31 @@ public class DashboardFragment extends Fragment {
                         dayOfWeek = 6;
                         break;
                 }
+                if (!sort_by_week) {
+                    if (position + dayOfWeek != 0) {
+                        int size = 0;
+                        for (int n = 0; n < mLessons.size(); n++) {
+                            if (mLessons.get(n).size() == 0) {
+                                break;
+                            }
+                            size++;
+                        }
+                        if (dayOfWeek > size) dayOfWeek--;
+                        position = (dayOfWeek + position) % (size);
+                    }
+                    lessons = mLessons.get(position);
+                }
                 holder.mDayOfWeekText.setText(days[position]);
                 String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
                 if (dayOfWeek == position) {
                     holder.mDayOfWeekText.setText(dayOfWeekText);
                 }
+                int[] params = mTimeController.getNumberlesson();
                 for (int i = 0; i < lessons.size(); i++) {
                     // 0 - урок или перемена
                     // 1 - номер урока которого считать
                     // 2 - номер след.урока
                     // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
-                    int[] params = mTimeController.getNumberlesson();
                     LessonsController.Lesson lesson = lessons.get(i);
                     String startString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getStart());
                     String endString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getEnd());
@@ -193,8 +244,15 @@ public class DashboardFragment extends Fragment {
                             relativeLayout.setEnabled(true);
                         }
                     String numberText = lesson.getNumberText();
-                    if (lesson.isZamena())
+                    if (lesson.isZamena()) {
+                        colors = new int[]{
+                                getResources().getColor(R.color.card_color_replace),
+                                getResources().getColor(R.color.card_color),
+                        };
                         numberText = numberText + " " + getResources().getString(R.string.replacement);
+                        relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                        relativeLayout.setEnabled(true);
+                    }
                     numberLesson.setText(numberText);
                     nameLesson.setText(lesson.getName());
                     dateText.setText(timeString);

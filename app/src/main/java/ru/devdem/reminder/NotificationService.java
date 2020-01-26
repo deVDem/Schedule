@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -25,7 +26,7 @@ public class NotificationService extends Service {
     private LessonsController mLessonsController;
     private Thread sThread;
     private boolean canGo = true;
-    private int count = 0;
+    private static final String TAG = "NotificationService";
 
     @Override
     public void onCreate() {
@@ -105,9 +106,10 @@ public class NotificationService extends Service {
                         NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(counterString, countString);
                         Notification notification = builder.build();
                         notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
-                        if (canGo)
+                        if (canGo) {
                             mNotificationUtils.getManager().notify(103, notification);
-                        count++;
+                            startForeground(103, notification);
+                        }
                         Thread.sleep(500);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -131,9 +133,10 @@ public class NotificationService extends Service {
             reloadIntent.setAction("ru.devdem.reminder.reloadservice");
             notification.contentIntent = PendingIntent.getActivity(this, 0, reloadIntent, 0);
             mNotificationUtils.getManager().notify(103, notification);
-            NetworkController.serviceDebug(getApplicationContext(), count);
+            sendBroadcast(new Intent("YouWillNeverKillMe"));
         }
         sThread = null;
+        Log.d(TAG, "onDestroy: ddd");
     }
 
     @Nullable

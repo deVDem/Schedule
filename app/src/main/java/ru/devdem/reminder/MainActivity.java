@@ -40,13 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Snackbar snackbar;
     private SharedPreferences mSettings;
     private View mView;
-    public float[] getHeightAndEndYMenu() {
-        float[] answer = new float[2];
-        answer[0] = mBottomNavigationView.getHeight();
-        answer[1] = mBottomNavigationView.getY();
 
-        return answer;
-    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         String NAME_PREFS = "settings";

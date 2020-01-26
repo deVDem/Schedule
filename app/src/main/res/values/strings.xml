@@ -65,6 +65,9 @@
     <string name="editing_a_profile">Editing a profile</string>
     <string name="enter_the_correct_address">Enter the correct address</string>
     <string name="type_first_and_last_name">Type First and Last name</string>
+    <string name="sort_by">Sort by</string>
+    <string name="current_day">current day</string>
+    <string name="week">week</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

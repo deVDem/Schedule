@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,13 +48,20 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_reload:
-                Toast.makeText(mContext, "reload", Toast.LENGTH_SHORT).show();
+                updateUI();
                 return true;
             case R.id.menu_edit:
-                startActivity(new Intent(mContext, EditProfileActivity.class));
+                startActivityForResult(new Intent(mContext, EditProfileActivity.class), 228);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        updateUI();
     }
 
     @Override
