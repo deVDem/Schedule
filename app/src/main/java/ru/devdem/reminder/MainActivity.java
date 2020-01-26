@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             };
             Response.ErrorListener errorListener = error -> start();
             NetworkController.getLessons(this, listener, errorListener, mSettings.getString("group", "0"));
-        } else start();
+        } else if (!mSettings.getBoolean("first", true)) start();
         notificationUtils = new NotificationUtils(this);
     }
 
@@ -187,8 +187,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLessonsController.destroy();
-        mTimeController.destroy();
+        if (mLessonsController != null) mLessonsController.destroy();
+        if (mTimeController != null) mTimeController.destroy();
     }
 
     static class MainViewPagerAdapter extends FragmentStatePagerAdapter {

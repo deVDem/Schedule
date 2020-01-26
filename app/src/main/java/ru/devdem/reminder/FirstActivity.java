@@ -132,6 +132,7 @@ public class FirstActivity extends AppCompatActivity {
                                 boolean spam1 = jsonUserInfo.getString("spam").equals("1");
                                 int permission = jsonUserInfo.getInt("permission");
                                 String token = jsonUserInfo.getString("token");
+                                mSettings.edit().clear().apply();
                                 SharedPreferences.Editor editor = mSettings.edit();
                                 editor.putInt("user_id", user_id);
                                 editor.putString("name", name1);
@@ -212,6 +213,7 @@ public class FirstActivity extends AppCompatActivity {
                                 boolean spam = jsonUserInfo.getString("spam").equals("1");
                                 int permission = jsonUserInfo.getInt("permission");
                                 String token = jsonUserInfo.getString("token");
+                                mSettings.edit().clear().apply();
                                 SharedPreferences.Editor editor = mSettings.edit();
                                 editor.putInt("user_id", user_id);
                                 editor.putString("name", name);

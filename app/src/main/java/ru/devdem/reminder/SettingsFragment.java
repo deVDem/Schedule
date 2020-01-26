@@ -68,7 +68,9 @@ public class SettingsFragment extends Fragment {
         mLogOffButton.setOnClickListener(v -> {
             can = false;
             mSettings.edit().clear().apply();
+            mSettings.edit().putBoolean("notification", false).apply();
             context.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
+            Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
             restart();
         });
         return view;

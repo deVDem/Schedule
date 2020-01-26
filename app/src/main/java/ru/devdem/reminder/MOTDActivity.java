@@ -20,14 +20,30 @@ public class MOTDActivity extends AppCompatActivity {
 
     public String mTextMOTD = "Новое обновление " + BuildConfig.VERSION_NAME + "!" +
             "\n\n\nДобавлено в обновлении:\n" +
-            "-Добавлена реклама\n" +
-            "-Ну, а хули. Мне нужна поддержка(( запомните это обновление как самое лучшее\n" +
+            "-Оптимизировано обновление уроков\n" +
+            "-Добавлена сортировка уроков в зависимости от текущего дня(или как раньше, по порядку недели)\n" +
+            "-Добавлено редактирование профиля\n" +
+            "-Наконец-таки уведомление стабильно работает в фоновом режиме\n" +
+            "-Реклама на главном экране перемещена вверх\n" +
+            "-Замены отдельно помечаются в списке уроков цветом и надписью.\n" +
+            "-Оптимизация и исправление ошибок при выходе из аккаунта\n" +
+            "-Исправление ошибок в работе контроллера времени\n" +
+            "-Исправлена ошибка в активности информации об обновлении\n" +
             "\n\n\nХорошей вам недели и спасибо за тестирование и использование приложения! <3";
     private int i;
     private int ANIM_DURATION = 470 * 2;
     private LinearLayout mHarderLayout;
     private RelativeLayout mMOTDLayout;
     private TextView mTextView;
+    private MediaPlayer mediaPlayer;
+    private CountDownTimer mCountDownTimer;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) mediaPlayer.release();
+        if (mCountDownTimer != null) mCountDownTimer.cancel();
+    }
 
     @Override
     public void onBackPressed() {
@@ -49,12 +65,12 @@ public class MOTDActivity extends AppCompatActivity {
         textView.setText(mTextMOTD);
         Button ok = view.findViewById(R.id.buttonOK);
         ok.setOnClickListener(v -> onBackPressed());
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.harderbetterfasterstronger);
+        mediaPlayer = MediaPlayer.create(this, R.raw.harderbetterfasterstronger);
         mediaPlayer.setLooping(false);
         View[] views = {view.findViewById(R.id.harder), view.findViewById(R.id.better),
                 view.findViewById(R.id.faster), view.findViewById(R.id.stronger)};
         mediaPlayer.start();
-        new CountDownTimer(ANIM_DURATION * 4 + ANIM_DURATION / 2, ANIM_DURATION) {
+        mCountDownTimer = new CountDownTimer(ANIM_DURATION * 4 + ANIM_DURATION / 2, ANIM_DURATION) {
 
             @Override
             public void onTick(long millisUntilFinished) {
