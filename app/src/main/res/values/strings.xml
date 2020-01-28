@@ -68,6 +68,8 @@
     <string name="sort_by">Sort by</string>
     <string name="current_day">current day</string>
     <string name="week">week</string>
+    <string name="through">Through</string>
+    <string name="tomorrow">tomorrow</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

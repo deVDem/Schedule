@@ -160,6 +160,7 @@ public class DashboardFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull LessonsViewer holder, int position) {
+            boolean tomorrow = false;
             ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
             if (lessons.size() != 0) {
                 Calendar calendar = Calendar.getInstance();
@@ -187,7 +188,17 @@ public class DashboardFragment extends Fragment {
                         dayOfWeek = 6;
                         break;
                 }
+                // 0 - урок или перемена
+                // 1 - номер урока которого считать
+                // 2 - номер след.урока
+                // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
+                int[] params = mTimeController.getNumberlesson();
+                int nextLessonDay = mLessonsController.getLessons().get(params[2]).getDay();
+                if (dayOfWeek + 1 == nextLessonDay) {
+                    tomorrow = true;
+                }
                 if (!sort_by_week) {
+                    if (tomorrow) position++;
                     if (position + dayOfWeek != 0) {
                         int size = 0;
                         for (int n = 0; n < mLessons.size(); n++) {
@@ -202,16 +213,15 @@ public class DashboardFragment extends Fragment {
                     lessons = mLessons.get(position);
                 }
                 holder.mDayOfWeekText.setText(days[position]);
-                String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
-                if (dayOfWeek == position) {
+                if (dayOfWeek == position && !tomorrow) {
+                    String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
                     holder.mDayOfWeekText.setText(dayOfWeekText);
                 }
-                int[] params = mTimeController.getNumberlesson();
+                if (dayOfWeek + 1 == position && tomorrow) {
+                    String dayOfWeekText = days[position] + " (" + getResources().getString(R.string.tomorrow) + ")";
+                    holder.mDayOfWeekText.setText(dayOfWeekText);
+                }
                 for (int i = 0; i < lessons.size(); i++) {
-                    // 0 - урок или перемена
-                    // 1 - номер урока которого считать
-                    // 2 - номер след.урока
-                    // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
                     LessonsController.Lesson lesson = lessons.get(i);
                     String startString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getStart());
                     String endString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getEnd());

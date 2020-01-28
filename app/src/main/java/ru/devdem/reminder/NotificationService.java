@@ -95,8 +95,11 @@ public class NotificationService extends Service {
                                 counterString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName();
                                 break;
                             case 1:
-                                countString = getApplicationContext().getString(R.string.left_before) + " " + mLessons.get(params[2]).getName();
-                                counterString = mTimeController.getRemainText(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
+                                if (mLessons.get(params[2]).getDay() == day)
+                                    countString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName();
+                                else
+                                    countString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName() + " (" + getApplicationContext().getString(R.string.tomorrow) + ")";
+                                counterString = getApplicationContext().getString(R.string.through) + " " + mTimeController.getRemainText(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
                                 break;
                         }
                         if (params[3] == 3) {

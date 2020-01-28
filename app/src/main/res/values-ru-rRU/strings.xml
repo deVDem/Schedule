@@ -78,6 +78,8 @@
     <string name="sort_by">Сортировать по</string>
     <string name="current_day">текущему дню</string>
     <string name="week">неделе</string>
+    <string name="through">Через</string>
+    <string name="tomorrow">завтра</string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>
