@@ -140,6 +140,7 @@ public class TimerFragment extends Fragment {
                                 counterString = mTimeController.getRemainText(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
                                 break;
                         }
+                        int finalDay = day;
                         mActivity.runOnUiThread(() -> {
                             try {
                                 if (params[3] == 3) {
@@ -153,7 +154,12 @@ public class TimerFragment extends Fragment {
                                     counterText.setText(counterString);
                                     lessonNextText.setText(R.string.next_lesson);
                                     countText.setText(countString);
-                                    lessonNext.setText(mLessons.get(params[2]).getName());
+                                    String nextLessonText;
+                                    if (mLessons.get(params[2]).getDay() == finalDay)
+                                        nextLessonText = mLessons.get(params[2]).getName();
+                                    else
+                                        nextLessonText = mLessons.get(params[2]).getName() + "\n (" + mContext.getString(R.string.tomorrow) + ")";
+                                    lessonNext.setText(nextLessonText);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

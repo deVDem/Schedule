@@ -70,6 +70,7 @@
     <string name="week">week</string>
     <string name="through">Through</string>
     <string name="tomorrow">tomorrow</string>
+    <string name="lessons_over_today">Lessons are over for today!</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

@@ -80,6 +80,7 @@
     <string name="week">неделе</string>
     <string name="through">Через</string>
     <string name="tomorrow">завтра</string>
+    <string name="lessons_over_today">Уроки на сегодня закончены!</string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>
