@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,6 +74,9 @@ public class SettingsFragment extends Fragment {
             Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
             restart();
         });
+        TextView versionInfo = view.findViewById(R.id.versionInfo);
+        String verInf = BuildConfig.BUILD_TYPE + " | v: " + BuildConfig.VERSION_CODE + " name: " + BuildConfig.VERSION_NAME;
+        versionInfo.setText(verInf);
         return view;
     }
 

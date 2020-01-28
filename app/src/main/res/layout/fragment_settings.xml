@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <ImageButton
@@ -70,6 +70,14 @@
                 android:backgroundTint="@color/card_color_lessons"
                 android:text="@string/logoff"
                 android:textColor="@android:color/holo_red_light" />
+
+            <TextView
+                android:id="@+id/versionInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                tools:text="Version info" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
