@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -75,6 +76,7 @@ public class DownloadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mUrlPath = getIntent().getStringExtra("url");
         View view = View.inflate(this, R.layout.activity_update, null);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(view);
         mProgressBar = view.findViewById(R.id.progressBar);
         mTextView = view.findViewById(R.id.detail_download_text);
@@ -181,6 +183,9 @@ public class DownloadActivity extends AppCompatActivity {
                     public void onError(Error error) {
                         notificationManager.cancel(101);
                         mErrorLayout.setVisibility(View.VISIBLE);
+                        TextView mErrorText = mErrorLayout.findViewById(R.id.errorText);
+                        String errormessage = getResources().getString(R.string.errorNetwork) + "\n" + error.getConnectionException().getMessage();
+                        mErrorText.setText(errormessage);
                         YoYo.with(new TakingOffAnimator())
                                 .interpolate(new AccelerateDecelerateInterpolator())
                                 .onEnd(animator -> mDownloadingLayout.setVisibility(View.GONE))

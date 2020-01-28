@@ -2,7 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:shareInterpolator="false">
     <scale
-        android:duration="1000"
+        android:duration="800"
         android:fromXScale="0%"
         android:fromYScale="0%"
         android:interpolator="@android:anim/overshoot_interpolator"
@@ -11,11 +11,11 @@
         android:toXScale="100%"
         android:toYScale="100%" />
     <alpha
-        android:duration="1700"
+        android:duration="1500"
         android:fromAlpha="0.0"
         android:toAlpha="1.0" />
     <rotate
-        android:duration="1700"
+        android:duration="1500"
         android:fromDegrees="0"
         android:interpolator="@android:anim/decelerate_interpolator"
         android:pivotX="50%"
