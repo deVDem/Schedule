@@ -90,15 +90,17 @@ public class NotificationService extends Service {
                         // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
                         int[] params = mTimeController.getNumberlesson();
                         ArrayList<LessonsController.Lesson> mLessons = mLessonsController.getLessons();
+                        LessonsController.Lesson lesson = mLessons.get(params[1]);
+                        LessonsController.Lesson lessonNext = mLessons.get(params[2]);
                         switch (params[0]) {
                             case 0:
-                                countString = getApplicationContext().getString(R.string.left_before_the_break) + ": " + mTimeController.getRemainText(mLessons.get(params[1]).getEnd(), Objects.requireNonNull(date));
-                                counterString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName();
+                                countString = getApplicationContext().getString(R.string.left_before_the_break) + ": " + mTimeController.getRemainText(lesson.getEnd(), Objects.requireNonNull(date));
+                                counterString = getApplicationContext().getString(R.string.next) + ": " + lessonNext.getName();
                                 break;
                             case 1:
-                                if (mLessons.get(params[2]).getDay() == day && mLessons.get(params[1]).getDay() == day) {
-                                    countString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName();
-                                    counterString = getApplicationContext().getString(R.string.through) + " " + mTimeController.getRemainText(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
+                                if (lessonNext.getDay() == day && lesson.getDay() == day) {
+                                    countString = getApplicationContext().getString(R.string.next) + ": " + lessonNext.getName();
+                                    counterString = getApplicationContext().getString(R.string.through) + " " + mTimeController.getRemainText(lessonNext.getStart(), Objects.requireNonNull(date));
                                 } else {
                                     countString = getApplicationContext().getString(R.string.lessons_over_today);
                                     counterString = getString(R.string.good_rest);

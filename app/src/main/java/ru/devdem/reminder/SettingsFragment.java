@@ -50,19 +50,19 @@ public class SettingsFragment extends Fragment {
         }
         switchNight.setChecked(mSettings.getBoolean("night", false));
         switchNotification.setChecked(mSettings.getBoolean("notification", true));
-        switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (can)
-                mSettings.edit().putBoolean("notification", isChecked).apply();
-            if (mSettings.getBoolean("notification", true))
-                Objects.requireNonNull(getActivity()).startService(new Intent(getContext(), NotificationService.class));
-            else {
-                Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
-            }
-        });
         switchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (can) {
                 mSettings.edit().putBoolean("night", isChecked).apply();
                 restart();
+            }
+        });
+        switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (can)
+                mSettings.edit().putBoolean("notification", isChecked).apply();
+            if (mSettings.getBoolean("notification", true)) {
+                Objects.requireNonNull(getActivity()).startService(new Intent(getContext(), NotificationService.class));
+            } else {
+                Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
             }
         });
         Button mLogOffButton = view.findViewById(R.id.buttonLogOff);
