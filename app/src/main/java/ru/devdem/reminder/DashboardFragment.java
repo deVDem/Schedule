@@ -242,6 +242,7 @@ public class DashboardFragment extends Fragment {
                     TextView nameLesson = view.findViewById(R.id.textLesson);
                     TextView dateText = view.findViewById(R.id.textDate);
                     TextView cabText = view.findViewById(R.id.textCab);
+                    String numberText = lesson.getNumberText();
                     if (params[3] != 3 && params[3] != 0)
                         if (params[0] == 0) {
                             if (lesson.getNumber() == params[1]) {
@@ -251,20 +252,19 @@ public class DashboardFragment extends Fragment {
                                 nameLesson.setTextColor(getResources().getColor(R.color.white));
                                 dateText.setTextColor(getResources().getColor(R.color.white));
                                 cabText.setTextColor(getResources().getColor(R.color.white));
+                            } else if (lesson.isZamena()) {
+                                colors = new int[]{
+                                        getResources().getColor(R.color.card_color_replace),
+                                        getResources().getColor(R.color.card_color),
+                                };
+                                numberText = numberText + " " + getResources().getString(R.string.replacement);
+                                relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                relativeLayout.setEnabled(true);
                             }
                         } else {
                             relativeLayout.setEnabled(true);
                         }
-                    String numberText = lesson.getNumberText();
-                    if (lesson.isZamena()) {
-                        colors = new int[]{
-                                getResources().getColor(R.color.card_color_replace),
-                                getResources().getColor(R.color.card_color),
-                        };
-                        numberText = numberText + " " + getResources().getString(R.string.replacement);
-                        relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
-                        relativeLayout.setEnabled(true);
-                    }
+
                     numberLesson.setText(numberText);
                     nameLesson.setText(lesson.getName());
                     dateText.setText(timeString);

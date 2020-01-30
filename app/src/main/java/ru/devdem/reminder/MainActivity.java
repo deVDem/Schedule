@@ -49,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
-        if (mLessonsController.getLessons().size() == 0 && !mSettings.getBoolean("first", true)) {
+        if (!mSettings.getBoolean("first", true)) {
             Response.Listener<String> listener = response -> {
                 mLessonsController.parseLessons(response);
-                start();
             };
             Response.ErrorListener errorListener = error -> start();
             NetworkController.getLessons(this, listener, errorListener, mSettings.getString("group", "0"));
-        } else if (!mSettings.getBoolean("first", true)) start();
+        }
+        if (!mSettings.getBoolean("first", true)) start();
         notificationUtils = new NotificationUtils(this);
     }
 
