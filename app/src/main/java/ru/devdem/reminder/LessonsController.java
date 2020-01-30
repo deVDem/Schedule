@@ -60,10 +60,10 @@ class LessonsController {
                 boolean isZamena = jsonObject.getBoolean("zamena");
                 addLesson(name, numberText, day, cab, start, end, isZamena);
             }
+            saveLessons(response);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        saveLessons(response);
     }
 
     void loadLessons() {
@@ -99,11 +99,11 @@ class LessonsController {
         private String mCab;
         private boolean mZamena;
 
-        public boolean isZamena() {
+        boolean isZamena() {
             return mZamena;
         }
 
-        public void setZamena(boolean zamena) {
+        void setZamena(boolean zamena) {
             mZamena = zamena;
         }
 

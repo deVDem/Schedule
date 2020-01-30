@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -95,11 +96,12 @@ public class NotificationService extends Service {
                                 counterString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName();
                                 break;
                             case 1:
-                                if (mLessons.get(params[2]).getDay() == day) {
+                                if (mLessons.get(params[2]).getDay() == day && mLessons.get(params[1]).getDay() == day) {
                                     countString = getApplicationContext().getString(R.string.next) + ": " + mLessons.get(params[2]).getName();
                                     counterString = getApplicationContext().getString(R.string.through) + " " + mTimeController.getRemainText(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
                                 } else {
                                     countString = getApplicationContext().getString(R.string.lessons_over_today);
+                                    counterString = getString(R.string.good_rest);
                                 }
                                 break;
                         }
@@ -128,7 +130,11 @@ public class NotificationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         sThread.interrupt();
-        mNotificationUtils.getManager().cancel(103);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE);
+        } else {
+            mNotificationUtils.getManager().cancel(103);
+        }
         canGo = false;
         if (getSharedPreferences("settings", MODE_PRIVATE).getBoolean("notification", true)) {
             NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(getApplicationContext().getString(R.string.click_to_restart), getApplicationContext().getString(R.string.service_stopped));

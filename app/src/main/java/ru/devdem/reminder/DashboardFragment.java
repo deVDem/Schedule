@@ -162,6 +162,9 @@ public class DashboardFragment extends Fragment {
         public void onBindViewHolder(@NonNull LessonsViewer holder, int position) {
             boolean tomorrow = false;
             ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
+            if (position + 1 == getItemCount()) {
+                holder.mSpace.setVisibility(View.VISIBLE);
+            }
             if (lessons.size() != 0) {
                 Calendar calendar = Calendar.getInstance();
                 int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
@@ -193,8 +196,7 @@ public class DashboardFragment extends Fragment {
                 // 2 - номер след.урока
                 // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
                 int[] params = mTimeController.getNumberlesson();
-                int nextLessonDay = mLessonsController.getLessons().get(params[2]).getDay();
-                if (dayOfWeek + 1 == nextLessonDay) {
+                if (dayOfWeek + 1 == mLessonsController.getLessons().get(params[2]).getDay() && dayOfWeek + 1 == mLessonsController.getLessons().get(params[1]).getDay()) {
                     tomorrow = true;
                 }
                 if (!sort_by_week) {
@@ -272,9 +274,6 @@ public class DashboardFragment extends Fragment {
             } else {
                 holder.mRelativeLayout.removeAllViews();
                 holder.mRelativeLayout.setVisibility(View.GONE);
-            }
-            if (position + 1 == getItemCount()) {
-                holder.mSpace.setVisibility(View.VISIBLE);
             }
         }
 
