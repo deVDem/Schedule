@@ -49,10 +49,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lltext"
+            android:adjustViewBounds="true"
             android:background="@drawable/box_shape"
             android:backgroundTintMode="screen"
             android:contentDescription="@string/image"
-            android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             tools:src="@drawable/cat" />
 
@@ -64,7 +64,6 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/text_color"
             tools:text="Задонатьте плс" />
-
         <Space
             android:id="@+id/space"
             android:layout_width="match_parent"
