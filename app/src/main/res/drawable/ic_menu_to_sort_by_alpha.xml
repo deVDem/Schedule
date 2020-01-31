@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_sort_by_alpha">
+    <target
+        android:name="menu_sort_by_alpha"
+        android:animation="@animator/menu_dashboard_anim_reverse" />
+</animated-vector>

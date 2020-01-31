@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Snackbar snackbar;
     private SharedPreferences mSettings;
     private View mView;
+    ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,9 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
         if (!mSettings.getBoolean("first", true)) {
-            Response.Listener<String> listener = response -> {
-                mLessonsController.parseLessons(response);
-            };
+            Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
             Response.ErrorListener errorListener = error -> start();
             NetworkController.getLessons(this, listener, errorListener, mSettings.getString("group", "0"));
         }
@@ -68,7 +67,14 @@ public class MainActivity extends AppCompatActivity {
         });
         mTimeController = TimeController.get(this);
         mViewPager = findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager(), 0));
+        MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), 0);
+        mFragments.add(new ProfileFragment());
+        mFragments.add(new DashboardFragment());
+        mFragments.add(new TimerFragment());
+        mFragments.add(new NotificationsFragment());
+        mFragments.add(new SettingsFragment());
+        mainViewPagerAdapter.setFragments(mFragments);
+        mViewPager.setAdapter(mainViewPagerAdapter);
         mViewPager.setCurrentItem(0);
         mViewPager.setPageTransformer(true, (v, pos) -> {
             final float opacity = Math.abs(Math.abs(pos) - 1);
@@ -184,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
         NetworkController.getLastVerInt(this, listener);
     }
 
+    public void updateDashboard() {
+        DashboardFragment fragment = (DashboardFragment) mFragments.get(1);
+        fragment.update(0);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -194,13 +205,12 @@ public class MainActivity extends AppCompatActivity {
     static class MainViewPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> mFragments = new ArrayList<>();
 
+        void setFragments(ArrayList<Fragment> fragments) {
+            mFragments = fragments;
+        }
+
         MainViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
-            mFragments.add(new ProfileFragment());
-            mFragments.add(new DashboardFragment());
-            mFragments.add(new TimerFragment());
-            mFragments.add(new NotificationsFragment());
-            mFragments.add(new SettingsFragment());
         }
 
         @NonNull

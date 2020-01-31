@@ -44,6 +44,8 @@ public class TimerFragment extends Fragment {
     private TextView lessonNextText;
     private TextView lessonNext;
     private Thread mThread;
+    private MainActivity mMainActivity;
+    private int lastParams;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class TimerFragment extends Fragment {
         relativeLayout.addView(adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
+        mMainActivity = (MainActivity) mActivity;
         return view;
     }
 
@@ -160,6 +163,10 @@ public class TimerFragment extends Fragment {
                                     else
                                         nextLessonText = mLessons.get(params[2]).getName() + "\n (" + mContext.getString(R.string.tomorrow) + ")";
                                     lessonNext.setText(nextLessonText);
+                                }
+                                if (lastParams != params[1]) {
+                                    mMainActivity.updateDashboard();
+                                    lastParams = params[1];
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

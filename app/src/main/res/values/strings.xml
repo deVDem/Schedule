@@ -71,6 +71,7 @@
     <string name="through">Through</string>
     <string name="tomorrow">tomorrow</string>
     <string name="lessons_over_today">Lessons are over for today!</string>
+    <string name="messages">Messages</string>
     <string-array name="days">
         <item>Monday</item>
         <item>Tuesday</item>

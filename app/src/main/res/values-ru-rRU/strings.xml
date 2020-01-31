@@ -81,6 +81,7 @@
     <string name="through">Через</string>
     <string name="tomorrow">завтра</string>
     <string name="lessons_over_today">Уроки на сегодня закончены!</string>
+    <string name="messages">Сообщения</string>
     <string-array name="permissions">
         <item>Пользователь</item>
         <item>Редактор</item>

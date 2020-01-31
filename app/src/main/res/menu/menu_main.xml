@@ -14,8 +14,8 @@
         android:title="@string/timer" />
     <item
         android:id="@+id/main_notifications"
-        android:icon="@drawable/ic_notifications"
-        android:title="@string/notifications" />
+        android:icon="@drawable/ic_message"
+        android:title="@string/messages" />
     <item
         android:id="@+id/main_settings"
         android:icon="@drawable/ic_settings"

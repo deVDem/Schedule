@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -68,7 +69,7 @@ public class DashboardFragment extends Fragment {
         return v;
     }
 
-    private void update(int why) {
+    void update(int why) {
         if (why == 1) {
             Response.Listener<String> listener = response -> {
                 mLessonsController.parseLessons(response);
@@ -83,16 +84,18 @@ public class DashboardFragment extends Fragment {
     }
 
     private void updateUI() {
-        RVAdapter RVAdapter = new RVAdapter(prepareArrayFromArray(mLessonsController.getLessons()));
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(RVAdapter);
-        scaleInAnimationAdapter.setDuration(500);
-        scaleInAnimationAdapter.setFirstOnly(false);
-        scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
-        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
-        animationAdapter.setDuration(1000);
-        animationAdapter.setFirstOnly(false);
-        mRecyclerView.setAdapter(animationAdapter);
-        swipeRefreshLayout.setRefreshing(false);
+        if (mLessonsController != null) {
+            RVAdapter RVAdapter = new RVAdapter(prepareArrayFromArray(mLessonsController.getLessons()));
+            ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(RVAdapter);
+            scaleInAnimationAdapter.setDuration(500);
+            scaleInAnimationAdapter.setFirstOnly(false);
+            scaleInAnimationAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+            AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
+            animationAdapter.setDuration(1000);
+            animationAdapter.setFirstOnly(false);
+            mRecyclerView.setAdapter(animationAdapter);
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private ArrayList<ArrayList<LessonsController.Lesson>> prepareArrayFromArray(ArrayList<LessonsController.Lesson> lessons) {
@@ -118,10 +121,10 @@ public class DashboardFragment extends Fragment {
         inflater.inflate(R.menu.menu_dashboard, menu);
         MenuItem item = menu.findItem(R.id.menu_sort);
         if (sort_by_week) {
-            item.setIcon(R.drawable.ic_reorder);
+            item.setIcon(R.drawable.ic_sort_by_alpha);
             item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
         } else {
-            item.setIcon(R.drawable.ic_sort_by_alpha);
+            item.setIcon(R.drawable.ic_reorder);
             item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
         }
     }
@@ -129,13 +132,17 @@ public class DashboardFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_sort) {
+            AnimatedVectorDrawable drawable;
             if (!sort_by_week) {
-                item.setIcon(R.drawable.ic_reorder);
+                drawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_dashboard);
+                item.setIcon(drawable);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
             } else {
-                item.setIcon(R.drawable.ic_sort_by_alpha);
+                drawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_to_sort_by_alpha);
+                item.setIcon(drawable);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
             }
+            drawable.start();
             sort_by_week = !sort_by_week;
             mSettings.edit().putBoolean("sort_by_week", sort_by_week).apply();
             update(0);
