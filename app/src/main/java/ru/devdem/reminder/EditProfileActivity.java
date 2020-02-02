@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -33,6 +34,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String email;
     private String login;
     private String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    private static final String TAG = "EditProfileActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,7 +131,7 @@ public class EditProfileActivity extends AppCompatActivity {
             try {
                 JSONObject object = new JSONObject(response);
                 if (object.getBoolean("ok")) {
-                    Toast.makeText(EditProfileActivity.this, R.string.ok, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "updateProfile: " + response);
                     SharedPreferences.Editor editor = mPreferences.edit();
                     int user_id = object.getInt("id");
                     String name1 = object.getString("name");
@@ -148,6 +150,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     editor.putInt("permission", permission);
                     editor.putString("token", token);
                     editor.apply();
+                    Toast.makeText(EditProfileActivity.this, R.string.ok, Toast.LENGTH_SHORT).show();
                     finish();
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }

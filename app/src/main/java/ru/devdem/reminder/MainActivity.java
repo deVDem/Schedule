@@ -8,7 +8,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences mSettings;
     private View mView;
     ArrayList<Fragment> mFragments = new ArrayList<>();
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
+        notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
             Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
-            Response.ErrorListener errorListener = error -> start();
-            NetworkController.getLessons(this, listener, errorListener, mSettings.getString("group", "0"));
-        }
-        if (!mSettings.getBoolean("first", true)) start();
-        notificationUtils = new NotificationUtils(this);
+            NetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
+            NetworkController.getGroups(this, mSettings.getString("group", ""));
+            start();
+        } else finish();
     }
 
     private void start() {
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mTimeController = TimeController.get(this);
         mViewPager = findViewById(R.id.viewPager);
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), 0);
+        mFragments.clear();
         mFragments.add(new ProfileFragment());
         mFragments.add(new DashboardFragment());
         mFragments.add(new TimerFragment());
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(0);
                     break;
                 case R.id.main_dashboard:
-                    actionBar.setSubtitle(getResources().getString(R.string.dashboard));
+                    actionBar.setSubtitle(getResources().getString(R.string.schedule_of_group) + " " + mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(1);
                     break;
                 case R.id.main_timer:
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(2);
                     break;
                 case R.id.main_notifications:
-                    actionBar.setSubtitle(getResources().getString(R.string.notifications));
+                    actionBar.setSubtitle(getResources().getString(R.string.notifications_of_group) + " " + mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(3);
                     break;
                 case R.id.main_settings:
@@ -160,6 +164,67 @@ public class MainActivity extends AppCompatActivity {
         }
         if (mSettings.getBoolean("notification", true))
             startService(new Intent(this, NotificationService.class));
+        checkAccount();
+    }
+
+    public void checkAccount() {
+        Response.Listener<String> listener = response -> {
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                boolean ok = jsonResponse.getBoolean("ok");
+                if (ok) {
+                    boolean password_ok = jsonResponse.getBoolean("password_ok");
+                    if (password_ok) {
+                        try {
+                            JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
+                            int user_id = jsonUserInfo.getInt("id");
+                            String name = jsonUserInfo.getString("name");
+                            String email = jsonUserInfo.getString("email");
+                            String login1 = jsonUserInfo.getString("login");
+                            String group = jsonUserInfo.getString("groups");
+                            String password_hash = jsonUserInfo.getString("password");
+                            boolean spam = jsonUserInfo.getString("spam").equals("1");
+                            int permission = jsonUserInfo.getInt("permission");
+                            String token = jsonUserInfo.getString("token");
+                            SharedPreferences.Editor editor = mSettings.edit();
+                            editor.putInt("user_id", user_id);
+                            editor.putString("name", name);
+                            editor.putString("email", email);
+                            editor.putString("login", login1);
+                            editor.putString("group", group);
+                            editor.putBoolean("spam", spam);
+                            editor.putString("password", password_hash);
+                            editor.putInt("permission", permission);
+                            editor.putString("token", token);
+                            editor.apply();
+                            Toast.makeText(this, "Успешный вход.", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "checkAccount: " + response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Wrong password.", Toast.LENGTH_SHORT).show();
+                        exit();
+                    }
+                } else {
+                    Toast.makeText(this, "Wrong login or email.", Toast.LENGTH_SHORT).show();
+                    exit();
+                }
+            } catch (Exception e) {
+                Toast.makeText(this, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        };
+        Response.ErrorListener errorListener = error -> Toast.makeText(this, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
+        NetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("password", ""), listener, errorListener);
+    }
+
+    private void exit() {
+        mSettings.edit().clear().apply();
+        startActivity(new Intent(this, SplashActivity.class));
+        overridePendingTransition(R.anim.transition_in, R.anim.transition_out);
+        finish();
     }
 
     private void getVerInt() {

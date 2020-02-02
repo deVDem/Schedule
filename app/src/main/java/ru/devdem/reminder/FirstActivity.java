@@ -210,6 +210,7 @@ public class FirstActivity extends AppCompatActivity {
                                 String email = jsonUserInfo.getString("email");
                                 String login1 = jsonUserInfo.getString("login");
                                 String group = jsonUserInfo.getString("groups");
+                                String password_hash = jsonUserInfo.getString("password");
                                 boolean spam = jsonUserInfo.getString("spam").equals("1");
                                 int permission = jsonUserInfo.getInt("permission");
                                 String token = jsonUserInfo.getString("token");
@@ -223,6 +224,7 @@ public class FirstActivity extends AppCompatActivity {
                                 editor.putBoolean("spam", spam);
                                 editor.putInt("permission", permission);
                                 editor.putString("token", token);
+                                editor.putString("password", password_hash);
                                 editor.putBoolean(PREFS_FIRST, false);
                                 editor.apply();
                                 Toast.makeText(mContext, "Успешный вход.", Toast.LENGTH_SHORT).show();
@@ -248,7 +250,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
             };
             showHide(mLTextView, loginRl, true);
-            NetworkController.Login(mContext, login, password, listener);
+            NetworkController.Login(mContext, login, password, listener, NetworkController.getErrorListener(mContext));
         } else {
             Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();
         }

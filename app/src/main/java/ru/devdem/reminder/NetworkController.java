@@ -28,7 +28,9 @@ class NetworkController {
     private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
     private static String URL_UPDATE_PROFILE = "https://api.devdem.ru/apps/schedule/accounts/update.php";
 
-    private static Response.ErrorListener getErrorListener(Context context) {
+    private static final String TAG = "NetworkController";
+
+    static Response.ErrorListener getErrorListener(Context context) {
         return error -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(R.string.errorNetwork)
@@ -59,11 +61,11 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_UPDATE_PROFILE, map);
     }
 
-    static void Login(Context context, String login, String password, Response.Listener<String> listener) {
+    static void Login(Context context, String login, String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
         map.put("login", login);
         map.put("password", password);
-        goSend(context, listener, getErrorListener(context), URL_LOGIN, map);
+        goSend(context, listener, errorListener, URL_LOGIN, map);
     }
 
     static void Register(Context context, String login, String name, String email, String password, String group, String spam, Response.Listener<String> listener) {
@@ -77,10 +79,34 @@ class NetworkController {
         goSend(context, listener, getErrorListener(context), URL_REGISTER, map);
     }
 
-    static void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group) {
+    static void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
+        map.put("token", token);
         goSend(context, listener, errorListener, URL_LESSONS, map);
+    }
+
+    static void getGroups(Context context, String group) {
+        Response.Listener<String> listener = response -> {
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                for (int i = 1; i < 255; i++) {
+                    try {
+                        if (i == Integer.parseInt(group)) {
+                            context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
+                                    .putString("group_name", jsonResponse.getJSONObject(String.valueOf(i)).getString("name"))
+                                    .apply();
+                            break;
+                        }
+                    } catch (Exception e) {
+                        break;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        };
+        goSend(context, listener, null, URL_GETGROUPS, new HashMap<>());
     }
 
     static void GetGroups(Context context, Spinner spinner) {
@@ -104,8 +130,11 @@ class NetworkController {
         goSend(context, listener, getErrorListener(context), URL_GETGROUPS, new HashMap<>());
     }
 
-    static void getNotifications(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        goSend(context, listener, errorListener, URL_NOTIFICATIONS, new HashMap<>());
+    static void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        Map<String, String> map = new HashMap<>();
+        map.put("group", group);
+        map.put("token", token);
+        goSend(context, listener, errorListener, URL_NOTIFICATIONS, map);
     }
 
     static void getLastVerInt(Context context, Response.Listener<String> listener) {

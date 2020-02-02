@@ -3,9 +3,13 @@ package ru.devdem.reminder;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -55,7 +59,31 @@ public class NotificationsFragment extends Fragment {
         mSwipeRefreshLayout = view.findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(this::createNotifications);
         createNotifications();
+        setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_profile, menu);
+        if (mSettings.getInt("permission", 0) < 1) {
+            MenuItem item = menu.findItem(R.id.menu_edit);
+            item.setVisible(false);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_reload:
+                createNotifications();
+                return true;
+            case R.id.menu_edit:
+                startActivityForResult(new Intent(getActivity(), NewNotificationActivity.class), 154);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -73,17 +101,15 @@ public class NotificationsFragment extends Fragment {
                 int all = object.getInt("all");
                 for (int i = 0; i < all; i++) {
                     JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
-                    int group = jsonObject.getInt("group");
-                    if (group == Integer.parseInt(mSettings.getString("group", "-1")) || group == -1) {
-                        Notification notification = new Notification();
-                        notification.setId(i);
-                        notification.setTitle(jsonObject.getString("Title"));
-                        notification.setSubTitle(jsonObject.getString("Subtitle"));
-                        notification.setUrlImage(jsonObject.getString("URLImage"));
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                        notification.setDate(format.parse(jsonObject.getString("date")));
-                        mNotifications.add(notification);
-                    }
+                    //int group = jsonObject.getInt("group");
+                    Notification notification = new Notification();
+                    notification.setId(i);
+                    notification.setTitle(jsonObject.getString("Title"));
+                    notification.setSubTitle(jsonObject.getString("Subtitle"));
+                    notification.setUrlImage(jsonObject.getString("URLImage"));
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    notification.setDate(format.parse(jsonObject.getString("date")));
+                    mNotifications.add(notification);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -105,6 +131,7 @@ public class NotificationsFragment extends Fragment {
             mSwipeRefreshLayout.setRefreshing(false);
         };
         Response.ErrorListener errorListener = error -> {
+
             ArrayList<Notification> mNotifications = new ArrayList<>();
             Notification notification = new Notification();
             notification.setDate(new Date());
@@ -129,7 +156,7 @@ public class NotificationsFragment extends Fragment {
             }
             mSwipeRefreshLayout.setRefreshing(false);
         };
-        NetworkController.getNotifications(getContext(), listener, errorListener);
+        NetworkController.getNotifications(getContext(), mSettings.getString("group", ""), mSettings.getString("token", ""), listener, errorListener);
     }
 
     class Notification {

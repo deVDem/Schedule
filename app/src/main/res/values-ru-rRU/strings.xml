@@ -82,10 +82,15 @@
     <string name="tomorrow">завтра</string>
     <string name="lessons_over_today">Уроки на сегодня закончены!</string>
     <string name="messages">Сообщения</string>
+    <string name="schedule_of_group">Расписание для группы</string>
+    <string name="notifications_of_group">Уведомления для группы</string>
+    <string name="title">Заголовок</string>
+    <string name="message_text">Сообщение</string>
+    <string name="insert_a_link_to_the_image_here">Вставьте сюда ссылку на картинку</string>
     <string-array name="permissions">
-        <item>Пользователь</item>
-        <item>Редактор</item>
-        <item>Модератор</item>
-        <item>Администратор</item>
+        <item>Пользователь</item> <!-- Лошок-->
+        <item>Редактор</item> <!-- Создатель группы, может свою редактировать,посылать сообщения своим, чужие смотреть не может-->
+        <item>Модератор</item> <!-- Может редактировать чужие группы, сообщения -->
+        <item>Администратор</item> <!-- Может писать и редактировать всё (системные уведомления)-->
     </string-array>
 </resources>

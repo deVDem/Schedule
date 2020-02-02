@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +50,7 @@ public class DashboardFragment extends Fragment {
     private SharedPreferences mSettings;
     private Context mContext;
     private boolean sort_by_week = false;
+    private static final String TAG = "DashboardFragment";
 
     @Nullable
     @Override
@@ -72,14 +76,23 @@ public class DashboardFragment extends Fragment {
     void update(int why) {
         if (why == 1) {
             Response.Listener<String> listener = response -> {
+                try {
+                    if (new JSONObject(response).getString("error").equals("NO_TOKEN")) {
+                        MainActivity activity = (MainActivity) getActivity();
+                        Objects.requireNonNull(activity).checkAccount();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mLessonsController.parseLessons(response);
+                Log.d(TAG, "update: " + response);
                 updateUI();
             };
             Response.ErrorListener errorListener = error -> {
                 Toast.makeText(mContext, R.string.errorNetwork, Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
             };
-            NetworkController.getLessons(mContext, listener, errorListener, mSettings.getString("group", "0"));
+            NetworkController.getLessons(mContext, listener, errorListener, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
         } else updateUI();
     }
 
@@ -134,15 +147,17 @@ public class DashboardFragment extends Fragment {
         if (item.getItemId() == R.id.menu_sort) {
             AnimatedVectorDrawable drawable;
             if (!sort_by_week) {
-                drawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_dashboard);
+                drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_dashboard);
                 item.setIcon(drawable);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
             } else {
-                drawable = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_to_sort_by_alpha);
+                drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_to_sort_by_alpha);
                 item.setIcon(drawable);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
             }
-            drawable.start();
+            if (drawable != null) {
+                drawable.start();
+            }
             sort_by_week = !sort_by_week;
             mSettings.edit().putBoolean("sort_by_week", sort_by_week).apply();
             update(0);

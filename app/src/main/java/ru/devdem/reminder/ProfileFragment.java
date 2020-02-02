@@ -27,12 +27,14 @@ public class ProfileFragment extends Fragment {
     private TextView profileLogin;
     private TextView profileEmail;
     private TextView profilePermission;
+    private MainActivity mMainActivity;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_profile, null);
         mContext = Objects.requireNonNull(getContext());
+        mMainActivity = (MainActivity) Objects.requireNonNull(getActivity());
         permissions = getResources().getStringArray(R.array.permissions);
         mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
         profileName = v.findViewById(R.id.profileName);
@@ -48,6 +50,7 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_reload:
+                mMainActivity.checkAccount();
                 updateUI();
                 return true;
             case R.id.menu_edit:
