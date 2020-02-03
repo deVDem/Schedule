@@ -168,6 +168,7 @@ public class DashboardFragment extends Fragment {
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LessonsViewer> {
         ArrayList<ArrayList<LessonsController.Lesson>> mLessons;
+        boolean[] prepared = new boolean[6];
 
         RVAdapter(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
             this.mLessons = lessons;
@@ -181,121 +182,134 @@ public class DashboardFragment extends Fragment {
         }
 
         @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
         public void onBindViewHolder(@NonNull LessonsViewer holder, int position) {
             boolean tomorrow = false;
-            ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
-            if (position + 1 == getItemCount()) {
-                holder.mSpace.setVisibility(View.VISIBLE);
-            }
-            if (lessons.size() != 0) {
-                Calendar calendar = Calendar.getInstance();
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                switch (dayOfWeek) {
-                    case Calendar.MONDAY:
-                        dayOfWeek = 0;
-                        break;
-                    case Calendar.TUESDAY:
-                        dayOfWeek = 1;
-                        break;
-                    case Calendar.WEDNESDAY:
-                        dayOfWeek = 2;
-                        break;
-                    case Calendar.THURSDAY:
-                        dayOfWeek = 3;
-                        break;
-                    case Calendar.FRIDAY:
-                        dayOfWeek = 4;
-                        break;
-                    case Calendar.SATURDAY:
-                        dayOfWeek = 5;
-                        break;
-                    case Calendar.SUNDAY:
-                        dayOfWeek = 6;
-                        break;
+            if (!prepared[position]) {
+                prepared[position] = true;
+                ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
+                if (position + 1 == getItemCount()) {
+                    holder.mSpace.setVisibility(View.VISIBLE);
                 }
-                // 0 - урок или перемена
-                // 1 - номер урока которого считать
-                // 2 - номер след.урока
-                // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
-                int[] params = mTimeController.getNumberlesson();
-                if (dayOfWeek + 1 == mLessonsController.getLessons().get(params[2]).getDay() && dayOfWeek + 1 == mLessonsController.getLessons().get(params[1]).getDay()) {
-                    tomorrow = true;
-                }
-                if (!sort_by_week) {
-                    if (tomorrow) position++;
-                    if (position + dayOfWeek != 0) {
-                        int size = 0;
-                        for (int n = 0; n < mLessons.size(); n++) {
-                            if (mLessons.get(n).size() == 0) {
-                                break;
-                            }
-                            size++;
-                        }
-                        if (dayOfWeek > size) dayOfWeek--;
-                        position = (dayOfWeek + position) % (size);
+                if (lessons.size() != 0) {
+                    Calendar calendar = Calendar.getInstance();
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    switch (dayOfWeek) {
+                        case Calendar.MONDAY:
+                            dayOfWeek = 0;
+                            break;
+                        case Calendar.TUESDAY:
+                            dayOfWeek = 1;
+                            break;
+                        case Calendar.WEDNESDAY:
+                            dayOfWeek = 2;
+                            break;
+                        case Calendar.THURSDAY:
+                            dayOfWeek = 3;
+                            break;
+                        case Calendar.FRIDAY:
+                            dayOfWeek = 4;
+                            break;
+                        case Calendar.SATURDAY:
+                            dayOfWeek = 5;
+                            break;
+                        case Calendar.SUNDAY:
+                            dayOfWeek = 6;
+                            break;
                     }
-                    lessons = mLessons.get(position);
-                }
-                holder.mDayOfWeekText.setText(days[position]);
-                if (dayOfWeek == position && !tomorrow) {
-                    String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
-                    holder.mDayOfWeekText.setText(dayOfWeekText);
-                }
-                if (dayOfWeek + 1 == position && tomorrow) {
-                    String dayOfWeekText = days[position] + " (" + getResources().getString(R.string.tomorrow) + ")";
-                    holder.mDayOfWeekText.setText(dayOfWeekText);
-                }
-                for (int i = 0; i < lessons.size(); i++) {
-                    LessonsController.Lesson lesson = lessons.get(i);
-                    String startString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getStart());
-                    String endString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getEnd());
-                    String timeString = startString + "-" + endString;
-                    @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
-                    RelativeLayout relativeLayout = view.findViewById(R.id.rlLesson);
-                    int[][] states = new int[][]{
-                            new int[]{android.R.attr.state_enabled},
-                            new int[]{-android.R.attr.state_enabled}
-                    };
-                    int[] colors = new int[]{
-                            getResources().getColor(R.color.colorAccent),
-                            getResources().getColor(R.color.card_color),
-                    };
-                    TextView numberLesson = view.findViewById(R.id.numberLesson);
-                    TextView nameLesson = view.findViewById(R.id.textLesson);
-                    TextView dateText = view.findViewById(R.id.textDate);
-                    TextView cabText = view.findViewById(R.id.textCab);
-                    String numberText = lesson.getNumberText();
-                    if (params[3] != 3 && params[3] != 0)
-                        if (params[0] == 0) {
-                            if (lesson.getNumber() == params[1]) {
-                                relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
-                                relativeLayout.setEnabled(true);
-                                numberLesson.setTextColor(getResources().getColor(R.color.white));
-                                nameLesson.setTextColor(getResources().getColor(R.color.white));
-                                dateText.setTextColor(getResources().getColor(R.color.white));
-                                cabText.setTextColor(getResources().getColor(R.color.white));
-                            } else if (lesson.isZamena()) {
-                                colors = new int[]{
-                                        getResources().getColor(R.color.card_color_replace),
-                                        getResources().getColor(R.color.card_color),
-                                };
-                                numberText = numberText + " " + getResources().getString(R.string.replacement);
-                                relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                    // 0 - урок или перемена
+                    // 1 - номер урока которого считать
+                    // 2 - номер след.урока
+                    // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
+                    int[] params = mTimeController.getNumberlesson();
+                    if (dayOfWeek + 1 == mLessonsController.getLessons().get(params[2]).getDay() && dayOfWeek + 1 == mLessonsController.getLessons().get(params[1]).getDay()) {
+                        tomorrow = true;
+                    }
+                    if (!sort_by_week) {
+                        if (tomorrow) position++;
+                        if (position + dayOfWeek != 0) {
+                            int size = 0;
+                            for (int n = 0; n < mLessons.size(); n++) {
+                                if (mLessons.get(n).size() == 0) {
+                                    break;
+                                }
+                                size++;
+                            }
+                            if (dayOfWeek > size) dayOfWeek--;
+                            position = (dayOfWeek + position) % (size);
+                        }
+                        lessons = mLessons.get(position);
+                    }
+                    holder.mDayOfWeekText.setText(days[position]);
+                    if (dayOfWeek == position && !tomorrow) {
+                        String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
+                        holder.mDayOfWeekText.setText(dayOfWeekText);
+                    }
+                    if (dayOfWeek + 1 == position && tomorrow) {
+                        String dayOfWeekText = days[position] + " (" + getResources().getString(R.string.tomorrow) + ")";
+                        holder.mDayOfWeekText.setText(dayOfWeekText);
+                    }
+                    for (int i = 0; i < lessons.size(); i++) {
+                        LessonsController.Lesson lesson = lessons.get(i);
+                        String startString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getStart());
+                        String endString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getEnd());
+                        String timeString = startString + "-" + endString;
+                        @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.lesson_item, null);
+                        RelativeLayout relativeLayout = view.findViewById(R.id.rlLesson);
+                        int[][] states = new int[][]{
+                                new int[]{android.R.attr.state_enabled},
+                                new int[]{-android.R.attr.state_enabled}
+                        };
+                        int[] colors = new int[]{
+                                getResources().getColor(R.color.colorAccent),
+                                getResources().getColor(R.color.card_color),
+                        };
+                        TextView numberLesson = view.findViewById(R.id.numberLesson);
+                        TextView nameLesson = view.findViewById(R.id.textLesson);
+                        TextView dateText = view.findViewById(R.id.textDate);
+                        TextView cabText = view.findViewById(R.id.textCab);
+                        String numberText = lesson.getNumberText();
+                        if (params[3] != 3 && params[3] != 0)
+                            if (params[0] == 0) {
+                                if (lesson.getNumber() == params[1]) {
+                                    relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                    relativeLayout.setEnabled(true);
+                                    numberLesson.setTextColor(getResources().getColor(R.color.white));
+                                    nameLesson.setTextColor(getResources().getColor(R.color.white));
+                                    dateText.setTextColor(getResources().getColor(R.color.white));
+                                    cabText.setTextColor(getResources().getColor(R.color.white));
+                                } else if (lesson.isZamena()) {
+                                    colors = new int[]{
+                                            getResources().getColor(R.color.card_color_replace),
+                                            getResources().getColor(R.color.card_color),
+                                    };
+                                    numberText = numberText + " " + getResources().getString(R.string.replacement);
+                                    relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
+                                    relativeLayout.setEnabled(true);
+                                }
+                            } else {
                                 relativeLayout.setEnabled(true);
                             }
-                        } else {
-                            relativeLayout.setEnabled(true);
-                        }
 
-                    numberLesson.setText(numberText);
-                    nameLesson.setText(lesson.getName());
-                    dateText.setText(timeString);
-                    cabText.setText(lesson.getCab());
-                    holder.mLessonsLL.addView(view);
+                        numberLesson.setText(numberText);
+                        nameLesson.setText(lesson.getName());
+                        dateText.setText(timeString);
+                        cabText.setText(lesson.getCab());
+                        holder.mLessonsLL.addView(view);
+                    }
+                } else {
+                    holder.mRelativeLayout.removeAllViews();
+                    holder.mRelativeLayout.setVisibility(View.GONE);
                 }
-            } else {
-                holder.mRelativeLayout.removeAllViews();
-                holder.mRelativeLayout.setVisibility(View.GONE);
             }
         }
 
