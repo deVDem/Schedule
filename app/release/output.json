@@ -6,7 +6,7 @@
     "apkData": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 38,
+      "versionCode": 39,
       "versionName": "0.9.7 beta",
       "enabled": true,
       "outputFile": "app-release.apk",
