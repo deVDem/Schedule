@@ -22,11 +22,12 @@ class NetworkController {
 
     private static String URL_LOGIN = "https://api.devdem.ru/apps/schedule/accounts/login.php";
     private static String URL_REGISTER = "https://api.devdem.ru/apps/schedule/accounts/register.php";
-    private static String URL_GETGROUPS = "https://api.devdem.ru/apps/schedule/getgroups.php";
+    private static String URL_GET_GROUPS = "https://api.devdem.ru/apps/schedule/groups/get.php";
     private static String URL_NOTIFICATIONS = "https://api.devdem.ru/apps/schedule/notifications.php";
     private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
     private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
     private static String URL_UPDATE_PROFILE = "https://api.devdem.ru/apps/schedule/accounts/update.php";
+    private static String URL_ADD_NOTIFICATION = "https://api.devdem.ru/apps/schedule/notifications/add.php";
 
     private static final String TAG = "NetworkController";
 
@@ -50,6 +51,17 @@ class NetworkController {
         SendRequest sendRequest = new SendRequest(listener, errorListener, URL, map);
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendRequest);
+    }
+
+    static void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String urlImage) {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        map.put("group", group);
+        map.put("title", title);
+        map.put("message", message);
+        map.put("urlImage", urlImage);
+        goSend(context, listener, errorListener, URL_ADD_NOTIFICATION, map);
+
     }
 
     static void editProfile(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String name, String email, String login, String token) {
@@ -106,10 +118,10 @@ class NetworkController {
                 e.printStackTrace();
             }
         };
-        goSend(context, listener, null, URL_GETGROUPS, new HashMap<>());
+        goSend(context, listener, null, URL_GET_GROUPS, new HashMap<>());
     }
 
-    static void GetGroups(Context context, Spinner spinner) {
+    static void GetGroupsToSpinner(Context context, Spinner spinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         adapter.add(context.getString(R.string.choose));
         Response.Listener<String> listener = response -> {
@@ -127,7 +139,7 @@ class NetworkController {
             }
             spinner.setAdapter(adapter);
         };
-        goSend(context, listener, getErrorListener(context), URL_GETGROUPS, new HashMap<>());
+        goSend(context, listener, getErrorListener(context), URL_GET_GROUPS, new HashMap<>());
     }
 
     static void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {

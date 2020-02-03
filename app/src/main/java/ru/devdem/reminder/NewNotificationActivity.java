@@ -91,6 +91,18 @@ public class NewNotificationActivity extends AppCompatActivity {
         MaterialEditText etText = view.findViewById(R.id.etText);
         MaterialEditText etUrl = view.findViewById(R.id.etUrlImage);
         FloatingActionButton actionButton = view.findViewById(R.id.floatingActionButton);
+        actionButton.setOnClickListener(v -> {
+            String title = etTitle.getText().toString();
+            String message = etText.getText().toString();
+            String urlImage = etUrl.getText().toString();
+            Response.Listener<String> listener = response -> {
+                Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
+            };
+            Response.ErrorListener errorListener = error -> {
+                Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show();
+            };
+            NetworkController.addNotification(this, listener, errorListener, mSettings.getString("token", ""), mSettings.getString("group", ""), title, message, urlImage);
+        });
         setContentView(view);
     }
 

@@ -103,7 +103,7 @@ public class NotificationsFragment extends Fragment {
                     JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
                     //int group = jsonObject.getInt("group");
                     Notification notification = new Notification();
-                    notification.setId(i);
+                    notification.setId(jsonObject.getInt("id"));
                     notification.setTitle(jsonObject.getString("Title"));
                     notification.setSubTitle(jsonObject.getString("Subtitle"));
                     notification.setUrlImage(jsonObject.getString("URLImage"));

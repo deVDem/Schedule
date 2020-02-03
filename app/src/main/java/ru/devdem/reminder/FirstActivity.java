@@ -100,7 +100,7 @@ public class FirstActivity extends AppCompatActivity {
 
         mContext = this;
         loginButton.setOnClickListener(v -> LoginFuncs());
-        NetworkController.GetGroups(mContext, mSpinner);
+        NetworkController.GetGroupsToSpinner(mContext, mSpinner);
         registerButton.setOnClickListener(v -> RegisterFuncs());
     }
 
