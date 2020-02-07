@@ -54,6 +54,7 @@
             android:backgroundTintMode="screen"
             android:contentDescription="@string/image"
             android:scaleType="fitCenter"
+            android:visibility="gone"
             tools:src="@drawable/cat" />
 
         <TextView

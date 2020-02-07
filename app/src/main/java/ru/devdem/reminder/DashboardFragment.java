@@ -45,6 +45,7 @@ public class DashboardFragment extends Fragment {
     private String[] days;
     private TimeController mTimeController;
     private LessonsController mLessonsController;
+    private NetworkController mNetworkController;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SharedPreferences mSettings;
@@ -61,6 +62,7 @@ public class DashboardFragment extends Fragment {
         days = getResources().getStringArray(R.array.days);
         mTimeController = TimeController.get(getContext());
         mLessonsController = LessonsController.get(mContext);
+        mNetworkController = NetworkController.get();
         mRecyclerView = v.findViewById(R.id.recyclerViewDash);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
@@ -92,7 +94,7 @@ public class DashboardFragment extends Fragment {
                 Toast.makeText(mContext, R.string.errorNetwork, Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
             };
-            NetworkController.getLessons(mContext, listener, errorListener, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
+            mNetworkController.getLessons(mContext, listener, errorListener, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
         } else updateUI();
     }
 

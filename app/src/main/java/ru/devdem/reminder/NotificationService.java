@@ -113,6 +113,9 @@ public class NotificationService extends Service {
                         }
                         NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(counterString, countString);
                         Notification notification = builder.build();
+                        Intent reloadIntent = new Intent(getApplicationContext(), SplashActivity.class);
+                        reloadIntent.setAction("ru.devdem.reminder.openApp");
+                        notification.contentIntent = PendingIntent.getActivity(this, 0, reloadIntent, 0);
                         notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
                         if (canGo) {
                             mNotificationUtils.getManager().notify(103, notification);

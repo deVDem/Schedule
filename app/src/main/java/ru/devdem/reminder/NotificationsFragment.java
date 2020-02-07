@@ -43,6 +43,7 @@ public class NotificationsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RVAdapter mRVAdapter;
+    private NetworkController mNetworkController;
 
     @SuppressLint("InflateParams")
     @Nullable
@@ -50,6 +51,7 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, null);
         Context context = getContext();
+        mNetworkController = NetworkController.get();
         String NAME_PREFS = "settings";
         mSettings = Objects.requireNonNull(context).getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
         mRecyclerView = view.findViewById(R.id.recyclerViewNotifications);
@@ -124,6 +126,7 @@ public class NotificationsFragment extends Fragment {
                 animationAdapter.setDuration(1000);
                 animationAdapter.setFirstOnly(true);
                 mRecyclerView.setAdapter(animationAdapter);
+                mRVAdapter.notifyDataSetChanged();
             } else {
                 mRVAdapter.setNotifications(mNotifications);
                 mRVAdapter.notifyDataSetChanged();
@@ -156,7 +159,7 @@ public class NotificationsFragment extends Fragment {
             }
             mSwipeRefreshLayout.setRefreshing(false);
         };
-        NetworkController.getNotifications(getContext(), mSettings.getString("group", ""), mSettings.getString("token", ""), listener, errorListener);
+        mNetworkController.getNotifications(getContext(), mSettings.getString("group", ""), mSettings.getString("token", ""), listener, errorListener);
     }
 
     class Notification {
@@ -213,9 +216,11 @@ public class NotificationsFragment extends Fragment {
 
     class RVAdapter extends RecyclerView.Adapter<RVAdapter.NotificationViewer> {
         ArrayList<Notification> mNotifications;
+        boolean[] prepared;
 
         RVAdapter(ArrayList<Notification> notifications) {
             this.mNotifications = notifications;
+            prepared = new boolean[mNotifications.size()];
         }
 
         void setNotifications(ArrayList<Notification> notifications) {
@@ -238,11 +243,12 @@ public class NotificationsFragment extends Fragment {
             String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
             holder.mDateView.setText(dateString);
             String urlImage = notification.getUrlImage();
-            if (urlImage.length() > 0) {
+            if (urlImage.length() > 0 && holder.mImageView.getVisibility() == View.GONE) {
+                holder.mImageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
                 holder.mImageView.setOnClickListener(v -> {
                     Activity activity = Objects.requireNonNull(getActivity());
-                    startActivity(FullImageActivity.newInstance(getActivity(), urlImage));
+                    startActivity(FullImageActivity.newInstance(activity, urlImage));
                     activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                 });
             } else holder.mImageView.setVisibility(View.GONE);

@@ -16,10 +16,13 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class NewNotificationActivity extends AppCompatActivity {
 
     private SharedPreferences mSettings;
     private AlertDialog dialog;
+    private NetworkController mNetworkController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class NewNotificationActivity extends AppCompatActivity {
         mSettings = getSharedPreferences("settings", MODE_PRIVATE);
         setTheme(R.style.EditProfile);
         setTitle("New notification");
+        mNetworkController = NetworkController.get();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         dialog = builder.setMessage(R.string.loading).create();
         dialog.show();
@@ -81,7 +85,7 @@ public class NewNotificationActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
             exit();
         };
-        NetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("password", ""), listener, errorListener);
+        mNetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("password", ""), listener, errorListener);
     }
 
     private void start() {
@@ -92,16 +96,16 @@ public class NewNotificationActivity extends AppCompatActivity {
         MaterialEditText etUrl = view.findViewById(R.id.etUrlImage);
         FloatingActionButton actionButton = view.findViewById(R.id.floatingActionButton);
         actionButton.setOnClickListener(v -> {
-            String title = etTitle.getText().toString();
-            String message = etText.getText().toString();
-            String urlImage = etUrl.getText().toString();
+            String title = Objects.requireNonNull(etTitle.getText()).toString();
+            String message = Objects.requireNonNull(etText.getText()).toString();
+            String urlImage = Objects.requireNonNull(etUrl.getText()).toString();
             Response.Listener<String> listener = response -> {
                 Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
             };
             Response.ErrorListener errorListener = error -> {
                 Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show();
             };
-            NetworkController.addNotification(this, listener, errorListener, mSettings.getString("token", ""), mSettings.getString("group", ""), title, message, urlImage);
+            mNetworkController.addNotification(this, listener, errorListener, mSettings.getString("token", ""), mSettings.getString("group", ""), title, message, urlImage);
         });
         setContentView(view);
     }

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private LessonsController mLessonsController;
     private TimeController mTimeController;
+    private NetworkController mNetworkController;
     NotificationUtils notificationUtils;
     private Snackbar snackbar;
     private SharedPreferences mSettings;
@@ -51,13 +52,14 @@ public class MainActivity extends AppCompatActivity {
         mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
+        mNetworkController = NetworkController.get();
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
         notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
             Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
-            NetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
-            NetworkController.getGroups(this, mSettings.getString("group", ""));
+            mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
+            mNetworkController.getGroups(this, mSettings.getString("group", ""));
             start();
         } else finish();
     }
@@ -217,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         Response.ErrorListener errorListener = error -> Toast.makeText(this, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
-        NetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("password", ""), listener, errorListener);
+        mNetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("password", ""), listener, errorListener);
     }
 
     private void exit() {
@@ -252,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         };
-        NetworkController.getLastVerInt(this, listener);
+        mNetworkController.getLastVerInt(this, listener);
     }
 
     public void updateDashboard() {

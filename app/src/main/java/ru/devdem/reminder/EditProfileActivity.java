@@ -30,6 +30,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FloatingActionButton mActionButton;
     private ScrollView mScrollView;
     private RelativeLayout mRelativeLayout;
+    private NetworkController mNetworkController;
     private String name;
     private String email;
     private String login;
@@ -43,6 +44,7 @@ public class EditProfileActivity extends AppCompatActivity {
         View v = View.inflate(this, R.layout.activity_edit_profile, null);
         setTheme(R.style.EditProfile);
         setContentView(v);
+        mNetworkController = NetworkController.get();
         mEtName = v.findViewById(R.id.etName);
         mEtEmail = v.findViewById(R.id.etEmail);
         mEtLogin = v.findViewById(R.id.etLogin);
@@ -169,7 +171,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.error) + ": " + error.getMessage(), Toast.LENGTH_LONG).show();
             check();
         };
-        NetworkController.editProfile(this, listener, errorListener, name, email, login, mPreferences.getString("token", "null"));
+        mNetworkController.editProfile(this, listener, errorListener, name, email, login, mPreferences.getString("token", "null"));
     }
 
     private void check() {

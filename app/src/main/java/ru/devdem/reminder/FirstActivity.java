@@ -42,6 +42,8 @@ public class FirstActivity extends AppCompatActivity {
     private Spinner mSpinner;
     private SharedPreferences mSettings;
 
+    private NetworkController mNetworkController;
+
     private EditText mRLoginEt;
     private EditText mRNameEt;
     private EditText mREmailEt;
@@ -72,6 +74,7 @@ public class FirstActivity extends AppCompatActivity {
         mSettings = getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+        mNetworkController = NetworkController.get();
         helloRl = findViewById(R.id.hello);
         loginRl = findViewById(R.id.relativeLayoutLogin);
         registerRl = findViewById(R.id.relativeLayoutRegister);
@@ -100,7 +103,7 @@ public class FirstActivity extends AppCompatActivity {
 
         mContext = this;
         loginButton.setOnClickListener(v -> LoginFuncs());
-        NetworkController.GetGroupsToSpinner(mContext, mSpinner);
+        mNetworkController.GetGroupsToSpinner(mContext, mSpinner);
         registerButton.setOnClickListener(v -> RegisterFuncs());
     }
 
@@ -167,7 +170,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
             };
             showHide(mRTextView, registerRl, true);
-            NetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
+            mNetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
         } else
             Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
     }
@@ -250,7 +253,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
             };
             showHide(mLTextView, loginRl, true);
-            NetworkController.Login(mContext, login, password, listener, NetworkController.getErrorListener(mContext));
+            mNetworkController.Login(mContext, login, password, listener, mNetworkController.getErrorListener(mContext));
         } else {
             Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();
         }

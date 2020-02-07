@@ -18,20 +18,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 class NetworkController {
+    private static NetworkController sNetworkController;
+    private String URL_LOGIN;
+    private String URL_REGISTER;
+    private String URL_GET_GROUPS;
+    private String URL_NOTIFICATIONS;
+    private String URL_LESSONS;
+    private String URL_GET_VER_INT;
+    private String URL_UPDATE_PROFILE;
+    private String URL_ADD_NOTIFICATION;
     private static RequestQueue queue;
 
-    private static String URL_LOGIN = "https://api.devdem.ru/apps/schedule/accounts/login.php";
-    private static String URL_REGISTER = "https://api.devdem.ru/apps/schedule/accounts/register.php";
-    private static String URL_GET_GROUPS = "https://api.devdem.ru/apps/schedule/groups/get.php";
-    private static String URL_NOTIFICATIONS = "https://api.devdem.ru/apps/schedule/notifications.php";
-    private static String URL_LESSONS = "https://api.devdem.ru/apps/schedule/lessons.php";
-    private static String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/getver.php";
-    private static String URL_UPDATE_PROFILE = "https://api.devdem.ru/apps/schedule/accounts/update.php";
-    private static String URL_ADD_NOTIFICATION = "https://api.devdem.ru/apps/schedule/notifications/add.php";
+    private NetworkController() {
+        String URL_ROOT = "https://api.devdem.ru/apps/schedule/";
+        if (BuildConfig.DEBUG) {
+            URL_LOGIN = URL_ROOT + "/debug/" + "/accounts/login.php";
+            URL_REGISTER = URL_ROOT + "/debug/" + "/accounts/register.php";
+            URL_GET_GROUPS = URL_ROOT + "/debug/" + "/groups/get.php";
+            URL_NOTIFICATIONS = URL_ROOT + "/debug/" + "/notifications.php";
+            URL_LESSONS = URL_ROOT + "/debug/" + "/lessons.php";
+            URL_GET_VER_INT = URL_ROOT + "/debug/" + "/getver.php";
+            URL_UPDATE_PROFILE = URL_ROOT + "/debug/" + "/accounts/update.php";
+            URL_ADD_NOTIFICATION = URL_ROOT + "/debug/" + "/notifications/add.php";
+        } else {
+            URL_LOGIN = URL_ROOT + "/accounts/login.php";
+            URL_REGISTER = URL_ROOT + "/accounts/register.php";
+            URL_GET_GROUPS = URL_ROOT + "/groups/get.php";
+            URL_NOTIFICATIONS = URL_ROOT + "/notifications.php";
+            URL_LESSONS = URL_ROOT + "/lessons.php";
+            URL_GET_VER_INT = URL_ROOT + "/getver.php";
+            URL_UPDATE_PROFILE = URL_ROOT + "/accounts/update.php";
+            URL_ADD_NOTIFICATION = URL_ROOT + "/notifications/add.php";
+        }
+    }
 
-    private static final String TAG = "NetworkController";
+    public static NetworkController get() {
+        if (sNetworkController == null) sNetworkController = new NetworkController();
+        return sNetworkController;
+    }
 
-    static Response.ErrorListener getErrorListener(Context context) {
+    Response.ErrorListener getErrorListener(Context context) {
         return error -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(R.string.errorNetwork)
@@ -47,13 +73,13 @@ class NetworkController {
         };
     }
 
-    private static void goSend(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String URL, Map<String, String> map) {
+    private void goSend(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String URL, Map<String, String> map) {
         SendRequest sendRequest = new SendRequest(listener, errorListener, URL, map);
         if (queue == null) queue = Volley.newRequestQueue(context);
         queue.add(sendRequest);
     }
 
-    static void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String urlImage) {
+    void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String urlImage) {
         Map<String, String> map = new HashMap<>();
         map.put("token", token);
         map.put("group", group);
@@ -64,7 +90,7 @@ class NetworkController {
 
     }
 
-    static void editProfile(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String name, String email, String login, String token) {
+    void editProfile(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String name, String email, String login, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("name", name);
         map.put("email", email);
@@ -73,14 +99,14 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_UPDATE_PROFILE, map);
     }
 
-    static void Login(Context context, String login, String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    void Login(Context context, String login, String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
         map.put("login", login);
         map.put("password", password);
         goSend(context, listener, errorListener, URL_LOGIN, map);
     }
 
-    static void Register(Context context, String login, String name, String email, String password, String group, String spam, Response.Listener<String> listener) {
+    void Register(Context context, String login, String name, String email, String password, String group, String spam, Response.Listener<String> listener) {
         Map<String, String> map = new HashMap<>();
         map.put("login", login);
         map.put("name", name);
@@ -91,14 +117,14 @@ class NetworkController {
         goSend(context, listener, getErrorListener(context), URL_REGISTER, map);
     }
 
-    static void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group, String token) {
+    void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
         map.put("token", token);
         goSend(context, listener, errorListener, URL_LESSONS, map);
     }
 
-    static void getGroups(Context context, String group) {
+    void getGroups(Context context, String group) {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonResponse = new JSONObject(response);
@@ -121,7 +147,7 @@ class NetworkController {
         goSend(context, listener, null, URL_GET_GROUPS, new HashMap<>());
     }
 
-    static void GetGroupsToSpinner(Context context, Spinner spinner) {
+    void GetGroupsToSpinner(Context context, Spinner spinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         adapter.add(context.getString(R.string.choose));
         Response.Listener<String> listener = response -> {
@@ -142,14 +168,14 @@ class NetworkController {
         goSend(context, listener, getErrorListener(context), URL_GET_GROUPS, new HashMap<>());
     }
 
-    static void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
         map.put("token", token);
         goSend(context, listener, errorListener, URL_NOTIFICATIONS, map);
     }
 
-    static void getLastVerInt(Context context, Response.Listener<String> listener) {
+    void getLastVerInt(Context context, Response.Listener<String> listener) {
         goSend(context, listener, null, URL_GET_VER_INT, new HashMap<>());
     }
 
