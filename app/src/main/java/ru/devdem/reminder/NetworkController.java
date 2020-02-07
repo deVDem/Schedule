@@ -19,36 +19,36 @@ import java.util.Map;
 
 class NetworkController {
     private static NetworkController sNetworkController;
-    private String URL_LOGIN;
-    private String URL_REGISTER;
-    private String URL_GET_GROUPS;
-    private String URL_NOTIFICATIONS;
-    private String URL_LESSONS;
-    private String URL_GET_VER_INT;
-    private String URL_UPDATE_PROFILE;
-    private String URL_ADD_NOTIFICATION;
+    private String URL_LOGIN = "/accounts/login.php";
+    private String URL_REGISTER = "/accounts/register.php";
+    private String URL_GET_GROUPS = "/groups/get.php";
+    private String URL_NOTIFICATIONS_GET = "/notifications/get.php";
+    private String URL_LESSONS = "/lessons.php";
+    private String URL_GET_VER_INT = "/getver.php";
+    private String URL_UPDATE_PROFILE = "/accounts/update.php";
+    private String URL_ADD_NOTIFICATION = "/notifications/add.php";
     private static RequestQueue queue;
 
     private NetworkController() {
         String URL_ROOT = "https://api.devdem.ru/apps/schedule/";
         if (BuildConfig.DEBUG) {
-            URL_LOGIN = URL_ROOT + "/debug/" + "/accounts/login.php";
-            URL_REGISTER = URL_ROOT + "/debug/" + "/accounts/register.php";
-            URL_GET_GROUPS = URL_ROOT + "/debug/" + "/groups/get.php";
-            URL_NOTIFICATIONS = URL_ROOT + "/debug/" + "/notifications.php";
-            URL_LESSONS = URL_ROOT + "/debug/" + "/lessons.php";
-            URL_GET_VER_INT = URL_ROOT + "/debug/" + "/getver.php";
-            URL_UPDATE_PROFILE = URL_ROOT + "/debug/" + "/accounts/update.php";
-            URL_ADD_NOTIFICATION = URL_ROOT + "/debug/" + "/notifications/add.php";
+            URL_LOGIN = URL_ROOT + "/debug/" + URL_LOGIN;
+            URL_REGISTER = URL_ROOT + "/debug/" + URL_REGISTER;
+            URL_GET_GROUPS = URL_ROOT + "/debug/" + URL_GET_GROUPS;
+            URL_NOTIFICATIONS_GET = URL_ROOT + "/debug/" + URL_NOTIFICATIONS_GET;
+            URL_LESSONS = URL_ROOT + "/debug/" + URL_LESSONS;
+            URL_GET_VER_INT = URL_ROOT + "/debug/" + URL_GET_VER_INT;
+            URL_UPDATE_PROFILE = URL_ROOT + "/debug/" + URL_UPDATE_PROFILE;
+            URL_ADD_NOTIFICATION = URL_ROOT + "/debug/" + URL_ADD_NOTIFICATION;
         } else {
-            URL_LOGIN = URL_ROOT + "/accounts/login.php";
-            URL_REGISTER = URL_ROOT + "/accounts/register.php";
-            URL_GET_GROUPS = URL_ROOT + "/groups/get.php";
-            URL_NOTIFICATIONS = URL_ROOT + "/notifications.php";
-            URL_LESSONS = URL_ROOT + "/lessons.php";
-            URL_GET_VER_INT = URL_ROOT + "/getver.php";
-            URL_UPDATE_PROFILE = URL_ROOT + "/accounts/update.php";
-            URL_ADD_NOTIFICATION = URL_ROOT + "/notifications/add.php";
+            URL_LOGIN = URL_ROOT + URL_LOGIN;
+            URL_REGISTER = URL_ROOT + URL_REGISTER;
+            URL_GET_GROUPS = URL_ROOT + URL_GET_GROUPS;
+            URL_NOTIFICATIONS_GET = URL_ROOT + URL_NOTIFICATIONS_GET;
+            URL_LESSONS = URL_ROOT + URL_LESSONS;
+            URL_GET_VER_INT = URL_ROOT + URL_GET_VER_INT;
+            URL_UPDATE_PROFILE = URL_ROOT + URL_UPDATE_PROFILE;
+            URL_ADD_NOTIFICATION = URL_ROOT + URL_ADD_NOTIFICATION;
         }
     }
 
@@ -172,7 +172,7 @@ class NetworkController {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
         map.put("token", token);
-        goSend(context, listener, errorListener, URL_NOTIFICATIONS, map);
+        goSend(context, listener, errorListener, URL_NOTIFICATIONS_GET, map);
     }
 
     void getLastVerInt(Context context, Response.Listener<String> listener) {
