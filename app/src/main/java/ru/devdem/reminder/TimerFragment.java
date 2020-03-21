@@ -45,7 +45,7 @@ public class TimerFragment extends Fragment {
     private TextView lessonNext;
     private Thread mThread;
     private MainActivity mMainActivity;
-    private int lastParams;
+    private int[] lastParams;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +66,10 @@ public class TimerFragment extends Fragment {
         lessonNextText = view.findViewById(R.id.lessonNextText);
         lessonNext = view.findViewById(R.id.lessonNext);
         AdView adView = new AdView(mContext);
+        /*List<String> testDeviceIds = Arrays.asList("ID");
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(configuration);*/
         if (!BuildConfig.DEBUG)
             adView.setAdUnitId("ca-app-pub-7389415060915567/7081052515");
         else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
@@ -171,9 +175,10 @@ public class TimerFragment extends Fragment {
                                         nextLessonText = mContext.getString(R.string.lessons_over_today);
                                     lessonNext.setText(nextLessonText);
                                 }
-                                if (lastParams != params[1]) {
+                                if (lastParams == null) lastParams = params;
+                                if (lastParams[0] != params[0]) {
                                     mMainActivity.updateDashboard();
-                                    lastParams = params[1];
+                                    lastParams = params;
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

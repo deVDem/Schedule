@@ -92,4 +92,5 @@
         <item>Moderator</item>
         <item>Administrator</item>
     </string-array>
+    <string name="use_theme_system">Use the theme settings system</string>
 </resources>

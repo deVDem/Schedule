@@ -38,6 +38,19 @@
             android:orientation="vertical">
 
             <Switch
+                android:id="@+id/switchTheme"
+                style="@style/MySwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/card_color_lessons"
+                android:checked="true"
+                android:padding="10dp"
+                android:text="@string/use_theme_system"
+                android:textColor="@color/text_color" />
+
+            <Switch
                 android:id="@+id/switchNightTheme"
                 style="@style/MySwitch"
                 android:layout_width="match_parent"

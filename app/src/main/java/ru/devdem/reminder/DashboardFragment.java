@@ -68,15 +68,15 @@ public class DashboardFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(llm);
         swipeRefreshLayout = v.findViewById(R.id.swipeContainer);
-        swipeRefreshLayout.setOnRefreshListener(() -> update(1));
-        update(0);
+        swipeRefreshLayout.setOnRefreshListener(() -> update(true));
+        update(false);
         setHasOptionsMenu(true);
         sort_by_week = mSettings.getBoolean("sort_by_week", false);
         return v;
     }
 
-    void update(int why) {
-        if (why == 1) {
+    void update(boolean why) {
+        if (why) {
             Response.Listener<String> listener = response -> {
                 try {
                     if (new JSONObject(response).getString("error").equals("NO_TOKEN")) {
@@ -162,7 +162,7 @@ public class DashboardFragment extends Fragment {
             }
             sort_by_week = !sort_by_week;
             mSettings.edit().putBoolean("sort_by_week", sort_by_week).apply();
-            update(0);
+            update(false);
             return true;
         }
         return super.onOptionsItemSelected(item);

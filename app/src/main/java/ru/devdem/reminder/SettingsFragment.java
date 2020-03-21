@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
@@ -34,6 +35,7 @@ public class SettingsFragment extends Fragment {
         Context context = Objects.requireNonNull(getContext());
         String NAME_PREFS = "settings";
         mSettings = context.getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
+        Switch switchTheme = view.findViewById(R.id.switchTheme);
         Switch switchNight = view.findViewById(R.id.switchNightTheme);
         Switch switchNotification = view.findViewById(R.id.switchNotification);
         int[][] states = new int[][]{
@@ -48,11 +50,27 @@ public class SettingsFragment extends Fragment {
             switchNight.setThumbTintList(new ColorStateList(states, colors));
             switchNotification.setThumbTintList(new ColorStateList(states, colors));
         }
+        switchTheme.setChecked(mSettings.getBoolean("system_theme", true));
         switchNight.setChecked(mSettings.getBoolean("night", false));
         switchNotification.setChecked(mSettings.getBoolean("notification", true));
+        if (switchTheme.isChecked()) {
+            switchNight.setEnabled(false);
+            switchNight.setAlpha(0.5f);
+        }
+        switchTheme.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            if (can) {
+                mSettings.edit().putBoolean("system_theme", isChecked).apply();
+                switchNight.setEnabled(!isChecked);
+                switchNight.setAlpha(isChecked ? 0.5f : 1f);
+                switchNight.setChecked(mSettings.getBoolean("night", false));
+                AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM : switchNight.isChecked() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+                restart();
+            }
+        }));
         switchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (can) {
                 mSettings.edit().putBoolean("night", isChecked).apply();
+                AppCompatDelegate.setDefaultNightMode(switchTheme.isChecked() ? AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM : isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
                 restart();
             }
         });

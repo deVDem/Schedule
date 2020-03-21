@@ -260,8 +260,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateDashboard() {
-        DashboardFragment fragment = (DashboardFragment) mFragments.get(1);
-        fragment.update(0);
+        try {
+            DashboardFragment fragment = (DashboardFragment) mFragments.get(1);
+            fragment.update(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
