@@ -31,7 +31,7 @@ class LessonsController {
         return sLessonsController;
     }
 
-    private void addLesson(String name, String numberText, int day, String cab, Date start, Date end, boolean zamena) {
+    private void addLesson(String name, String numberText, int day, String cab, Date start, Date end, boolean zamena, String desc) {
         Lesson l = new Lesson();
         l.setName(name);
         l.setNumberText(numberText);
@@ -41,6 +41,7 @@ class LessonsController {
         l.setEnd(end);
         l.setCab(cab);
         l.setZamena(zamena);
+        l.setDescription(desc);
         mLessons.add(l);
     }
 
@@ -58,7 +59,9 @@ class LessonsController {
                 Date start = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("start"));
                 Date end = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("end"));
                 boolean isZamena = jsonObject.getBoolean("zamena");
-                addLesson(name, numberText, day, cab, start, end, isZamena);
+                String desc = jsonObject.getString("description");
+                if (desc.equals("null")) desc = "";
+                addLesson(name, numberText, day, cab, start, end, isZamena, desc);
             }
             saveLessons(response);
         } catch (Exception e) {
@@ -88,7 +91,7 @@ class LessonsController {
     }
 
     // объект урока
-    public class Lesson {
+    public static class Lesson {
         private UUID mId;
         private int mNumber;
         private String mNumberText;
@@ -98,6 +101,16 @@ class LessonsController {
         private Date mEnd;
         private String mCab;
         private boolean mZamena;
+        private String mDescription;
+
+        String getDescription() {
+            return mDescription;
+        }
+
+        void setDescription(String mDescription) {
+            this.mDescription = mDescription;
+        }
+
 
         boolean isZamena() {
             return mZamena;

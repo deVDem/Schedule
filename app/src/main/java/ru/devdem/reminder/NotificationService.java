@@ -95,7 +95,11 @@ public class NotificationService extends Service {
                         switch (params[0]) {
                             case 0:
                                 countString = getApplicationContext().getString(R.string.left_before_the_break) + ": " + mTimeController.getRemainText(lesson.getEnd(), Objects.requireNonNull(date));
-                                counterString = getApplicationContext().getString(R.string.next) + ": " + lessonNext.getName();
+                                if (mLessons.get(params[2]).getDay() == day)
+                                    counterString = getApplicationContext().getString(R.string.next) + ": " + lessonNext.getName();
+                                else
+                                    counterString = getApplicationContext().getString(R.string.lessons_over_today);
+
                                 break;
                             case 1:
                                 if (lessonNext.getDay() == day && lesson.getDay() == day) {

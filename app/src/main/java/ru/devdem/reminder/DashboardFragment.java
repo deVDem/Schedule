@@ -279,6 +279,7 @@ public class DashboardFragment extends Fragment {
                         TextView nameLesson = view.findViewById(R.id.textLesson);
                         TextView dateText = view.findViewById(R.id.textDate);
                         TextView cabText = view.findViewById(R.id.textCab);
+                        TextView descText = view.findViewById(R.id.descLesson);
                         String numberText = lesson.getNumberText();
                         if (params[3] != 3 && params[3] != 0)
                             if (params[0] == 0) {
@@ -289,6 +290,7 @@ public class DashboardFragment extends Fragment {
                                     nameLesson.setTextColor(getResources().getColor(R.color.white));
                                     dateText.setTextColor(getResources().getColor(R.color.white));
                                     cabText.setTextColor(getResources().getColor(R.color.white));
+                                    descText.setTextColor(getResources().getColor(R.color.white));
                                 } else if (lesson.isZamena()) {
                                     colors = new int[]{
                                             getResources().getColor(R.color.card_color_replace),
@@ -306,6 +308,9 @@ public class DashboardFragment extends Fragment {
                         nameLesson.setText(lesson.getName());
                         dateText.setText(timeString);
                         cabText.setText(lesson.getCab());
+                        if (lesson.getDescription().length() < 1)
+                            descText.setVisibility(View.GONE);
+                        else descText.setText(lesson.getDescription());
                         holder.mLessonsLL.addView(view);
                     }
                 } else {

@@ -146,9 +146,16 @@ public class TimerFragment extends Fragment {
                         int finalDay = day;
                         mActivity.runOnUiThread(() -> {
                             try {
+                                LessonsController.Lesson mLesson = mLessons.get(params[1]);
+                                LessonsController.Lesson mLessonNext = mLessons.get(params[2]);
                                 if (params[3] == 3) {
                                     countText.setVisibility(View.INVISIBLE);
                                     counterText.setText(R.string.end_week);
+                                    lessonNextText.setText(R.string.good_rest);
+                                    lessonNext.setVisibility(View.INVISIBLE);
+                                } else if (mLessonNext.getDay() != finalDay && mLesson.getDay() != finalDay) {
+                                    countText.setVisibility(View.INVISIBLE);
+                                    counterText.setText(R.string.lessons_over_today);
                                     lessonNextText.setText(R.string.good_rest);
                                     lessonNext.setVisibility(View.INVISIBLE);
                                 } else {
@@ -161,7 +168,7 @@ public class TimerFragment extends Fragment {
                                     if (mLessons.get(params[2]).getDay() == finalDay)
                                         nextLessonText = mLessons.get(params[2]).getName();
                                     else
-                                        nextLessonText = mLessons.get(params[2]).getName() + "\n (" + mContext.getString(R.string.tomorrow) + ")";
+                                        nextLessonText = mContext.getString(R.string.lessons_over_today);
                                     lessonNext.setText(nextLessonText);
                                 }
                                 if (lastParams != params[1]) {
