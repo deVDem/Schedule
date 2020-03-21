@@ -1,5 +1,6 @@
 package ru.devdem.reminder;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -17,6 +18,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences mSettings;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         String NAME_PREFS = "settings";

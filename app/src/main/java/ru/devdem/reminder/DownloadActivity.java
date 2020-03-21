@@ -1,6 +1,7 @@
 package ru.devdem.reminder;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -71,9 +72,15 @@ public class DownloadActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!BuildConfig.BUILD_TYPE.equals("release_apk")) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.devdem.ru"));
+            startActivity(browserIntent);
+            finish();
+        }
         mUrlPath = getIntent().getStringExtra("url");
         View view = View.inflate(this, R.layout.activity_update, null);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

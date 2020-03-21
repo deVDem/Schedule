@@ -1,5 +1,6 @@
 package ru.devdem.reminder;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Fragment> mFragments = new ArrayList<>();
     private static final String TAG = "MainActivity";
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         String NAME_PREFS = "settings";
