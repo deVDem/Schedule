@@ -7,7 +7,7 @@ android {
         applicationId "ru.devdem.reminder"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
+        versionCode 3
         versionName "0.0.1 alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

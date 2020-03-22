@@ -1,0 +1,20 @@
+[
+  {
+    "outputType": {
+      "type": "APK"
+    },
+    "apkData": {
+      "type": "MAIN",
+      "splits": [],
+      "versionCode": 2,
+      "versionName": "0.0.1 alpha",
+      "enabled": true,
+      "outputFile": "app-alpha.apk",
+      "fullName": "alpha",
+      "baseName": "alpha",
+      "dirName": ""
+    },
+    "path": "app-alpha.apk",
+    "properties": {}
+  }
+]
