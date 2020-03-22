@@ -94,4 +94,6 @@
         <item>Администратор</item> <!-- Может писать и редактировать всё (системные уведомления)-->
     </string-array>
     <string name="use_theme_system">Использовать параметры темы системы</string>
+    <string name="join_to_group">Присоединиться в группу</string>
+    <string name="create_group">Создать группу</string>
 </resources>

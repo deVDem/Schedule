@@ -50,19 +50,24 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         String NAME_PREFS = "settings";
         mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        super.onCreate(savedInstanceState);
         mNetworkController = NetworkController.get();
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
         notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
-            Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
-            mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
-            mNetworkController.getGroups(this, mSettings.getString("group", ""));
-            start();
+            if (mSettings.getString("group", "0").equals("0")) {
+                startActivity(new Intent(MainActivity.this, HelloActivity.class));
+                finish();
+            } else {
+                Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
+                mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
+                mNetworkController.getGroups(this, mSettings.getString("group", ""));
+                start();
+            }
         } else finish();
     }
 

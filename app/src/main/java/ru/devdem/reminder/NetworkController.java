@@ -23,33 +23,22 @@ class NetworkController {
     private String URL_REGISTER = "/accounts/register.php";
     private String URL_GET_GROUPS = "/groups/get.php";
     private String URL_NOTIFICATIONS_GET = "/notifications/get.php";
-    private String URL_LESSONS = "/lessons.php";
+    private String URL_LESSONS_GET = "/lessons/get.php";
     private String URL_GET_VER_INT = "/getver.php";
     private String URL_UPDATE_PROFILE = "/accounts/update.php";
     private String URL_ADD_NOTIFICATION = "/notifications/add.php";
     private static RequestQueue queue;
 
     private NetworkController() {
-        String URL_ROOT = "https://api.devdem.ru/apps/schedule/";
-        if (BuildConfig.DEBUG) {
-            URL_LOGIN = URL_ROOT + "/debug/" + URL_LOGIN;
-            URL_REGISTER = URL_ROOT + "/debug/" + URL_REGISTER;
-            URL_GET_GROUPS = URL_ROOT + "/debug/" + URL_GET_GROUPS;
-            URL_NOTIFICATIONS_GET = URL_ROOT + "/debug/" + URL_NOTIFICATIONS_GET;
-            URL_LESSONS = URL_ROOT + "/debug/" + URL_LESSONS;
-            URL_GET_VER_INT = URL_ROOT + "/debug/" + URL_GET_VER_INT;
-            URL_UPDATE_PROFILE = URL_ROOT + "/debug/" + URL_UPDATE_PROFILE;
-            URL_ADD_NOTIFICATION = URL_ROOT + "/debug/" + URL_ADD_NOTIFICATION;
-        } else {
+        String URL_ROOT = "https://api.devdem.ru/apps/schedule/v/" + BuildConfig.VERSION_CODE;
             URL_LOGIN = URL_ROOT + URL_LOGIN;
             URL_REGISTER = URL_ROOT + URL_REGISTER;
             URL_GET_GROUPS = URL_ROOT + URL_GET_GROUPS;
             URL_NOTIFICATIONS_GET = URL_ROOT + URL_NOTIFICATIONS_GET;
-            URL_LESSONS = URL_ROOT + URL_LESSONS;
+        URL_LESSONS_GET = URL_ROOT + URL_LESSONS_GET;
             URL_GET_VER_INT = URL_ROOT + URL_GET_VER_INT;
             URL_UPDATE_PROFILE = URL_ROOT + URL_UPDATE_PROFILE;
             URL_ADD_NOTIFICATION = URL_ROOT + URL_ADD_NOTIFICATION;
-        }
     }
 
     public static NetworkController get() {
@@ -106,13 +95,12 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_LOGIN, map);
     }
 
-    void Register(Context context, String login, String name, String email, String password, String group, String spam, Response.Listener<String> listener) {
+    void Register(Context context, String login, String name, String email, String password, String spam, Response.Listener<String> listener) {
         Map<String, String> map = new HashMap<>();
         map.put("login", login);
         map.put("name", name);
         map.put("email", email);
         map.put("password", password);
-        map.put("group", group);
         map.put("spam", spam);
         goSend(context, listener, getErrorListener(context), URL_REGISTER, map);
     }
@@ -121,7 +109,7 @@ class NetworkController {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
         map.put("token", token);
-        goSend(context, listener, errorListener, URL_LESSONS, map);
+        goSend(context, listener, errorListener, URL_LESSONS_GET, map);
     }
 
     void getGroups(Context context, String group) {

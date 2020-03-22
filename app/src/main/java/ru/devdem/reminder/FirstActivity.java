@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +39,6 @@ public class FirstActivity extends AppCompatActivity {
     private TextView mLTextView;
 
     private Context mContext;
-    private Spinner mSpinner;
     private SharedPreferences mSettings;
 
     private NetworkController mNetworkController;
@@ -91,7 +90,6 @@ public class FirstActivity extends AppCompatActivity {
             return false;
         });
         mLTextView = findViewById(R.id.textViewLogin);
-        mSpinner = findViewById(R.id.registerSpGroups);
         mRLoginEt = findViewById(R.id.registerEtLogin);
         mRNameEt = findViewById(R.id.registerEtName);
         mREmailEt = findViewById(R.id.registerEtEmail);
@@ -103,7 +101,6 @@ public class FirstActivity extends AppCompatActivity {
 
         mContext = this;
         loginButton.setOnClickListener(v -> LoginFuncs());
-        mNetworkController.GetGroupsToSpinner(mContext, mSpinner);
         registerButton.setOnClickListener(v -> RegisterFuncs());
     }
 
@@ -113,12 +110,12 @@ public class FirstActivity extends AppCompatActivity {
         String email = mREmailEt.getText().toString();
         String password = mRPassEt.getText().toString();
         String confirmPassword = mRConPassEt.getText().toString();
-        int group_id = mSpinner.getSelectedItemPosition();
         String spam;
         if (mRCheckSpam.isChecked()) spam = "1";
         else spam = "0";
-        if (login.length() > 5 && name.length() > 5 && email.length() > 8 && password.length() > 5 && password.equals(confirmPassword) && group_id != 0) {
+        if (login.length() > 5 && name.length() > 5 && email.length() > 8 && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
+                Log.d("FirstActivity", "RegisterFuncs: Response: " + response);
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     boolean ok = jsonResponse.getBoolean("ok");
@@ -135,6 +132,7 @@ public class FirstActivity extends AppCompatActivity {
                                 boolean spam1 = jsonUserInfo.getString("spam").equals("1");
                                 int permission = jsonUserInfo.getInt("permission");
                                 String token = jsonUserInfo.getString("token");
+                                String password_hash = jsonUserInfo.getString("password");
                                 mSettings.edit().clear().apply();
                                 SharedPreferences.Editor editor = mSettings.edit();
                                 editor.putInt("user_id", user_id);
@@ -145,20 +143,21 @@ public class FirstActivity extends AppCompatActivity {
                                 editor.putBoolean("spam", spam1);
                                 editor.putInt("permission", permission);
                                 editor.putString("token", token);
+                                editor.putString("password", password_hash);
                                 editor.putBoolean(PREFS_FIRST, false);
                                 editor.apply();
                                 Toast.makeText(mContext, "Успешная регистрация.", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                startActivity(new Intent(FirstActivity.this, SplashActivity.class));
                                 overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                 finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
-                                showHide(mRTextView, registerRl, true);
+                                showHide(mRTextView, registerRl, false);
                             }
                         } else {
                             Toast.makeText(mContext, "Такой пользователь уже зарегистрирован", Toast.LENGTH_SHORT).show();
-                            showHide(mRTextView, registerRl, true);
+                            showHide(mRTextView, registerRl, false);
                         }
                     } else {
                         Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
@@ -170,7 +169,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
             };
             showHide(mRTextView, registerRl, true);
-            mNetworkController.Register(mContext, login, name, email, password, String.valueOf(group_id), spam, listener);
+            mNetworkController.Register(mContext, login, name, email, password, spam, listener);
         } else
             Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
     }
@@ -231,7 +230,7 @@ public class FirstActivity extends AppCompatActivity {
                                 editor.putBoolean(PREFS_FIRST, false);
                                 editor.apply();
                                 Toast.makeText(mContext, "Успешный вход.", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(FirstActivity.this, MainActivity.class));
+                                startActivity(new Intent(FirstActivity.this, SplashActivity.class));
                                 overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                 finish();
                             } catch (Exception e) {

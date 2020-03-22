@@ -93,4 +93,6 @@
         <item>Administrator</item>
     </string-array>
     <string name="use_theme_system">Use the theme settings system</string>
+    <string name="join_to_group">Join to group</string>
+    <string name="create_group">Create group</string>
 </resources>
