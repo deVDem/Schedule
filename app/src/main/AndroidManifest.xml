@@ -67,6 +67,7 @@
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".NewNotificationActivity" />
         <activity android:name=".HelloActivity" />
+        <activity android:name=".GroupListActivity" />
     </application>
 
 </manifest>
