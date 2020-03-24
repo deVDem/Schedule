@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 import org.json.JSONObject;
 
@@ -52,12 +57,17 @@ public class DashboardFragment extends Fragment {
     private Context mContext;
     private boolean sort_by_week = false;
     private static final String TAG = "DashboardFragment";
+    private String[] adIds = {"ca-app-pub-7389415060915567/7850481695",
+            "ca-app-pub-7389415060915567/1285073344",
+            "ca-app-pub-7389415060915567/3301148008"};
+    private MainActivity activity;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_dashboard, null);
         mContext = Objects.requireNonNull(getContext());
+        activity = (MainActivity) getActivity();
         mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
         days = getResources().getStringArray(R.array.days);
         mTimeController = TimeController.get(getContext());
@@ -80,7 +90,6 @@ public class DashboardFragment extends Fragment {
             Response.Listener<String> listener = response -> {
                 try {
                     if (new JSONObject(response).getString("error").equals("NO_TOKEN")) {
-                        MainActivity activity = (MainActivity) getActivity();
                         Objects.requireNonNull(activity).checkAccount();
                     }
                 } catch (Exception e) {
@@ -199,8 +208,26 @@ public class DashboardFragment extends Fragment {
             if (!prepared[position]) {
                 prepared[position] = true;
                 ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
+
+//                List<String> testDeviceIds = Arrays.asList("4E11FD42B15D49D851F14BAEAAD27C72");
+//                RequestConfiguration configuration =
+//                        new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+//                MobileAds.setRequestConfiguration(configuration);
+                if (position % 2 == 0) {
+                    AdView adView = new AdView(mContext);
+                    if (!BuildConfig.DEBUG)
+                        adView.setAdUnitId(adIds[position / 2]);
+                    else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+                    adView.setAdSize(getAdSize());
+                    holder.mAdContainer.addView(adView);
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    adView.loadAd(adRequest);
+                }
                 if (position + 1 == getItemCount()) {
-                    holder.mSpace.setVisibility(View.VISIBLE);
+                    TextView space = new TextView(mContext);
+                    space.setWidth(holder.mAdContainer.getWidth());
+                    space.setHeight(activity.getHeightMenu() + 20);
+                    holder.mAdContainer.addView(space);
                 }
                 if (lessons.size() != 0) {
                     Calendar calendar = Calendar.getInstance();
@@ -228,6 +255,7 @@ public class DashboardFragment extends Fragment {
                             dayOfWeek = 6;
                             break;
                     }
+
                     // 0 - урок или перемена
                     // 1 - номер урока которого считать
                     // 2 - номер след.урока
@@ -320,6 +348,16 @@ public class DashboardFragment extends Fragment {
             }
         }
 
+        private AdSize getAdSize() {
+            Display display = Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay();
+            DisplayMetrics outMetrics = new DisplayMetrics();
+            display.getMetrics(outMetrics);
+            float widthPixels = outMetrics.widthPixels;
+            float density = outMetrics.density;
+            int adWidth = (int) (widthPixels / density);
+            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(mContext, adWidth);
+        }
+
         private int countItems() {
             int i = 0;
             for (; i < mLessons.size(); i++) {
@@ -338,6 +376,7 @@ public class DashboardFragment extends Fragment {
             RelativeLayout mRelativeLayout;
             TextView mDayOfWeekText;
             LinearLayout mLessonsLL;
+            LinearLayout mAdContainer;
             Space mSpace;
 
             LessonsViewer(View itemView) {
@@ -345,6 +384,7 @@ public class DashboardFragment extends Fragment {
                 mRelativeLayout = itemView.findViewById(R.id.relativeLayoutCard);
                 mDayOfWeekText = itemView.findViewById(R.id.textDay);
                 mLessonsLL = itemView.findViewById(R.id.llLessons);
+                mAdContainer = itemView.findViewById(R.id.adContainer);
                 mSpace = itemView.findViewById(R.id.space);
             }
         }

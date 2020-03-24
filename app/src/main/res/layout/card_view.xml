@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/adContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/card_color"
-    app:cardCornerRadius="10dp">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutCard"
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/card_color"
+        app:cardCornerRadius="10dp">
 
-        <TextView
-            android:id="@+id/textDay"
+        <RelativeLayout
+            android:id="@+id/relativeLayoutCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_bold_color"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            tools:text="День недели" />
+            android:padding="16dp">
 
-        <LinearLayout
-            android:id="@+id/llLessons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textDay"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/box_shape"
-            android:backgroundTint="@color/card_color_lessons"
-            android:gravity="start"
-            android:padding="10dp"
-            android:orientation="vertical" />
+            <TextView
+                android:id="@+id/textDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_bold_color"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="День недели" />
 
-        <Space
-            android:id="@+id/space"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_below="@id/llLessons"
-            android:visibility="gone" />
-    </RelativeLayout>
-</androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:id="@+id/llLessons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textDay"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/box_shape"
+                android:backgroundTint="@color/card_color_lessons"
+                android:gravity="start"
+                android:orientation="vertical"
+                android:padding="10dp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

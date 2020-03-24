@@ -171,6 +171,9 @@ public class MainActivity extends AppCompatActivity {
         checkAccount();
     }
 
+    public int getHeightMenu() {
+        return mBottomNavigationView.getHeight();
+    }
     public void checkAccount() {
         Response.Listener<String> listener = response -> {
             try {
