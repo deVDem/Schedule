@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 *.jks
+/app/alpha/app-alpha.aab
+/app/alpha/app-alpha.apk
+/app/beta/app-beta.apk
+/app/beta/app-beta.aab
+/app/release/app-release.aab
+/app/release/app-release.apk
