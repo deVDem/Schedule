@@ -12,5 +12,6 @@
     <color name="text_bold_color">#212121</color>
     <color name="text_color">#424242</color>
     <color name="window_background">#ffffff</color>
+    <color name="loading_background">#ccffffff</color>
     <color name="line_color">#6A000000</color>
 </resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/group_name"
+                android:maxLength="255"
+                android:textColorHighlight="@color/text_color"
+                app:met_helperText="Enter the group name"
+                app:met_maxCharacters="255"
+                app:met_minCharacters="2" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/city"
+                android:maxLength="32"
+                android:textColorHighlight="@color/text_color"
+                app:met_helperText="Enter your city"
+                app:met_maxCharacters="32"
+                app:met_minCharacters="2" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupBuilding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/building"
+                android:maxLength="255"
+                android:textColorHighlight="@color/text_color"
+                app:met_helperText="Enter your building"
+                app:met_maxCharacters="255"
+                app:met_minCharacters="2" />
+
+            <Switch
+                android:id="@+id/swOnlyConfirmed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@string/only_confirmed_ones" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

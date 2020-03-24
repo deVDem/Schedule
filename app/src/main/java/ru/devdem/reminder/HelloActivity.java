@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -45,6 +46,11 @@ public class HelloActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         View view = View.inflate(this, R.layout.activity_hello, null);
         setContentView(view);
+        Button btnJoinGroup = view.findViewById(R.id.btnjoingroup);
+        btnJoinGroup.setOnClickListener(v -> {
+            startActivity(new Intent(this, GroupListActivity.class));
+            overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+        });
     }
 
     public void logoff(View view) {

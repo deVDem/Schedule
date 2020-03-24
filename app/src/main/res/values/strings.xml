@@ -95,4 +95,13 @@
     <string name="use_theme_system">Use the theme settings system</string>
     <string name="join_to_group">Join to group</string>
     <string name="create_group">Create group</string>
+    <string name="search_group">Search a group</string>
+    <string name="group_list">Group list</string>
+    <string name="join">Join</string>
+    <string name="search_options">Search options</string>
+    <string name="nothing_was_found_try_changing_the_search_parameters">Nothing was found. Try changing the search parameters</string>
+    <string name="group_name">Group name</string>
+    <string name="city">City</string>
+    <string name="building">Building</string>
+    <string name="only_confirmed_ones">Only confirmed ones</string>
 </resources>

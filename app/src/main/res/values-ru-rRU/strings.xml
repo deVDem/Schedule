@@ -96,4 +96,12 @@
     <string name="use_theme_system">Использовать параметры темы системы</string>
     <string name="join_to_group">Присоединиться в группу</string>
     <string name="create_group">Создать группу</string>
+    <string name="search_group">Поиск группы</string>
+    <string name="group_list">Список групп</string>
+    <string name="join">Вступить</string>
+    <string name="search_options">Параметры поиска</string>
+    <string name="nothing_was_found_try_changing_the_search_parameters">Ничего не найдено. Попробуйте поменять параметры поиска</string>
+    <string name="group_name">Group name</string>
+    <string name="building">Building</string>
+    <string name="only_confirmed_ones">Only confirmed ones</string>
 </resources>

@@ -64,10 +64,16 @@
             android:theme="@style/FullImage" />
         <activity android:name=".DownloadActivity" />
         <activity android:name=".MOTDActivity" />
-        <activity android:name=".EditProfileActivity" />
-        <activity android:name=".NewNotificationActivity" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:theme="@style/EditProfile" />
+        <activity
+            android:name=".NewNotificationActivity"
+            android:theme="@style/AppTheme" />
         <activity android:name=".HelloActivity" />
-        <activity android:name=".GroupListActivity" />
+        <activity
+            android:name=".GroupListActivity"
+            android:theme="@style/SearchTheme" />
     </application>
 
 </manifest>

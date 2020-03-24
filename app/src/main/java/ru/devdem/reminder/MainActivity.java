@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
                 mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
-                mNetworkController.getGroups(this, mSettings.getString("group", ""));
+                mNetworkController.getGroup(this, mSettings.getString("group", ""), null);
                 start();
             }
         } else finish();
@@ -207,6 +207,10 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("token", token);
                             editor.apply();
                             Toast.makeText(this, "Успешный вход.", Toast.LENGTH_SHORT).show();
+                            if (mSettings.getString("group", "0").equals("0")) {
+                                startActivity(new Intent(MainActivity.this, HelloActivity.class));
+                                finish();
+                            }
                             Log.d(TAG, "checkAccount: " + response);
                         } catch (Exception e) {
                             e.printStackTrace();

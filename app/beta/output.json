@@ -1,0 +1,20 @@
+[
+  {
+    "outputType": {
+      "type": "APK"
+    },
+    "apkData": {
+      "type": "MAIN",
+      "splits": [],
+      "versionCode": 3,
+      "versionName": "0.0.1 alpha",
+      "enabled": true,
+      "outputFile": "app-beta.apk",
+      "fullName": "beta",
+      "baseName": "beta",
+      "dirName": ""
+    },
+    "path": "app-beta.apk",
+    "properties": {}
+  }
+]

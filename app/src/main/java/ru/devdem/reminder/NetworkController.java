@@ -3,8 +3,6 @@ package ru.devdem.reminder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,14 +29,14 @@ class NetworkController {
 
     private NetworkController() {
         String URL_ROOT = "https://api.devdem.ru/apps/schedule/v/" + BuildConfig.VERSION_CODE;
-            URL_LOGIN = URL_ROOT + URL_LOGIN;
-            URL_REGISTER = URL_ROOT + URL_REGISTER;
-            URL_GET_GROUPS = URL_ROOT + URL_GET_GROUPS;
-            URL_NOTIFICATIONS_GET = URL_ROOT + URL_NOTIFICATIONS_GET;
+        URL_LOGIN = URL_ROOT + URL_LOGIN;
+        URL_REGISTER = URL_ROOT + URL_REGISTER;
+        URL_GET_GROUPS = URL_ROOT + URL_GET_GROUPS;
+        URL_NOTIFICATIONS_GET = URL_ROOT + URL_NOTIFICATIONS_GET;
         URL_LESSONS_GET = URL_ROOT + URL_LESSONS_GET;
-            URL_GET_VER_INT = URL_ROOT + URL_GET_VER_INT;
-            URL_UPDATE_PROFILE = URL_ROOT + URL_UPDATE_PROFILE;
-            URL_ADD_NOTIFICATION = URL_ROOT + URL_ADD_NOTIFICATION;
+        URL_GET_VER_INT = URL_ROOT + URL_GET_VER_INT;
+        URL_UPDATE_PROFILE = URL_ROOT + URL_UPDATE_PROFILE;
+        URL_ADD_NOTIFICATION = URL_ROOT + URL_ADD_NOTIFICATION;
     }
 
     public static NetworkController get() {
@@ -112,7 +110,27 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_LESSONS_GET, map);
     }
 
-    void getGroups(Context context, String group) {
+    void getGroups(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        goSend(context, listener, errorListener, URL_GET_GROUPS, new HashMap<>());
+    }
+
+    void getGroups(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String[] params) {
+        // name, city, building, confirmed
+        Map<String, String> map = new HashMap<>();
+        if (params != null) {
+            if (params[0] != null)
+                map.put("name", params[0]);
+            if (params[1] != null)
+                map.put("city", params[1]);
+            if (params[2] != null)
+                map.put("building", params[2]);
+            if (params[3] != null)
+                map.put("confirmed", params[3]);
+        }
+        goSend(context, listener, errorListener, URL_GET_GROUPS, map);
+    }
+
+    void getGroup(Context context, String group, Response.ErrorListener errorListener) {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonResponse = new JSONObject(response);
@@ -121,6 +139,13 @@ class NetworkController {
                         if (i == Integer.parseInt(group)) {
                             context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
                                     .putString("group_name", jsonResponse.getJSONObject(String.valueOf(i)).getString("name"))
+                                    .putString("group_city", jsonResponse.getJSONObject(String.valueOf(i)).getString("city"))
+                                    .putString("group_building", jsonResponse.getJSONObject(String.valueOf(i)).getString("building"))
+                                    .putString("group_description", jsonResponse.getJSONObject(String.valueOf(i)).getString("description"))
+                                    .putString("group_urlImage", jsonResponse.getJSONObject(String.valueOf(i)).getString("urlImage"))
+                                    .putString("group_confirmed", jsonResponse.getJSONObject(String.valueOf(i)).getString("confirmed"))
+                                    .putString("group_author_id", jsonResponse.getJSONObject(String.valueOf(i)).getString("author_id"))
+                                    .putString("group_date_created", jsonResponse.getJSONObject(String.valueOf(i)).getString("date_created"))
                                     .apply();
                             break;
                         }
@@ -132,28 +157,7 @@ class NetworkController {
                 e.printStackTrace();
             }
         };
-        goSend(context, listener, null, URL_GET_GROUPS, new HashMap<>());
-    }
-
-    void GetGroupsToSpinner(Context context, Spinner spinner) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-        adapter.add(context.getString(R.string.choose));
-        Response.Listener<String> listener = response -> {
-            try {
-                JSONObject jsonResponse = new JSONObject(response);
-                for (int i = 1; i <= 100; i++) {
-                    try {
-                        adapter.add(jsonResponse.getJSONObject(String.valueOf(i)).getString("name"));
-                    } catch (Exception e) {
-                        break;
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            spinner.setAdapter(adapter);
-        };
-        goSend(context, listener, getErrorListener(context), URL_GET_GROUPS, new HashMap<>());
+        goSend(context, listener, errorListener, URL_GET_GROUPS, new HashMap<>());
     }
 
     void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
