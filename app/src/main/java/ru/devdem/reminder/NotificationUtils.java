@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.downloader.Progress;
@@ -62,6 +61,14 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(false);
     }
 
+    public NotificationCompat.Builder getNewNotificationNotification(String title, String text) {
+        return new NotificationCompat.Builder(getApplicationContext(), ANDROID_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setSmallIcon(R.drawable.ic_message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setAutoCancel(true);
+    }
     public NotificationCompat.Builder getNewUpdateChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), ANDROID_CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.a_new_version_of_the_app_is_available))
@@ -70,27 +77,28 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(true);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannels() {
-        NotificationChannel downloadChannel = new NotificationChannel(DOWNLOAD_CHANNEL_ID, DOWNLOAD_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-        downloadChannel.enableLights(false);
-        downloadChannel.enableVibration(false);
-        downloadChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel downloadChannel = new NotificationChannel(DOWNLOAD_CHANNEL_ID, DOWNLOAD_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            downloadChannel.enableLights(false);
+            downloadChannel.enableVibration(false);
+            downloadChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-        NotificationChannel timerChannel = new NotificationChannel(TIMER_CHANNEL_ID, TIMER_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-        timerChannel.enableLights(false);
-        timerChannel.enableVibration(false);
-        timerChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationChannel timerChannel = new NotificationChannel(TIMER_CHANNEL_ID, TIMER_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            timerChannel.enableLights(false);
+            timerChannel.enableVibration(false);
+            timerChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-        NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID,
-                ANDROID_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-        androidChannel.enableLights(false);
-        androidChannel.enableVibration(true);
-        androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID,
+                    ANDROID_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            androidChannel.enableLights(false);
+            androidChannel.enableVibration(true);
+            androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-        getManager().createNotificationChannel(androidChannel);
-        getManager().createNotificationChannel(downloadChannel);
-        getManager().createNotificationChannel(timerChannel);
+            getManager().createNotificationChannel(androidChannel);
+            getManager().createNotificationChannel(downloadChannel);
+            getManager().createNotificationChannel(timerChannel);
+        }
     }
 
     NotificationManager getManager() {

@@ -4,12 +4,17 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.android.volley.Response;
+
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,9 +30,12 @@ public class NotificationService extends Service {
     private NotificationUtils mNotificationUtils;
     private TimeController mTimeController;
     private LessonsController mLessonsController;
+    private NetworkController networkController;
+    private SharedPreferences mSettings;
     private Thread sThread;
     private boolean canGo = true;
     private static final String TAG = "NotificationService";
+    private int count = 0;
 
     @Override
     public void onCreate() {
@@ -35,14 +43,51 @@ public class NotificationService extends Service {
         mNotificationUtils = new NotificationUtils(this);
         mTimeController = TimeController.get(this);
         mLessonsController = LessonsController.get(this);
+        networkController = NetworkController.get();
+        mSettings = getSharedPreferences("settings", MODE_PRIVATE);
+        checkNewNotifications();
         createThread();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!sThread.isInterrupted() && !sThread.isAlive()) sThread.start();
-        else createThread();
+        else {
+            createThread();
+        }
         return START_REDELIVER_INTENT;
+    }
+
+    private void checkNewNotifications() {
+        count = 0;
+        Log.d(TAG, "checkNewNotifications: checking..");
+        Response.Listener<String> listener = response -> {
+            try {
+                JSONObject object = new JSONObject(response);
+                int all = object.getInt("all");
+                if (mSettings.getInt("notifications_all_service", 0) != all) {
+                    Log.d(TAG, "checkNewNotifications: new notifications!");
+                    int need = all - mSettings.getInt("notifications_all_service", 0);
+                    for (int i = 0; i < need && i <= 5; i++) {
+                        NotificationCompat.Builder builder =
+                                mNotificationUtils.getNewNotificationNotification(
+                                        object.getJSONObject(String.valueOf(i)).getString("Title"),
+                                        object.getJSONObject(String.valueOf(i)).getString("Subtitle"));
+                        String dateString = object.getJSONObject(String.valueOf(i)).getString("date");
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        builder.setWhen(!dateString.equals("null") ? format.parse(dateString).getTime() : new Date().getTime());
+                        Notification notification = builder.build();
+                        if (canGo) {
+                            mNotificationUtils.getManager().notify(104 + i, notification);
+                        }
+                    }
+                    mSettings.edit().putInt("notifications_all_service", all).apply();
+                } else Log.d(TAG, "checkNewNotifications: no new notifications");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+        networkController.getNotifications(getApplicationContext(), mSettings.getString("group", "0"), mSettings.getString("token", "null"), listener, null);
     }
 
     private void createThread() {
@@ -125,7 +170,9 @@ public class NotificationService extends Service {
                             mNotificationUtils.getManager().notify(103, notification);
                             startForeground(103, notification);
                         }
-                        Thread.sleep(500);
+                        count++;
+                        if (count >= 5) checkNewNotifications();
+                        Thread.sleep(750);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

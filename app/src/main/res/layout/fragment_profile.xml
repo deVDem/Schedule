@@ -13,51 +13,76 @@
         app:srcCompat="@drawable/box_shape"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_corn"
-        android:backgroundTint="@color/card_color"
-        android:src="@drawable/ic_profle"
-        tools:ignore="ContentDescription" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/lllnNameProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profileImage"
-        android:layout_alignBottom="@+id/profileImage"
-        android:layout_toEndOf="@+id/profileImage"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/profileName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Роман Медведев" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/profileLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="\@devdem" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/profileEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email: "
-            tools:ignore="HardcodedText"
-            tools:text="Email: devdem.ru@yandex.ru" />
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/shape_corn"
+                    android:backgroundTint="@color/card_color"
+                    android:src="@drawable/ic_profle"
+                    tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/profilePermission"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Пользователь" />
-    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/lllnNameProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        tools:text="Роман Медведев" />
+
+                    <TextView
+                        android:id="@+id/profileLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="\@devdem" />
+
+                    <TextView
+                        android:id="@+id/profileEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email: "
+                        tools:ignore="HardcodedText"
+                        tools:text="Email: devdem.ru@yandex.ru" />
+
+                    <TextView
+                        android:id="@+id/profilePermission"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Пользователь" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonLeaveGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/leave_the_group" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

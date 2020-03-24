@@ -77,7 +77,7 @@ class LessonsController {
         mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().putString("lessons", json).apply();
     }
 
-    private void removeLessons() {
+    void removeLessons() {
         mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().clear().apply();
         mLessons.clear();
     }

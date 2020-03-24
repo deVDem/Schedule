@@ -103,5 +103,10 @@
     <string name="group_name">Group name</string>
     <string name="city">City</string>
     <string name="building">Building</string>
-    <string name="only_confirmed_ones">Only confirmed ones</string>
+    <string name="only_confirmed_ones">Show only confirmed ones</string>
+    <string name="group_name_helper">Enter the group name</string>
+    <string name="group_city_helper">Enter your city</string>
+    <string name="group_building_helper">Enter your building</string>
+    <string name="leave_the_group">Leave the group</string>
+    <string name="success_login">Successful login</string>
 </resources>

@@ -29,7 +29,7 @@
                 android:hint="@string/group_name"
                 android:maxLength="255"
                 android:textColorHighlight="@color/text_color"
-                app:met_helperText="Enter the group name"
+                app:met_helperText="@string/group_name_helper"
                 app:met_maxCharacters="255"
                 app:met_minCharacters="2" />
 
@@ -40,7 +40,7 @@
                 android:hint="@string/city"
                 android:maxLength="32"
                 android:textColorHighlight="@color/text_color"
-                app:met_helperText="Enter your city"
+                app:met_helperText="@string/group_city_helper"
                 app:met_maxCharacters="32"
                 app:met_minCharacters="2" />
 
@@ -51,7 +51,7 @@
                 android:hint="@string/building"
                 android:maxLength="255"
                 android:textColorHighlight="@color/text_color"
-                app:met_helperText="Enter your building"
+                app:met_helperText="@string/group_building_helper"
                 app:met_maxCharacters="255"
                 app:met_minCharacters="2" />
 

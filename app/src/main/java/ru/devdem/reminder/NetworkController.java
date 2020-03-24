@@ -25,6 +25,7 @@ class NetworkController {
     private String URL_GET_VER_INT = "/getver.php";
     private String URL_UPDATE_PROFILE = "/accounts/update.php";
     private String URL_ADD_NOTIFICATION = "/notifications/add.php";
+    private String URL_JOIN_GROUP = "/accounts/join.php";
     private static RequestQueue queue;
 
     private NetworkController() {
@@ -37,6 +38,7 @@ class NetworkController {
         URL_GET_VER_INT = URL_ROOT + URL_GET_VER_INT;
         URL_UPDATE_PROFILE = URL_ROOT + URL_UPDATE_PROFILE;
         URL_ADD_NOTIFICATION = URL_ROOT + URL_ADD_NOTIFICATION;
+        URL_JOIN_GROUP = URL_ROOT + URL_JOIN_GROUP;
     }
 
     public static NetworkController get() {
@@ -110,8 +112,11 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_LESSONS_GET, map);
     }
 
-    void getGroups(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        goSend(context, listener, errorListener, URL_GET_GROUPS, new HashMap<>());
+    void joinToGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group_id, String token) {
+        Map<String, String> map = new HashMap<>();
+        map.put("group_id", group_id);
+        map.put("token", token);
+        goSend(context, listener, errorListener, URL_JOIN_GROUP, map);
     }
 
     void getGroups(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String[] params) {
@@ -134,18 +139,18 @@ class NetworkController {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonResponse = new JSONObject(response);
-                for (int i = 1; i < 255; i++) {
+                for (int i = 1; i < jsonResponse.getInt("all"); i++) {
                     try {
                         if (i == Integer.parseInt(group)) {
                             context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
-                                    .putString("group_name", jsonResponse.getJSONObject(String.valueOf(i)).getString("name"))
-                                    .putString("group_city", jsonResponse.getJSONObject(String.valueOf(i)).getString("city"))
-                                    .putString("group_building", jsonResponse.getJSONObject(String.valueOf(i)).getString("building"))
-                                    .putString("group_description", jsonResponse.getJSONObject(String.valueOf(i)).getString("description"))
-                                    .putString("group_urlImage", jsonResponse.getJSONObject(String.valueOf(i)).getString("urlImage"))
-                                    .putString("group_confirmed", jsonResponse.getJSONObject(String.valueOf(i)).getString("confirmed"))
-                                    .putString("group_author_id", jsonResponse.getJSONObject(String.valueOf(i)).getString("author_id"))
-                                    .putString("group_date_created", jsonResponse.getJSONObject(String.valueOf(i)).getString("date_created"))
+                                    .putString("group_name", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("name"))
+                                    .putString("group_city", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("city"))
+                                    .putString("group_building", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("building"))
+                                    .putString("group_description", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("description"))
+                                    .putString("group_urlImage", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("urlImage"))
+                                    .putString("group_confirmed", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("confirmed"))
+                                    .putString("group_author_id", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("author_id"))
+                                    .putString("group_date_created", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("date_created"))
                                     .apply();
                             break;
                         }
@@ -168,7 +173,9 @@ class NetworkController {
     }
 
     void getLastVerInt(Context context, Response.Listener<String> listener) {
-        goSend(context, listener, null, URL_GET_VER_INT, new HashMap<>());
+        Map<String, String> map = new HashMap<>();
+        map.put("type", BuildConfig.BUILD_TYPE);
+        goSend(context, listener, null, URL_GET_VER_INT, map);
     }
 
     private static class SendRequest extends StringRequest {

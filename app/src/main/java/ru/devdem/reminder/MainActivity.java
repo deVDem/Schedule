@@ -165,12 +165,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        if (BuildConfig.VERSION_CODE > mSettings.getInt("version", 0)) {
-            startActivity(new Intent(this, MOTDActivity.class));
-            getVerInt();
-        } else {
-            getVerInt();
-        }
+        getVerInt();
         if (mSettings.getBoolean("notification", true))
             startService(new Intent(this, NotificationService.class));
         checkAccount();
@@ -206,9 +201,9 @@ public class MainActivity extends AppCompatActivity {
                             editor.putInt("permission", permission);
                             editor.putString("token", token);
                             editor.apply();
-                            Toast.makeText(this, "Успешный вход.", Toast.LENGTH_SHORT).show();
                             if (mSettings.getString("group", "0").equals("0")) {
                                 startActivity(new Intent(MainActivity.this, HelloActivity.class));
+                                overridePendingTransition(R.anim.transition_in_back, R.anim.transition_out_back);
                                 finish();
                             }
                             Log.d(TAG, "checkAccount: " + response);

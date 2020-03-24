@@ -229,7 +229,7 @@ public class FirstActivity extends AppCompatActivity {
                                 editor.putString("password", password_hash);
                                 editor.putBoolean(PREFS_FIRST, false);
                                 editor.apply();
-                                Toast.makeText(mContext, "Успешный вход.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.success_login, Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(FirstActivity.this, SplashActivity.class));
                                 overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                 finish();

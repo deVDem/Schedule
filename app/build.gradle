@@ -7,8 +7,8 @@ android {
         applicationId "ru.devdem.reminder"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 3
-        versionName "0.0.1 alpha"
+        versionCode 4
+        versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,12 +19,18 @@ android {
         alpha {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix = ' alpha'
         }
         beta {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix = ' beta'
         }
         release_apk {
+            versionNameSuffix = ' apk'
+        }
+        debug {
+            versionNameSuffix = ' debug'
         }
     }
     compileOptions {

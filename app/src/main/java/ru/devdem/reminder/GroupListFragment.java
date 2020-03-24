@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -37,6 +38,7 @@ public class GroupListFragment extends Fragment {
     private RelativeLayout mErrorLayout;
     private GroupListActivity activity;
     private GroupAdapter groupAdapter;
+    private String[] lastParams = new String[4];
 
     public GroupListFragment() {
 
@@ -65,53 +67,56 @@ public class GroupListFragment extends Fragment {
     }
 
     void updateGroups(String[] params) {
-        mLoadingLayout.setVisibility(View.VISIBLE);
-        mErrorLayout.setVisibility(View.GONE);
-        Response.Listener<String> listener = response -> {
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                int all = jsonObject.getInt("all");
-                ArrayList<Group> groups = new ArrayList<>();
-                for (int i = 0; i < all; i++) {
-                    JSONObject groupjson = jsonObject.getJSONObject(String.valueOf(i));
-                    Group group = new Group();
-                    int id = groupjson.getInt("id");
-                    String name = groupjson.getString("name");
-                    String city = groupjson.getString("city");
-                    String building = groupjson.getString("building");
-                    String description = groupjson.getString("description");
-                    String urlImage = groupjson.getString("urlImage");
-                    String confirmed = groupjson.getString("confirmed");
-                    String date_created = groupjson.getString("date_created");
-                    group.setId(id);
-                    group.setName(!name.equals("null") ? name : "");
-                    group.setCity(!city.equals("null") ? city : "");
-                    group.setBuilding(!building.equals("null") ? building : "");
-                    group.setDescription(!description.equals("null") ? description : "");
-                    group.setUrl(!urlImage.equals("null") ? urlImage : "");
-                    group.setConfirmed(confirmed.equals("Yes"));
-                    // TODO: сделать автора
-                    group.setAuthor(new String[2]);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    group.setDateCreated(!date_created.equals("null") ? format.parse(date_created) : new Date());
-                    groups.add(group);
+        if (!Arrays.equals(lastParams, params)) {
+            lastParams = params;
+            mLoadingLayout.setVisibility(View.VISIBLE);
+            mErrorLayout.setVisibility(View.GONE);
+            Response.Listener<String> listener = response -> {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int all = jsonObject.getInt("all");
+                    ArrayList<Group> groups = new ArrayList<>();
+                    for (int i = 0; i < all; i++) {
+                        JSONObject groupjson = jsonObject.getJSONObject(String.valueOf(i));
+                        Group group = new Group();
+                        int id = groupjson.getInt("id");
+                        String name = groupjson.getString("name");
+                        String city = groupjson.getString("city");
+                        String building = groupjson.getString("building");
+                        String description = groupjson.getString("description");
+                        String urlImage = groupjson.getString("urlImage");
+                        String confirmed = groupjson.getString("confirmed");
+                        String date_created = groupjson.getString("date_created");
+                        group.setId(id);
+                        group.setName(!name.equals("null") ? name : "");
+                        group.setCity(!city.equals("null") ? city : "");
+                        group.setBuilding(!building.equals("null") ? building : "");
+                        group.setDescription(!description.equals("null") ? description : "");
+                        group.setUrl(!urlImage.equals("null") ? urlImage : "");
+                        group.setConfirmed(confirmed.equals("Yes"));
+                        // TODO: сделать автора
+                        group.setAuthor(new String[2]);
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        group.setDateCreated(!date_created.equals("null") ? format.parse(date_created) : new Date());
+                        groups.add(group);
+                    }
+                    if (groups.size() < 1) {
+                        mErrorLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        groupAdapter.setGroups(groups);
+                        mRecyclerView.setAdapter(groupAdapter);
+                    }
+                    mLoadingLayout.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (groups.size() < 1) {
-                    mErrorLayout.setVisibility(View.VISIBLE);
-                } else {
-                    groupAdapter.setGroups(groups);
-                    mRecyclerView.setAdapter(groupAdapter);
-                }
-                mLoadingLayout.setVisibility(View.GONE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
-        Response.ErrorListener errorListener = error -> {
-            mErrorLayout.setVisibility(View.VISIBLE);
-            // TODO: доделать индикацию ошибок
-        };
-        networkController.getGroups(activity, listener, errorListener, params);
+            };
+            Response.ErrorListener errorListener = error -> {
+                mErrorLayout.setVisibility(View.VISIBLE);
+                // TODO: доделать индикацию ошибок
+            };
+            networkController.getGroups(activity, listener, errorListener, params);
+        }
     }
 
     public static class Group {
@@ -127,17 +132,6 @@ public class GroupListFragment extends Fragment {
 
         Group() {
 
-        }
-
-        Group(String name, String city, String building, String description, String url, Boolean confirmed, String[] author, Date created) {
-            mName = name;
-            mCity = city;
-            mBuilding = building;
-            mDescription = description;
-            mUrl = url;
-            mConfirmed = confirmed;
-            mAuthor = author;
-            mDateCreated = created;
         }
 
         public int getId() {
@@ -208,7 +202,7 @@ public class GroupListFragment extends Fragment {
             return mDateCreated;
         }
 
-        public void setDateCreated(Date mDateCreated) {
+        void setDateCreated(Date mDateCreated) {
             this.mDateCreated = mDateCreated;
         }
 
@@ -269,9 +263,8 @@ public class GroupListFragment extends Fragment {
                 description += "\nДата создания: " + dateString;
             }
             holder.mDescription.setText(description);
-            holder.mGoButton.setOnClickListener(v -> {
-                activity.joinToGroup(group.getId());
-            });
+            holder.mGoButton.setOnClickListener(v -> activity.joinToGroup(group.getId()));
+            if (position == mGroups.size() - 1) holder.mSpace.setVisibility(View.VISIBLE);
         }
 
         @Override
