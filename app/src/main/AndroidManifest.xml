@@ -73,6 +73,8 @@
         <activity
             android:name=".GroupListActivity"
             android:theme="@style/SearchTheme" />
+        <activity android:name=".CreateGroupActivity"
+            android:theme="@style/SearchTheme"/>
     </application>
 
 </manifest>

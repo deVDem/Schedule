@@ -57,6 +57,12 @@ public class HelloActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
             finish();
         });
+        Button btnCreateGroup = view.findViewById(R.id.btncreategroup);
+        btnCreateGroup.setOnClickListener(v1->{
+            startActivity(new Intent(this, CreateGroupActivity.class));
+            overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+            finish();
+        });
     }
 
     public void logoff(View view) {
