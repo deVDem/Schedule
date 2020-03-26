@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -35,6 +36,17 @@ public class SettingsFragment extends Fragment {
         Context context = Objects.requireNonNull(getContext());
         String NAME_PREFS = "settings";
         mSettings = context.getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
+        if (BuildConfig.DEBUG) {
+            Button button = new Button(context);
+            button.setText("Reset notifications");
+            button.setBackground(getResources().getDrawable(R.drawable.box_shape));
+            button.setBackgroundColor(getResources().getColor(R.color.card_color_lessons));
+            button.setOnClickListener(v -> {
+                mSettings.edit().putInt("notifications_all_service", 0).apply();
+            });
+            LinearLayout ll = view.findViewById(R.id.llnSettings);
+            ll.addView(button);
+        }
         Switch switchTheme = view.findViewById(R.id.switchTheme);
         Switch switchNight = view.findViewById(R.id.switchNightTheme);
         Switch switchNotification = view.findViewById(R.id.switchNotification);

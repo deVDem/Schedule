@@ -137,7 +137,6 @@ public class GroupListActivity extends AppCompatActivity {
                             .apply();
                     startActivity(new Intent(this, MainActivity.class));
                     overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                    // TODO: загрузка уроков, уведомлений..
                     finish();
                 }
             } catch (Exception e) {

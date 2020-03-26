@@ -66,10 +66,6 @@ public class TimerFragment extends Fragment {
         lessonNextText = view.findViewById(R.id.lessonNextText);
         lessonNext = view.findViewById(R.id.lessonNext);
         AdView adView = new AdView(mContext);
-        /*List<String> testDeviceIds = Arrays.asList("ID");
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);*/
         if (!BuildConfig.DEBUG)
             adView.setAdUnitId("ca-app-pub-7389415060915567/7081052515");
         else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
@@ -95,8 +91,8 @@ public class TimerFragment extends Fragment {
     private Thread createThread() {
         return new Thread(null, () -> {
             while (canGo) {
-                if (mLessonsController.getLessons().size() > 0)
-                    try {
+                try {
+                    if (mLessonsController.getLessons().size() > 0) {
                         Date date = null;
                         Calendar now = Calendar.getInstance();
                         int hour = now.get(Calendar.HOUR_OF_DAY);
@@ -185,8 +181,18 @@ public class TimerFragment extends Fragment {
                             }
                         });
                         Thread.sleep(250);
-                    } catch (InterruptedException ignored) {
+                    } else {
+                        mActivity.runOnUiThread(() -> {
+                            countText.setVisibility(View.INVISIBLE);
+                            counterText.setText(R.string.loading);
+                            lessonNextText.setText(R.string.wait);
+                            lessonNext.setVisibility(View.INVISIBLE);
+                        });
+                        Thread.sleep(250);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, "Background");
     }
@@ -204,11 +210,9 @@ public class TimerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mLessonsController.getLessons().size() > 0) {
-            canGo = true;
-            if (mThread == null)
-                mThread = createThread();
-            mThread.start();
-        }
+        canGo = true;
+        if (mThread == null)
+            mThread = createThread();
+        mThread.start();
     }
 }

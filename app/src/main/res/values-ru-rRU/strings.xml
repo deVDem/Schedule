@@ -110,4 +110,5 @@
     <string name="group_building_helper">Введите Ваше здание</string>
     <string name="leave_the_group">Покинуть группу</string>
     <string name="success_login">Успешный вход</string>
+    <string name="wait">Пожалуйста, подождите</string>
 </resources>

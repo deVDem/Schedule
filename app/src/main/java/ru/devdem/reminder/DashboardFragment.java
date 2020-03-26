@@ -7,7 +7,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,7 +78,7 @@ public class DashboardFragment extends Fragment {
         mRecyclerView.setLayoutManager(llm);
         swipeRefreshLayout = v.findViewById(R.id.swipeContainer);
         swipeRefreshLayout.setOnRefreshListener(() -> update(true));
-        update(false);
+        update(mLessonsController.getLessons().size() == 0);
         setHasOptionsMenu(true);
         sort_by_week = mSettings.getBoolean("sort_by_week", false);
         return v;
@@ -96,7 +95,6 @@ public class DashboardFragment extends Fragment {
                     e.printStackTrace();
                 }
                 mLessonsController.parseLessons(response);
-                Log.d(TAG, "update: " + response);
                 updateUI();
             };
             Response.ErrorListener errorListener = error -> {
@@ -208,11 +206,6 @@ public class DashboardFragment extends Fragment {
             if (!prepared[position]) {
                 prepared[position] = true;
                 ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
-
-//                List<String> testDeviceIds = Arrays.asList("4E11FD42B15D49D851F14BAEAAD27C72");
-//                RequestConfiguration configuration =
-//                        new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-//                MobileAds.setRequestConfiguration(configuration);
                 if (position % 2 == 0) {
                     AdView adView = new AdView(mContext);
                     if (!BuildConfig.DEBUG)

@@ -7,6 +7,7 @@
     <color name="white">#ffffff</color>
     <color name="card_color_lessons">#404040</color>
     <color name="card_color">#333333</color>
+    <color name="notification_color_server">#434333</color>
     <color name="card_color_this_day">#E6B027</color>
     <color name="card_color_replace">#735814</color>
     <color name="text_bold_color">#E6E6E6</color>

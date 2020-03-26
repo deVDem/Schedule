@@ -30,9 +30,10 @@
                 android:hint="@string/group_name"
                 android:maxLength="255"
                 android:textColorHighlight="@color/text_color"
+                android:textColor="@color/text_bold_color"
+                app:met_baseColor="@color/text_bold_color"
                 app:met_helperText="@string/group_name_helper"
-                app:met_maxCharacters="255"
-                app:met_minCharacters="2" />
+                app:met_maxCharacters="255" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/etGroupCity"
@@ -40,10 +41,11 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/city"
                 android:maxLength="32"
+                android:textColor="@color/text_bold_color"
                 android:textColorHighlight="@color/text_color"
+                app:met_baseColor="@color/text_bold_color"
                 app:met_helperText="@string/group_city_helper"
-                app:met_maxCharacters="32"
-                app:met_minCharacters="2" />
+                app:met_maxCharacters="32" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/etGroupBuilding"
@@ -51,15 +53,17 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/building"
                 android:maxLength="255"
+                android:textColor="@color/text_bold_color"
                 android:textColorHighlight="@color/text_color"
+                app:met_baseColor="@color/text_bold_color"
                 app:met_helperText="@string/group_building_helper"
-                app:met_maxCharacters="255"
-                app:met_minCharacters="2" />
+                app:met_maxCharacters="255" />
 
             <Switch
                 android:id="@+id/swOnlyConfirmed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_bold_color"
                 android:layout_marginBottom="20dp"
                 android:text="@string/only_confirmed_ones" />
         </LinearLayout>

@@ -65,7 +65,7 @@ public class NotificationService extends Service {
             try {
                 JSONObject object = new JSONObject(response);
                 int all = object.getInt("all");
-                if (mSettings.getInt("notifications_all_service", 0) != all) {
+                if (mSettings.getInt("notifications_all_service", 0) != all && !mSettings.getBoolean("first_notifications", true)) {
                     Log.d(TAG, "checkNewNotifications: new notifications!");
                     int need = all - mSettings.getInt("notifications_all_service", 0);
                     for (int i = 0; i < need && i <= 5; i++) {
@@ -82,6 +82,8 @@ public class NotificationService extends Service {
                         }
                     }
                     mSettings.edit().putInt("notifications_all_service", all).apply();
+                } else if (mSettings.getBoolean("first_notifications", true)) {
+                    mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", all).apply();
                 } else Log.d(TAG, "checkNewNotifications: no new notifications");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -171,8 +173,8 @@ public class NotificationService extends Service {
                             startForeground(103, notification);
                         }
                         count++;
-                        if (count >= 5) checkNewNotifications();
-                        Thread.sleep(750);
+                        if (count >= 30) checkNewNotifications();
+                        Thread.sleep(500);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

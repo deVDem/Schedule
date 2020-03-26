@@ -48,7 +48,6 @@ public class HelloActivity extends AppCompatActivity {
         mLessonController.removeLessons();
         this.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
         super.onCreate(savedInstanceState);
-        // TODO: темная тема говно, поменяй
         View view = View.inflate(this, R.layout.activity_hello, null);
         setContentView(view);
         Button btnJoinGroup = view.findViewById(R.id.btnjoingroup);

@@ -80,6 +80,8 @@
                 android:id="@+id/buttonLeaveGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/card_color_lessons"
                 android:text="@string/leave_the_group" />
 
         </LinearLayout>

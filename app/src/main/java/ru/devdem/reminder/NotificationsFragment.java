@@ -103,12 +103,13 @@ public class NotificationsFragment extends Fragment {
                 int all = object.getInt("all");
                 for (int i = 0; i < all; i++) {
                     JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
-                    //int group = jsonObject.getInt("group");
+                    int group = jsonObject.getInt("group");
                     Notification notification = new Notification();
                     notification.setId(jsonObject.getInt("id"));
                     notification.setTitle(jsonObject.getString("Title"));
                     notification.setSubTitle(jsonObject.getString("Subtitle"));
                     notification.setUrlImage(jsonObject.getString("URLImage"));
+                    notification.setGroup(group);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     notification.setDate(format.parse(jsonObject.getString("date")));
                     mNotifications.add(notification);
@@ -128,6 +129,7 @@ public class NotificationsFragment extends Fragment {
             notification.setUrlImage("");
             notification.setTitle(getString(R.string.error));
             notification.setSubTitle(getString(R.string.swipedowntoretry));
+            notification.setGroup(-1);
             mNotifications.add(notification);
             updateUI(mNotifications);
             mSwipeRefreshLayout.setRefreshing(false);
@@ -148,15 +150,24 @@ public class NotificationsFragment extends Fragment {
         mRVAdapter.notifyDataSetChanged();
     }
 
-    class Notification {
+    static class Notification {
         private int mId;
         private String mTitle;
         private String mSubTitle;
         private String mUrlImage;
         private Date mDate;
+        private int mGroup;
 
         Notification() {
 
+        }
+
+        int getGroup() {
+            return mGroup;
+        }
+
+        void setGroup(int group) {
+            mGroup = group;
         }
 
         int getId() {
@@ -209,10 +220,6 @@ public class NotificationsFragment extends Fragment {
             prepared = new boolean[mNotifications.size()];
         }
 
-        void setNotifications(ArrayList<Notification> notifications) {
-            mNotifications = notifications;
-        }
-
         @NonNull
         @Override
         public NotificationsFragment.RVAdapter.NotificationViewer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -229,6 +236,9 @@ public class NotificationsFragment extends Fragment {
             String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
             holder.mDateView.setText(dateString);
             String urlImage = notification.getUrlImage();
+            if (notification.getGroup() == -1) {
+                holder.itemView.setBackgroundColor(getResources().getColor(R.color.notification_color_server));
+            }
             if (urlImage.length() > 0 && holder.mImageView.getVisibility() == View.GONE) {
                 holder.mImageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
