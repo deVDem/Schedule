@@ -51,7 +51,7 @@ public class FirstActivity extends AppCompatActivity {
     private CheckBox mRCheckSpam;
     private TextView mRTextView;
 
-    private int ANIM_DURATION = 500;
+    private int ANIM_DURATION = 700;
     private String PREFS_FIRST = "first";
 
     @Override

@@ -84,6 +84,16 @@
                 tools:text="Описание группы" />
 
             <Button
+                android:id="@+id/btnInfoGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewSubTitle"
+                android:layout_toStartOf="@+id/btnJoinToGroup"
+                android:backgroundTint="@color/card_color_lessons"
+                android:text="@string/detail"
+                android:textColor="@color/text_bold_color" />
+
+            <Button
                 android:id="@+id/btnJoinToGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

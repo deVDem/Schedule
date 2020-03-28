@@ -90,18 +90,16 @@ public class GroupListActivity extends AppCompatActivity {
                 floatingActionButton.setRotation(180 - position * 180);
                 floatingActionButton.setScaleX(scale[0]);
                 floatingActionButton.setScaleY(scale[1]);
-                switch (position) {
-                    //TODO: сделать страницу создания группы
-                    case 1:
-                        floatingActionButton.show();
-                        floatingActionButtonSearch.hide();
-                        break;
-                    default:
-                        floatingActionButton.hide();
-                        floatingActionButtonSearch.show();
-                        GroupListFragment listFragment = mFragment1;
-                        String[] parameters = mFragment2.getParams();
-                        listFragment.updateGroups(parameters);
+                if (position == 1) {
+                    floatingActionButton.show();
+                    floatingActionButtonSearch.hide();
+                } else {
+                    floatingActionButton.hide();
+                    floatingActionButtonSearch.show();
+                    GroupListFragment listFragment = mFragment1;
+                    String[] parameters = new String[6];
+                    if (mFragment2 != null) parameters = mFragment2.getParams();
+                    listFragment.updateGroups(parameters);
                 }
             }
 
@@ -109,6 +107,21 @@ public class GroupListActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    void detailedGroup(int id) {
+        Intent intent = GroupInfoActivity.getAIntent(this, id, true);
+        startActivityForResult(intent, 1);
+        overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK && data.getBooleanExtra("configured", false) && data.getIntExtra("group_id", 0) != 0) {
+            joinToGroup(data.getIntExtra("group_id", 0));
+        }
+        Log.d(TAG, "onActivityResult: " + requestCode + resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     void joinToGroup(int id) {

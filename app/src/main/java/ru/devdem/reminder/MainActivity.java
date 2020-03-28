@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -166,14 +169,24 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         getVerInt();
-        if (mSettings.getBoolean("notification", true))
+        if (mSettings.getBoolean("notification", true)) {
             startService(new Intent(this, NotificationService.class));
+            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            boolean inWhiteList = powerManager.isIgnoringBatteryOptimizations(getPackageName());
+            if (!inWhiteList) {
+                Intent intent = new
+                        Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                        Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
+        }
         checkAccount();
     }
 
     public int getHeightMenu() {
         return mBottomNavigationView.getHeight();
     }
+
     public void checkAccount() {
         Response.Listener<String> listener = response -> {
             try {

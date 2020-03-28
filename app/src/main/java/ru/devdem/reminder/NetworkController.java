@@ -131,6 +131,10 @@ class NetworkController {
                 map.put("building", params[2]);
             if (params[3] != null)
                 map.put("confirmed", params[3]);
+            if (params[4] != null)
+                map.put("id", params[4]);
+            if (params[5] != null)
+                map.put("full", params[5]);
         }
         goSend(context, listener, errorListener, URL_GET_GROUPS, map);
     }

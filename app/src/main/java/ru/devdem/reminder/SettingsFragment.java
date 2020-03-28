@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -36,20 +34,15 @@ public class SettingsFragment extends Fragment {
         Context context = Objects.requireNonNull(getContext());
         String NAME_PREFS = "settings";
         mSettings = context.getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
-        if (BuildConfig.DEBUG) {
-            Button button = new Button(context);
-            button.setText("Reset notifications");
-            button.setBackground(getResources().getDrawable(R.drawable.box_shape));
-            button.setBackgroundColor(getResources().getColor(R.color.card_color_lessons));
-            button.setOnClickListener(v -> {
-                mSettings.edit().putInt("notifications_all_service", 0).apply();
-            });
-            LinearLayout ll = view.findViewById(R.id.llnSettings);
-            ll.addView(button);
-        }
         Switch switchTheme = view.findViewById(R.id.switchTheme);
         Switch switchNight = view.findViewById(R.id.switchNightTheme);
         Switch switchNotification = view.findViewById(R.id.switchNotification);
+        Button btnDisableAd = view.findViewById(R.id.buttonDisableAd);
+        btnDisableAd.setOnClickListener(v -> {
+            Activity activity = getActivity();
+            activity.startActivity(new Intent(context, PurchaseActivity.class));
+            activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_out);
+        });
         int[][] states = new int[][]{
                 new int[]{android.R.attr.state_checked},
                 new int[]{-android.R.attr.state_checked}
@@ -58,10 +51,8 @@ public class SettingsFragment extends Fragment {
                 getResources().getColor(R.color.colorAccent),
                 getResources().getColor(R.color.white)
         };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            switchNight.setThumbTintList(new ColorStateList(states, colors));
-            switchNotification.setThumbTintList(new ColorStateList(states, colors));
-        }
+        switchNight.setThumbTintList(new ColorStateList(states, colors));
+        switchNotification.setThumbTintList(new ColorStateList(states, colors));
         switchTheme.setChecked(mSettings.getBoolean("system_theme", true));
         switchNight.setChecked(mSettings.getBoolean("night", false));
         switchNotification.setChecked(mSettings.getBoolean("notification", true));

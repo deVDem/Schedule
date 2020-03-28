@@ -22,8 +22,8 @@ android {
             versionNameSuffix = ' alpha'
         }
         beta {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
             versionNameSuffix = ' beta'
         }
         release_apk {
@@ -50,14 +50,16 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.gms:play-services-ads:19.0.1'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'commons-io:commons-io:20030203.000550'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.easing:library:2.1@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
     implementation 'com.mindorks.android:prdownloader:0.6.0'
+    implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 }

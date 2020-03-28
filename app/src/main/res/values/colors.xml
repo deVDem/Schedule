@@ -15,4 +15,6 @@
     <color name="window_background">#ffffff</color>
     <color name="loading_background">#ccffffff</color>
     <color name="line_color">#6A000000</color>
+    <color name="holo_red_light">#ffff4444</color>
+    <color name="line">#22000000</color>
 </resources>

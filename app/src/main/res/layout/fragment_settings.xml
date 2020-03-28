@@ -83,7 +83,7 @@
                 android:background="@drawable/shape_corn"
                 android:backgroundTint="@color/card_color_lessons"
                 android:text="@string/logoff"
-                android:textColor="@android:color/holo_red_light" />
+                android:textColor="@color/holo_red_light" />
 
             <TextView
                 android:id="@+id/versionInfo"
@@ -92,6 +92,16 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 tools:text="Version info" />
+
+            <Button
+                android:id="@+id/buttonDisableAd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/card_color_lessons"
+                android:text="@string/tired_of_advertising"
+                android:textColor="@color/card_color_this_day" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

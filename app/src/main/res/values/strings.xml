@@ -18,7 +18,7 @@
     <string name="registration">Register</string>
     <string name="choose">Choose your group</string>
     <string name="errorNetwork">An error occurred while connecting to the server.</string>
-    <string name="detail">More detailed: </string>
+    <string name="detail">Details</string>
     <string name="retry">Retry</string>
     <string name="image">Image</string>
     <string name="left_before_lesson">Left before lesson</string>
@@ -110,4 +110,8 @@
     <string name="leave_the_group">Leave the group</string>
     <string name="success_login">Successful login</string>
     <string name="wait">Please wait</string>
+    <string name="tired_of_advertising">Tired of advertising?</string>
+    <string name="members">Members</string>
+    <string name="confirmed_group">Passed verification</string>
+    <string name="no_members">No members</string>
 </resources>

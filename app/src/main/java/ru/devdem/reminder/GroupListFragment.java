@@ -216,10 +216,6 @@ public class GroupListFragment extends Fragment {
 
         }
 
-        ArrayList<Group> getGroups() {
-            return mGroups;
-        }
-
         void setGroups(ArrayList<Group> groups) {
             mGroups = groups;
         }
@@ -264,6 +260,7 @@ public class GroupListFragment extends Fragment {
             }
             holder.mDescription.setText(description);
             holder.mGoButton.setOnClickListener(v -> activity.joinToGroup(group.getId()));
+            holder.mDetailedButton.setOnClickListener(v -> activity.detailedGroup(group.getId()));
             if (position == mGroups.size() - 1) holder.mSpace.setVisibility(View.VISIBLE);
         }
 
@@ -280,6 +277,7 @@ public class GroupListFragment extends Fragment {
             TextView mDescription;
             TextView mCity;
             Button mGoButton;
+            Button mDetailedButton;
             Space mSpace;
 
             GroupListViewer(View itemView) {
@@ -290,6 +288,7 @@ public class GroupListFragment extends Fragment {
                 mBuilding = itemView.findViewById(R.id.textViewBuilding);
                 mDescription = itemView.findViewById(R.id.textViewSubTitle);
                 mGoButton = itemView.findViewById(R.id.btnJoinToGroup);
+                mDetailedButton = itemView.findViewById(R.id.btnInfoGroup);
                 mSpace = itemView.findViewById(R.id.space);
                 mCity = itemView.findViewById(R.id.textViewCity);
             }

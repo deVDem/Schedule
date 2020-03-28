@@ -37,7 +37,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/shape_corn"
                     android:backgroundTint="@color/card_color"
-                    android:src="@drawable/ic_profle"
+                    android:src="@drawable/ic_profile"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout

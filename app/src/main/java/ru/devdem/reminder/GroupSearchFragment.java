@@ -66,11 +66,15 @@ public class GroupSearchFragment extends Fragment {
     }
 
     String[] getParams() {
-        String[] params = new String[4];
-        params[0] = mETGroupName.getText().toString();
-        params[1] = mETCity.getText().toString();
-        params[2] = mETBuilding.getText().toString();
-        params[3] = mSwConfirmed.isChecked() ? "Yes" : "";
+        String[] params = new String[6];
+        try {
+            params[0] = mETGroupName.getText().toString();
+            params[1] = mETCity.getText().toString();
+            params[2] = mETBuilding.getText().toString();
+            params[3] = mSwConfirmed.isChecked() ? "Yes" : "";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return params;
     }
 }
