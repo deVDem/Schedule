@@ -126,4 +126,6 @@
     <string name="wrong_login_email">Неверный логин или электронная почта</string>
     <string name="enter_username_and_pass">Введите ваш логин и пароль</string>
     <string name="enter_data_correct">Укажите все данные верно</string>
+    <string name="management">Управление</string>
+    <string name="information_about_the_group">Информация о группе</string>
 </resources>

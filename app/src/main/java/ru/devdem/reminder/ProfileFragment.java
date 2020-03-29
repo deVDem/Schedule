@@ -51,6 +51,11 @@ public class ProfileFragment extends Fragment {
         profilePermission = v.findViewById(R.id.profilePermission);
         setHasOptionsMenu(true);
         updateUI();
+        Button mDetailButton = v.findViewById(R.id.buttonDetailGroup);
+        mDetailButton.setOnClickListener(view -> {
+            mMainActivity.startActivity(GroupInfoActivity.getAIntent(mContext, 1, false));
+            mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+        });
         Button mLeaveButton = v.findViewById(R.id.buttonLeaveGroup);
         mLeaveButton.setOnClickListener(v1 -> {
             Toast.makeText(mContext, R.string.loading, Toast.LENGTH_LONG).show();

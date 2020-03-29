@@ -125,4 +125,6 @@
     <string name="wrong_login_email">Wrong login or email</string>
     <string name="enter_username_and_pass">Enter your username and password</string>
     <string name="enter_data_correct">Enter all data correctly</string>
+    <string name="management">Management</string>
+    <string name="information_about_the_group">Information about the group</string>
 </resources>
