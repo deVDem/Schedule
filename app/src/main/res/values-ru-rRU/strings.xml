@@ -118,4 +118,8 @@
     <string name="creator">Создатель</string>
     <string name="system">Система</string>
     <string name="no_description">Описание отсутствует</string>
+    <string name="success_registration">Успешная регистрация</string>
+    <string name="failed_get_user_info">Не удалось получить информацию о пользователе</string>
+    <string name="user_already_registered">Такой пользователь уже зарегистрирован</string>
+    <string name="unknown_error">Произошла неизвестная ошибка</string>
 </resources>

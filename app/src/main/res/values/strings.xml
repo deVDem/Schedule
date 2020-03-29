@@ -117,4 +117,8 @@
     <string name="creator">Creator</string>
     <string name="system">System</string>
     <string name="no_description">No description</string>
+    <string name="success_registration">Successful registration</string>
+    <string name="failed_get_user_info">Failed to get user information</string>
+    <string name="user_already_registered">This user is already registered</string>
+    <string name="unknown_error">An unknown error occurred</string>
 </resources>

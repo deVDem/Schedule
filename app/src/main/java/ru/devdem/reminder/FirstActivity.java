@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -37,6 +36,8 @@ public class FirstActivity extends AppCompatActivity {
     private EditText mLLoginEt;
     private EditText mLPasswordEt;
     private TextView mLTextView;
+    private Button mLoginButton;
+    private TextView mLoginTVNotReg;
 
     private Context mContext;
     private SharedPreferences mSettings;
@@ -50,6 +51,9 @@ public class FirstActivity extends AppCompatActivity {
     private EditText mRConPassEt;
     private CheckBox mRCheckSpam;
     private TextView mRTextView;
+    private Button mRegisterButton;
+
+
 
     private int ANIM_DURATION = 700;
     private String PREFS_FIRST = "first";
@@ -77,10 +81,10 @@ public class FirstActivity extends AppCompatActivity {
         helloRl = findViewById(R.id.hello);
         loginRl = findViewById(R.id.relativeLayoutLogin);
         registerRl = findViewById(R.id.relativeLayoutRegister);
-        TextView loginTVNotReg = findViewById(R.id.loginTVNotReg);
-        loginTVNotReg.setOnClickListener(v1 -> onClickNotReg());
+        mLoginTVNotReg = findViewById(R.id.loginTVNotReg);
+        mLoginTVNotReg.setOnClickListener(v1 -> onClickNotReg());
         findViewById(R.id.firstBtNext).setOnClickListener(v1 -> onClickNext());
-        Button loginButton = findViewById(R.id.loginBtn);
+        mLoginButton = findViewById(R.id.loginBtn);
         mLLoginEt = findViewById(R.id.loginETLogin);
         mLPasswordEt = findViewById(R.id.loginETPassword);
         mLPasswordEt.setOnEditorActionListener((v, actionId, event) -> {
@@ -96,26 +100,39 @@ public class FirstActivity extends AppCompatActivity {
         mRPassEt = findViewById(R.id.registerEtPassword);
         mRConPassEt = findViewById(R.id.registerEtConfirm);
         mRCheckSpam = findViewById(R.id.registerChBxSpam);
-        Button registerButton = findViewById(R.id.registerBtnRegister);
+        mRegisterButton = findViewById(R.id.registerBtnRegister);
         mRTextView = findViewById(R.id.textViewRegister);
 
         mContext = this;
-        loginButton.setOnClickListener(v -> LoginFuncs());
-        registerButton.setOnClickListener(v -> RegisterFuncs());
+        mLoginButton.setOnClickListener(v -> LoginFuncs());
+        mRegisterButton.setOnClickListener(v -> RegisterFuncs());
+    }
+
+    public void controlViews(boolean enable) {
+        mRLoginEt.setEnabled(enable);
+        mRNameEt.setEnabled(enable);
+        mRCheckSpam.setEnabled(enable);
+        mRConPassEt.setEnabled(enable);
+        mREmailEt.setEnabled(enable);
+        mRLoginEt.setEnabled(enable);
+        mRPassEt.setEnabled(enable);
+        mLLoginEt.setEnabled(enable);
+        mLPasswordEt.setEnabled(enable);
+        mLoginButton.setEnabled(enable);
+        mRegisterButton.setEnabled(enable);
+        mLoginTVNotReg.setEnabled(enable);
     }
 
     private void RegisterFuncs() {
+        controlViews(false);
         String login = mRLoginEt.getText().toString();
         String name = mRNameEt.getText().toString();
         String email = mREmailEt.getText().toString();
         String password = mRPassEt.getText().toString();
         String confirmPassword = mRConPassEt.getText().toString();
-        String spam;
-        if (mRCheckSpam.isChecked()) spam = "1";
-        else spam = "0";
+        String spam = mRCheckSpam.isChecked() ? "1" : "0";
         if (login.length() > 5 && name.length() > 5 && email.length() > 8 && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
-                Log.d("FirstActivity", "RegisterFuncs: Response: " + response);
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     boolean ok = jsonResponse.getBoolean("ok");
@@ -146,26 +163,31 @@ public class FirstActivity extends AppCompatActivity {
                                 editor.putString("password", password_hash);
                                 editor.putBoolean(PREFS_FIRST, false);
                                 editor.apply();
-                                Toast.makeText(mContext, "Успешная регистрация.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.success_registration, Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(FirstActivity.this, SplashActivity.class));
                                 overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                                 finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
+                                controlViews(true);
+                                Toast.makeText(mContext, R.string.failed_get_user_info, Toast.LENGTH_SHORT).show();
                                 showHide(mRTextView, registerRl, false);
                             }
                         } else {
-                            Toast.makeText(mContext, "Такой пользователь уже зарегистрирован", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.user_already_registered, Toast.LENGTH_SHORT).show();
                             showHide(mRTextView, registerRl, false);
+                            controlViews(true);
                         }
                     } else {
-                        Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
                         showHide(mRTextView, registerRl, false);
+                        controlViews(true);
                     }
                 } catch (Exception e) {
-                    Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
+                    showHide(mRTextView, registerRl, false);
+                    controlViews(true);
                 }
             };
             showHide(mRTextView, registerRl, true);
