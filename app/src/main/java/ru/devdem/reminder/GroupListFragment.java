@@ -112,6 +112,7 @@ public class GroupListFragment extends Fragment {
                 }
             };
             Response.ErrorListener errorListener = error -> {
+                //test
                 mErrorLayout.setVisibility(View.VISIBLE);
                 // TODO: доделать индикацию ошибок
             };
