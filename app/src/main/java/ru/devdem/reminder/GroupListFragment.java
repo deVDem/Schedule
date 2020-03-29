@@ -321,6 +321,7 @@ public class GroupListFragment extends Fragment {
             holder.mDescription.setText(description);
             holder.mGoButton.setOnClickListener(v -> activity.joinToGroup(group.getId()));
             holder.mDetailedButton.setOnClickListener(v -> activity.detailedGroup(group.getId()));
+            holder.imageConfirm.setVisibility(group.getConfirmed() ? View.VISIBLE : View.GONE);
             if (position == mGroups.size() - 1) holder.mSpace.setVisibility(View.VISIBLE);
         }
 
@@ -332,6 +333,7 @@ public class GroupListFragment extends Fragment {
         class GroupListViewer extends RecyclerView.ViewHolder {
             RelativeLayout mRelativeLayout;
             ImageView mImage;
+            ImageView imageConfirm;
             TextView mGroupName;
             TextView mBuilding;
             TextView mDescription;
@@ -344,6 +346,7 @@ public class GroupListFragment extends Fragment {
                 super(itemView);
                 mRelativeLayout = itemView.findViewById(R.id.relativeLayoutCard);
                 mImage = itemView.findViewById(R.id.imageViewGroup);
+                imageConfirm = itemView.findViewById(R.id.imageConfirm);
                 mGroupName = itemView.findViewById(R.id.textViewTitle);
                 mBuilding = itemView.findViewById(R.id.textViewBuilding);
                 mDescription = itemView.findViewById(R.id.textViewSubTitle);
