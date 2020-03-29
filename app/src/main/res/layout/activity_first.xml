@@ -242,13 +242,6 @@
                     app:met_helperText="@string/helperPass"
                     app:met_minCharacters="6"
                     app:met_primaryColor="@color/white" />
-
-                <Spinner
-                    android:id="@+id/registerSpGroups"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/spinner_bg" />
-
                 <CheckBox
                     android:id="@+id/registerChBxSpam"
                     android:layout_width="match_parent"
