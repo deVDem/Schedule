@@ -158,6 +158,8 @@ public class GroupInfoActivity extends AppCompatActivity {
         LinearLayout mLayoutConfirmed = v.findViewById(R.id.group_confirmed);
         RecyclerView mListUsers = v.findViewById(R.id.userList);
         ImageView imageView = v.findViewById(R.id.app_bar_image);
+        TextView textCountMembers = v.findViewById(R.id.textMembersCount);
+        textCountMembers.setText(String.valueOf(mGroup.getMembers().size()));
         Target mTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
