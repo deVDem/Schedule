@@ -44,6 +44,12 @@ public class GroupListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("prepared", true);
+        super.onSaveInstanceState(outState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,10 +65,12 @@ public class GroupListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(llm);
-        updateGroups(null);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.group_list);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        if (savedInstanceState == null || !savedInstanceState.getBoolean("prepared")) {
+            updateGroups(null);
+        }
         return view;
     }
 

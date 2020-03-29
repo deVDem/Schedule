@@ -44,18 +44,24 @@ public class GroupListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("prepared", true);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSettings = getSharedPreferences("settings", MODE_PRIVATE);
         View view = View.inflate(this, R.layout.activity_grouplist, null);
         mNetworkController = NetworkController.get();
-        mFragment1 = new GroupListFragment();
-        mFragment2 = new GroupSearchFragment();
         setContentView(view);
         mViewPager = view.findViewById(R.id.viewPager2);
         mLoadingLayout = view.findViewById(R.id.loadingLayout);
         GroupListViewPagerAdapter groupListViewPagerAdapter = new GroupListViewPagerAdapter(getSupportFragmentManager(), 0);
         mFragments.clear();
+        mFragment1 = new GroupListFragment();
+        mFragment2 = new GroupSearchFragment();
         mFragments.add(mFragment1);
         mFragments.add(mFragment2);
         groupListViewPagerAdapter.setFragments(mFragments);

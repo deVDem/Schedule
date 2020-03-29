@@ -107,10 +107,11 @@ public class GroupInfoActivity extends AppCompatActivity {
                         user.setmLogin(userJson.getString("login"));
                         user.setUrlImage(userJson.getString("urlImage"));
                         user.setmPro(userJson.getString("pro").equals("Yes"));
-                        users.add(user);
-                        if (user.getmId() == groupJson.getInt("author_id"))
+                        if (groupJson.getInt("author_id") == user.getmId()) {
                             group.setAuthor(user);
+                        }
                         else group.setAuthor(null);
+                        users.add(user);
                     }
                     group.setmMembers(users);
                     mGroup = group;
