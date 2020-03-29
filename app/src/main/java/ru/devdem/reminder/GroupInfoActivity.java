@@ -47,6 +47,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ru.devdem.reminder.ObjectsController.Group;
+import ru.devdem.reminder.ObjectsController.User;
 
 public class GroupInfoActivity extends AppCompatActivity {
     private static final String TAG = "GroupInfoActivity";
@@ -102,18 +104,17 @@ public class GroupInfoActivity extends AppCompatActivity {
                     for (int j = 0; j < users_all; j++) {
                         JSONObject userJson = usersJson.getJSONObject(String.valueOf(j));
                         User user = new User();
-                        user.setmId(userJson.getInt("id"));
-                        user.setmName(userJson.getString("name"));
-                        user.setmLogin(userJson.getString("login"));
+                        user.setId(userJson.getInt("id"));
+                        user.setName(userJson.getString("name"));
+                        user.setLogin(userJson.getString("login"));
                         user.setUrlImage(userJson.getString("urlImage"));
-                        user.setmPro(userJson.getString("pro").equals("Yes"));
-                        if (groupJson.getInt("author_id") == user.getmId()) {
+                        user.setPro(userJson.getString("pro").equals("Yes"));
+                        if (groupJson.getInt("author_id") == user.getId()) {
                             group.setAuthor(user);
-                        }
-                        else group.setAuthor(null);
+                        } else group.setAuthor(null);
                         users.add(user);
                     }
-                    group.setmMembers(users);
+                    group.setMembers(users);
                     mGroup = group;
                 }
                 start();
@@ -129,7 +130,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         networkController.getGroups(this, listener, errorListener, new String[]{"", "", "", "", String.valueOf(group_id), "true"});
     }
 
-    void start() {
+    private void start() {
         CollapsingToolbarLayout toolbarLayout = v.findViewById(R.id.collapseToolbar);
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow);
@@ -243,7 +244,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         authorImage.setImageBitmap(scaled);
                         authorImage.setBorderColor(textColor);
-                        if (author == null || author.ismPro()) {
+                        if (author == null || author.isPro()) {
                             int[][] states = new int[][]{
                                     new int[]{android.R.attr.state_enabled}
                             };
@@ -282,9 +283,9 @@ public class GroupInfoActivity extends AppCompatActivity {
             }
         };
         if (author != null) {
-            String login = "@" + author.getmLogin();
+            String login = "@" + author.getLogin();
             authorLogin.setText(login);
-            authorName.setText(author.getmName());
+            authorName.setText(author.getName());
             if (!author.getUrlImage().equals("null")) {
                 Picasso.get().load(author.getUrlImage()).into(target);
             }
@@ -297,7 +298,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         mListUsers.setHasFixedSize(true);
         MembersAdapter adapter = new MembersAdapter();
         if (mThreadGroup == null) mThreadGroup = new ThreadGroup("Card Backgrounds");
-        adapter.setMembers(mGroup.getmMembers(), this, mThreadGroup);
+        adapter.setMembers(mGroup.getMembers(), this, mThreadGroup);
         mListUsers.setAdapter(adapter);
         RelativeLayout loadingLayout = v.findViewById(R.id.loadingLayout);
         YoYo.with(Techniques.TakingOff).duration(700).interpolate(new AccelerateDecelerateInterpolator()).onEnd(animator -> loadingLayout.setVisibility(View.GONE)).playOn(loadingLayout);
@@ -308,156 +309,6 @@ public class GroupInfoActivity extends AppCompatActivity {
         if (mThread != null) mThread.interrupt();
         if (mThreadGroup != null) mThreadGroup.interrupt();
         super.onDestroy();
-    }
-
-    public static class User {
-        private int mId;
-        private String mName;
-        private String mLogin;
-        private String urlImage;
-        private boolean mPro;
-
-        boolean ismPro() {
-            return mPro;
-        }
-
-        void setmPro(boolean pro) {
-            mPro = pro;
-        }
-
-        User() {
-
-        }
-
-        public int getmId() {
-            return mId;
-        }
-
-        public void setmId(int mId) {
-            this.mId = mId;
-        }
-
-        public String getmName() {
-            return mName;
-        }
-
-        public void setmName(String mName) {
-            this.mName = mName;
-        }
-
-        public String getmLogin() {
-            return mLogin;
-        }
-
-        public void setmLogin(String mLogin) {
-            this.mLogin = mLogin;
-        }
-
-        public String getUrlImage() {
-            return urlImage;
-        }
-
-        public void setUrlImage(String urlImage) {
-            this.urlImage = urlImage;
-        }
-    }
-
-    public static class Group {
-        private int mId;
-        private String mName;
-        private String mCity;
-        private String mBuilding;
-        private String mDescription;
-        private String mUrl;
-        private Boolean mConfirmed;
-        private User mAuthor;
-        private Date mDateCreated;
-        private ArrayList<User> mMembers = new ArrayList<>();
-
-        Group() {
-
-        }
-
-        public ArrayList<User> getmMembers() {
-            return mMembers;
-        }
-
-        public void setmMembers(ArrayList<User> mMembers) {
-            this.mMembers = mMembers;
-        }
-
-        public int getId() {
-            return mId;
-        }
-
-        public void setId(int id) {
-            mId = id;
-        }
-
-        public String getName() {
-            return mName;
-        }
-
-        public void setName(String mName) {
-            this.mName = mName;
-        }
-
-        String getCity() {
-            return mCity;
-        }
-
-        void setCity(String mCity) {
-            this.mCity = mCity;
-        }
-
-        String getBuilding() {
-            return mBuilding;
-        }
-
-        void setBuilding(String mBuilding) {
-            this.mBuilding = mBuilding;
-        }
-
-        String getDescription() {
-            return mDescription;
-        }
-
-        void setDescription(String mDescription) {
-            this.mDescription = mDescription;
-        }
-
-        String getUrl() {
-            return mUrl;
-        }
-
-        void setUrl(String mUrl) {
-            this.mUrl = mUrl;
-        }
-
-        public Boolean getConfirmed() {
-            return mConfirmed;
-        }
-
-        void setConfirmed(Boolean mConfirmed) {
-            this.mConfirmed = mConfirmed;
-        }
-
-        public User getAuthor() {
-            return mAuthor;
-        }
-
-        void setAuthor(User author) {
-            this.mAuthor = author;
-        }
-
-        Date getDateCreated() {
-            return mDateCreated;
-        }
-
-        void setDateCreated(Date mDateCreated) {
-            this.mDateCreated = mDateCreated;
-        }
-
     }
 
     public static class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberViewer> {
@@ -497,13 +348,13 @@ public class GroupInfoActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull MemberViewer holder, int position) {
             User user = members.get(position);
-            if (position == 0 && user.getmLogin() == null) {
+            if (position == 0 && user.getLogin() == null) {
                 holder.mTextNoMembers.setVisibility(View.VISIBLE);
                 holder.mCardView.setVisibility(View.GONE);
             } else {
-                String login = "@" + user.getmLogin();
+                String login = "@" + user.getLogin();
                 holder.mTextLogin.setText(login);
-                holder.mTextName.setText(user.getmName());
+                holder.mTextName.setText(user.getName());
                 if (!user.getUrlImage().equals("null")) {
                     Target target = new Target() {
                         @Override
@@ -524,7 +375,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                                 mActivity.runOnUiThread(() -> {
                                     holder.mImageProfile.setImageBitmap(scaled);
                                     holder.mImageProfile.setBorderColor(textColor);
-                                    if (user.ismPro()) {
+                                    if (user.isPro()) {
                                         int[][] states = new int[][]{
                                                 new int[]{android.R.attr.state_enabled}
                                         };

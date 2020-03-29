@@ -37,6 +37,7 @@ import java.util.Objects;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import ru.devdem.reminder.ObjectsController.Notification;
 
 public class NotificationsFragment extends Fragment {
     private SharedPreferences mSettings;
@@ -150,66 +151,6 @@ public class NotificationsFragment extends Fragment {
         mRVAdapter.notifyDataSetChanged();
     }
 
-    static class Notification {
-        private int mId;
-        private String mTitle;
-        private String mSubTitle;
-        private String mUrlImage;
-        private Date mDate;
-        private int mGroup;
-
-        Notification() {
-
-        }
-
-        int getGroup() {
-            return mGroup;
-        }
-
-        void setGroup(int group) {
-            mGroup = group;
-        }
-
-        int getId() {
-            return mId;
-        }
-
-        void setId(int id) {
-            mId = id;
-        }
-
-        String getTitle() {
-            return mTitle;
-        }
-
-        void setTitle(String title) {
-            mTitle = title;
-        }
-
-        String getSubTitle() {
-            return mSubTitle;
-        }
-
-        void setSubTitle(String subTitle) {
-            mSubTitle = subTitle;
-        }
-
-        String getUrlImage() {
-            return mUrlImage;
-        }
-
-        void setUrlImage(String urlImage) {
-            mUrlImage = urlImage;
-        }
-
-        Date getDate() {
-            return mDate;
-        }
-
-        void setDate(Date date) {
-            mDate = date;
-        }
-    }
 
     class RVAdapter extends RecyclerView.Adapter<RVAdapter.NotificationViewer> {
         ArrayList<Notification> mNotifications;

@@ -107,7 +107,7 @@ public class FirstActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(v -> RegisterFuncs());
     }
 
-    public void controlViews(boolean enable) {
+    private void controlViews(boolean enable) {
         mRLoginEt.setEnabled(enable);
         mRNameEt.setEnabled(enable);
         mRCheckSpam.setEnabled(enable);
@@ -195,7 +195,7 @@ public class FirstActivity extends AppCompatActivity {
             Snackbar.make(registerRl, R.string.enter_data_correct, Snackbar.LENGTH_LONG).show();
     }
 
-    void showHide(View view, View relativeView, boolean show) {
+    private void showHide(View view, View relativeView, boolean show) {
         view.setVisibility(View.VISIBLE);
         Animator animator;
         if (show)

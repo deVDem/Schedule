@@ -16,6 +16,7 @@ class TimeController {
 
     @SuppressLint("StaticFieldLeak")
     private static TimeController sTimeController;
+    @SuppressWarnings("FieldCanBeLocal")
     private Context mContext;
     private LessonsController mLessonsController;
 

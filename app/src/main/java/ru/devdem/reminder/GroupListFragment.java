@@ -31,6 +31,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import ru.devdem.reminder.ObjectsController.Group;
+import ru.devdem.reminder.ObjectsController.User;
+
 public class GroupListFragment extends Fragment {
     private static NetworkController networkController;
     private RecyclerView mRecyclerView;
@@ -125,147 +128,6 @@ public class GroupListFragment extends Fragment {
             };
             networkController.getGroups(activity, listener, errorListener, params);
         }
-    }
-
-    public static class User {
-        private int mId;
-        private String mName;
-        private String mLogin;
-        private String urlImage;
-
-        User() {
-
-        }
-
-        public int getmId() {
-            return mId;
-        }
-
-        public void setmId(int mId) {
-            this.mId = mId;
-        }
-
-        public String getmName() {
-            return mName;
-        }
-
-        public void setmName(String mName) {
-            this.mName = mName;
-        }
-
-        public String getmLogin() {
-            return mLogin;
-        }
-
-        public void setmLogin(String mLogin) {
-            this.mLogin = mLogin;
-        }
-
-        public String getUrlImage() {
-            return urlImage;
-        }
-
-        public void setUrlImage(String urlImage) {
-            this.urlImage = urlImage;
-        }
-    }
-
-    public static class Group {
-        private int mId;
-        private String mName;
-        private String mCity;
-        private String mBuilding;
-        private String mDescription;
-        private String mUrl;
-        private Boolean mConfirmed;
-        private User mAuthor;
-        private Date mDateCreated;
-        private ArrayList<User> mMembers = new ArrayList<>();
-
-        Group() {
-
-        }
-
-        public ArrayList<User> getmMembers() {
-            return mMembers;
-        }
-
-        public void setmMembers(ArrayList<User> mMembers) {
-            this.mMembers = mMembers;
-        }
-
-        public int getId() {
-            return mId;
-        }
-
-        public void setId(int id) {
-            mId = id;
-        }
-
-        public String getName() {
-            return mName;
-        }
-
-        public void setName(String mName) {
-            this.mName = mName;
-        }
-
-        String getCity() {
-            return mCity;
-        }
-
-        void setCity(String mCity) {
-            this.mCity = mCity;
-        }
-
-        String getBuilding() {
-            return mBuilding;
-        }
-
-        void setBuilding(String mBuilding) {
-            this.mBuilding = mBuilding;
-        }
-
-        String getDescription() {
-            return mDescription;
-        }
-
-        void setDescription(String mDescription) {
-            this.mDescription = mDescription;
-        }
-
-        String getUrl() {
-            return mUrl;
-        }
-
-        void setUrl(String mUrl) {
-            this.mUrl = mUrl;
-        }
-
-        public Boolean getConfirmed() {
-            return mConfirmed;
-        }
-
-        void setConfirmed(Boolean mConfirmed) {
-            this.mConfirmed = mConfirmed;
-        }
-
-        public User getAuthor() {
-            return mAuthor;
-        }
-
-        void setAuthor(User author) {
-            this.mAuthor = author;
-        }
-
-        Date getDateCreated() {
-            return mDateCreated;
-        }
-
-        void setDateCreated(Date mDateCreated) {
-            this.mDateCreated = mDateCreated;
-        }
-
     }
 
     public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupListViewer> {
