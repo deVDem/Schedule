@@ -9,7 +9,8 @@
         android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="200dp">
+        android:translationZ="200dp"
+        tools:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -191,6 +192,28 @@
                     android:text="@string/confirmed_group"
                     android:textColor="@color/text_color" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/creator"
+                android:textColor="@color/text_bold_color"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/line"
+                tools:ignore="ContentDescription" />
+
+            <FrameLayout
+                android:id="@+id/authorFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"

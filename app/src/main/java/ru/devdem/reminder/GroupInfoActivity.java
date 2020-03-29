@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -69,6 +71,12 @@ public class GroupInfoActivity extends AppCompatActivity {
             group_id = getIntent().getIntExtra("group_id", 0);
             go_button = getIntent().getBooleanExtra("go_button", false);
         }
+        v = View.inflate(this, R.layout.activity_group_info, null);
+        setContentView(v);
+        FloatingActionButton actionButton = v.findViewById(R.id.floatingActionButton);
+        actionButton.hide();
+        RelativeLayout loadingLayout = v.findViewById(R.id.loadingLayout);
+        loadingLayout.setVisibility(View.VISIBLE);
         NetworkController networkController = NetworkController.get();
         Response.Listener<String> listener = response -> {
             Log.d(TAG, "listener returned: " + response);
@@ -98,8 +106,11 @@ public class GroupInfoActivity extends AppCompatActivity {
                         user.setmName(userJson.getString("name"));
                         user.setmLogin(userJson.getString("login"));
                         user.setUrlImage(userJson.getString("urlImage"));
+                        user.setmPro(userJson.getString("pro").equals("Yes"));
                         users.add(user);
-                        if (user.getmId() == groupJson.getInt("author_id")) group.setAuthor(user);
+                        if (user.getmId() == groupJson.getInt("author_id"))
+                            group.setAuthor(user);
+                        else group.setAuthor(null);
                     }
                     group.setmMembers(users);
                     mGroup = group;
@@ -115,12 +126,6 @@ public class GroupInfoActivity extends AppCompatActivity {
             finish();
         };
         networkController.getGroups(this, listener, errorListener, new String[]{"", "", "", "", String.valueOf(group_id), "true"});
-        v = View.inflate(this, R.layout.activity_group_info, null);
-        setContentView(v);
-        FloatingActionButton actionButton = v.findViewById(R.id.floatingActionButton);
-        actionButton.hide();
-        RelativeLayout loadingLayout = v.findViewById(R.id.loadingLayout);
-        loadingLayout.setVisibility(View.VISIBLE);
     }
 
     void start() {
@@ -157,7 +162,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                 if (bitmap == null) {
                     Log.w(TAG, "Null");
                 } else {
-                    mThread = new Thread(null, () -> {
+                    mThread = new Thread(mThreadGroup, () -> {
                         try {
                             Log.d(TAG, "run: start");
                             int width = toolbar.getWidth();
@@ -204,16 +209,94 @@ public class GroupInfoActivity extends AppCompatActivity {
             }
         };
         if (!mGroup.getUrl().equals("null")) Picasso.get().load(mGroup.getUrl()).into(mTarget);
+        else Picasso.get().load(R.drawable.cat_error).into(mTarget);
         toolbar.setTitle(mGroup.getName());
         mTextName.setText(mGroup.getName());
         String location = mGroup.getBuilding() + ", " + mGroup.getCity();
         mTextLocation.setText(location);
-        mTextDescription.setText(mGroup.getDescription().equals("null") ? "Описание отсутствует" : mGroup.getDescription());
+        mTextDescription.setText(mGroup.getDescription().equals("null") ? getString(R.string.no_description) : mGroup.getDescription());
         mLayoutConfirmed.setVisibility(mGroup.getConfirmed() ? View.VISIBLE : View.GONE);
+        FrameLayout frameAuthor = v.findViewById(R.id.authorFrame);
+        View authorView = View.inflate(this, R.layout.group_info_user_view, null);
+        TextView authorLogin = authorView.findViewById(R.id.profileLogin);
+        TextView authorName = authorView.findViewById(R.id.profileName);
+        CardView authorCard = authorView.findViewById(R.id.card_view);
+        CircleImageView authorImage = authorView.findViewById(R.id.profileImage);
+        User author = mGroup.getAuthor();
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Log.d(TAG, "onBitmapLoaded: loaded");
+                new Thread(mThreadGroup, () -> {
+                    int width = 250;
+                    int height = Math.round((float) width / bitmap.getWidth() * bitmap.getHeight());
+                    Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
+                    Bitmap preparePixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
+                    int color = preparePixel.getPixel(0, 0);
+                    int rez = 0xFFF - color + 0xFF000000;
+                    float[] hsv = new float[3];
+                    Color.colorToHSV(rez, hsv);
+                    hsv[0] = hsv[0] + 180;
+                    int cardColor = Color.HSVToColor(hsv);
+                    int textColor = -1 * cardColor + 0xFF000000;
+                    runOnUiThread(() -> {
+                        authorImage.setImageBitmap(scaled);
+                        authorImage.setBorderColor(textColor);
+                        if (author == null || author.ismPro()) {
+                            int[][] states = new int[][]{
+                                    new int[]{android.R.attr.state_enabled}
+                            };
+                            int[] colors = new int[]{
+                                    cardColor
+                            };
+                            authorName.setTextColor(textColor);
+                            authorLogin.setTextColor(textColor);
+                            authorCard.setBackgroundTintList(new ColorStateList(states, colors));
+                        }
+                        new CountDownTimer(2000, 16) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                float alpha = (10000f - millisUntilFinished) / 10000f;
+                                authorImage.setAlpha(alpha);
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                authorImage.setAlpha(1.0f);
+                            }
+                        }.start();
+                    });
+                }, "Author background").start();
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                Log.e(TAG, "onBitmapFailed: ", e);
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                authorImage.setAlpha(0.0f);
+                Log.i(TAG, "onPrepareLoad: loading");
+            }
+        };
+        if (author != null) {
+            String login = "@" + author.getmLogin();
+            authorLogin.setText(login);
+            authorName.setText(author.getmName());
+            if (!author.getUrlImage().equals("null")) {
+                Picasso.get().load(author.getUrlImage()).into(target);
+            }
+        } else {
+            authorName.setText(R.string.system);
+            Picasso.get().load("https://files.devdem.ru/apps/schedule/user_images/server.jpg").into(target);
+        }
+        frameAuthor.addView(authorView);
         mListUsers.setLayoutManager(new LinearLayoutManager(this));
         mListUsers.setHasFixedSize(true);
         MembersAdapter adapter = new MembersAdapter();
-        adapter.setMembers(mGroup.getmMembers(), this, new ThreadGroup("Card backgrounds"));
+        if (mThreadGroup == null) mThreadGroup = new ThreadGroup("Card Backgrounds");
+        adapter.setMembers(mGroup.getmMembers(), this, mThreadGroup);
         mListUsers.setAdapter(adapter);
         RelativeLayout loadingLayout = v.findViewById(R.id.loadingLayout);
         YoYo.with(Techniques.TakingOff).duration(700).interpolate(new AccelerateDecelerateInterpolator()).onEnd(animator -> loadingLayout.setVisibility(View.GONE)).playOn(loadingLayout);
@@ -231,6 +314,15 @@ public class GroupInfoActivity extends AppCompatActivity {
         private String mName;
         private String mLogin;
         private String urlImage;
+        private boolean mPro;
+
+        boolean ismPro() {
+            return mPro;
+        }
+
+        void setmPro(boolean pro) {
+            mPro = pro;
+        }
 
         User() {
 
@@ -420,24 +512,38 @@ public class GroupInfoActivity extends AppCompatActivity {
                                 int width = 250;
                                 int height = Math.round((float) width / bitmap.getWidth() * bitmap.getHeight());
                                 Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
-                                Bitmap preparepixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
-                                int color = 0xFFF - preparepixel.getPixel(0, 0) + 0xFF000000;
+                                Bitmap preparePixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
+                                int color = preparePixel.getPixel(0, 0);
+                                int rez = 0xFFF - color + 0xFF000000;
+                                float[] hsv = new float[3];
+                                Color.colorToHSV(rez, hsv);
+                                hsv[0] = hsv[0] + 180;
+                                int cardColor = Color.HSVToColor(hsv);
+                                int textColor = -1 * cardColor + 0xFF000000;
                                 mActivity.runOnUiThread(() -> {
                                     holder.mImageProfile.setImageBitmap(scaled);
-                                    holder.mImageProfile.setBorderColor(color);
+                                    holder.mImageProfile.setBorderColor(textColor);
+                                    if (user.ismPro()) {
+                                        int[][] states = new int[][]{
+                                                new int[]{android.R.attr.state_enabled}
+                                        };
+                                        int[] colors = new int[]{
+                                                cardColor
+                                        };
+                                        holder.mTextName.setTextColor(textColor);
+                                        holder.mTextLogin.setTextColor(textColor);
+                                        holder.mCardView.setBackgroundTintList(new ColorStateList(states, colors));
+                                    }
                                     new CountDownTimer(2000, 16) {
                                         @Override
                                         public void onTick(long millisUntilFinished) {
                                             float alpha = (10000f - millisUntilFinished) / 10000f;
                                             holder.mImageProfile.setAlpha(alpha);
-                                            Log.d(TAG, "onTick: " + millisUntilFinished + "  " + alpha);
-                                            Log.d(TAG, "onTick: tick");
                                         }
 
                                         @Override
                                         public void onFinish() {
                                             holder.mImageProfile.setAlpha(1.0f);
-                                            Log.d(TAG, "onFinish: finish");
                                         }
                                     }.start();
                                 });

@@ -115,4 +115,7 @@
     <string name="members">Участники</string>
     <string name="confirmed_group">Прошла проверку</string>
     <string name="no_members">Участников нет</string>
+    <string name="creator">Создатель</string>
+    <string name="system">Система</string>
+    <string name="no_description">Описание отсутствует</string>
 </resources>

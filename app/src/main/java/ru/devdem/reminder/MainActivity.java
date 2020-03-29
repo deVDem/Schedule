@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -174,10 +173,8 @@ public class MainActivity extends AppCompatActivity {
             PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
             boolean inWhiteList = powerManager.isIgnoringBatteryOptimizations(getPackageName());
             if (!inWhiteList) {
-                Intent intent = new
-                        Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                        Uri.parse("package:" + getPackageName()));
-                startActivity(intent);
+                startActivity(new
+                        Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
             }
         }
         checkAccount();

@@ -91,11 +91,11 @@ public class GroupListFragment extends Fragment {
                         group.setName(!name.equals("null") ? name : "");
                         group.setCity(!city.equals("null") ? city : "");
                         group.setBuilding(!building.equals("null") ? building : "");
-                        group.setDescription(!description.equals("null") ? description : "");
+                        group.setDescription(!description.equals("null") ? description : getString(R.string.no_description));
                         group.setUrl(!urlImage.equals("null") ? urlImage : "");
                         group.setConfirmed(confirmed.equals("Yes"));
                         // TODO: сделать автора
-                        group.setAuthor(new String[2]);
+                        group.setAuthor(new User());
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                         group.setDateCreated(!date_created.equals("null") ? format.parse(date_created) : new Date());
                         groups.add(group);
@@ -119,6 +119,49 @@ public class GroupListFragment extends Fragment {
         }
     }
 
+    public static class User {
+        private int mId;
+        private String mName;
+        private String mLogin;
+        private String urlImage;
+
+        User() {
+
+        }
+
+        public int getmId() {
+            return mId;
+        }
+
+        public void setmId(int mId) {
+            this.mId = mId;
+        }
+
+        public String getmName() {
+            return mName;
+        }
+
+        public void setmName(String mName) {
+            this.mName = mName;
+        }
+
+        public String getmLogin() {
+            return mLogin;
+        }
+
+        public void setmLogin(String mLogin) {
+            this.mLogin = mLogin;
+        }
+
+        public String getUrlImage() {
+            return urlImage;
+        }
+
+        public void setUrlImage(String urlImage) {
+            this.urlImage = urlImage;
+        }
+    }
+
     public static class Group {
         private int mId;
         private String mName;
@@ -127,11 +170,20 @@ public class GroupListFragment extends Fragment {
         private String mDescription;
         private String mUrl;
         private Boolean mConfirmed;
-        private String[] mAuthor;
+        private User mAuthor;
         private Date mDateCreated;
+        private ArrayList<User> mMembers = new ArrayList<>();
 
         Group() {
 
+        }
+
+        public ArrayList<User> getmMembers() {
+            return mMembers;
+        }
+
+        public void setmMembers(ArrayList<User> mMembers) {
+            this.mMembers = mMembers;
         }
 
         public int getId() {
@@ -190,12 +242,12 @@ public class GroupListFragment extends Fragment {
             this.mConfirmed = mConfirmed;
         }
 
-        public String[] getAuthor() {
+        public User getAuthor() {
             return mAuthor;
         }
 
-        void setAuthor(String[] mAuthor) {
-            this.mAuthor = mAuthor;
+        void setAuthor(User author) {
+            this.mAuthor = author;
         }
 
         Date getDateCreated() {

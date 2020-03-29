@@ -114,4 +114,7 @@
     <string name="members">Members</string>
     <string name="confirmed_group">Passed verification</string>
     <string name="no_members">No members</string>
+    <string name="creator">Creator</string>
+    <string name="system">System</string>
+    <string name="no_description">No description</string>
 </resources>

@@ -1,6 +1,7 @@
 package ru.devdem.reminder;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -40,6 +41,15 @@ public class GroupSearchFragment extends Fragment {
         mETCity = view.findViewById(R.id.etGroupCity);
         mETBuilding = view.findViewById(R.id.etGroupBuilding);
         mSwConfirmed = view.findViewById(R.id.swOnlyConfirmed);
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_checked}
+        };
+        int[] colors = new int[]{
+                getResources().getColor(R.color.colorAccent),
+                getResources().getColor(R.color.white)
+        };
+        mSwConfirmed.setThumbTintList(new ColorStateList(states, colors));
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_group);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
