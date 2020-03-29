@@ -143,24 +143,24 @@ class NetworkController {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonResponse = new JSONObject(response);
-                for (int i = 1; i < jsonResponse.getInt("all"); i++) {
-                    try {
-                        if (i == Integer.parseInt(group)) {
-                            context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
-                                    .putString("group_name", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("name"))
-                                    .putString("group_city", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("city"))
-                                    .putString("group_building", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("building"))
-                                    .putString("group_description", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("description"))
-                                    .putString("group_urlImage", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("urlImage"))
-                                    .putString("group_confirmed", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("confirmed"))
-                                    .putString("group_author_id", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("author_id"))
-                                    .putString("group_date_created", jsonResponse.getJSONObject(String.valueOf(i - 1)).getString("date_created"))
-                                    .apply();
-                            break;
-                        }
-                    } catch (Exception e) {
+                JSONObject jsonGroup = null;
+                for (int i = 0; i < jsonResponse.getInt("all"); i++) {
+                    if (jsonResponse.getJSONObject(String.valueOf(i)).getInt("id") == Integer.parseInt(group)) {
+                        jsonGroup = jsonResponse.getJSONObject(String.valueOf(i));
                         break;
                     }
+                }
+                if (jsonGroup != null) {
+                    context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
+                            .putString("group_name", jsonGroup.getString("name"))
+                            .putString("group_city", jsonGroup.getString("city"))
+                            .putString("group_building", jsonGroup.getString("building"))
+                            .putString("group_description", jsonGroup.getString("description"))
+                            .putString("group_urlImage", jsonGroup.getString("urlImage"))
+                            .putString("group_confirmed", jsonGroup.getString("confirmed"))
+                            .putString("group_author_id", jsonGroup.getString("author_id"))
+                            .putString("group_date_created", jsonGroup.getString("date_created"))
+                            .apply();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
