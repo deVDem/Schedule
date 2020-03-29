@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.snackbar.Snackbar;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONObject;
 
@@ -46,12 +47,14 @@ public class FirstActivity extends AppCompatActivity {
 
     private EditText mRLoginEt;
     private EditText mRNameEt;
-    private EditText mREmailEt;
+    private MaterialEditText mREmailEt;
     private EditText mRPassEt;
     private EditText mRConPassEt;
     private CheckBox mRCheckSpam;
     private TextView mRTextView;
     private Button mRegisterButton;
+
+    private String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
 
     private int ANIM_DURATION = 700;
@@ -130,7 +133,7 @@ public class FirstActivity extends AppCompatActivity {
         String password = mRPassEt.getText().toString();
         String confirmPassword = mRConPassEt.getText().toString();
         String spam = mRCheckSpam.isChecked() ? "1" : "0";
-        if (login.length() > 5 && name.length() > 5 && email.length() > 8 && password.length() > 5 && password.equals(confirmPassword)) {
+        if (login.length() > 5 && name.length() > 5 && mREmailEt.validate(emailRegex, getText(R.string.enter_the_correct_address)) && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
@@ -191,8 +194,10 @@ public class FirstActivity extends AppCompatActivity {
             };
             showHide(mRTextView, registerRl, true);
             mNetworkController.Register(mContext, login, name, email, password, spam, listener);
-        } else
+        } else {
             Snackbar.make(registerRl, R.string.enter_data_correct, Snackbar.LENGTH_LONG).show();
+            controlViews(true);
+        }
     }
 
     private void showHide(View view, View relativeView, boolean show) {
@@ -278,10 +283,12 @@ public class FirstActivity extends AppCompatActivity {
                     controlViews(true);
                 }
             };
+            controlViews(true);
             showHide(mLTextView, loginRl, true);
             mNetworkController.Login(mContext, login, password, listener, mNetworkController.getErrorListener(mContext));
         } else {
             Snackbar.make(loginRl, R.string.enter_username_and_pass, Snackbar.LENGTH_LONG).show();
+            controlViews(true);
         }
     }
 
