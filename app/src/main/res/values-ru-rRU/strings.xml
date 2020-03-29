@@ -122,4 +122,8 @@
     <string name="failed_get_user_info">Не удалось получить информацию о пользователе</string>
     <string name="user_already_registered">Такой пользователь уже зарегистрирован</string>
     <string name="unknown_error">Произошла неизвестная ошибка</string>
+    <string name="wrong_password">Неверный пароль</string>
+    <string name="wrong_login_email">Неверный логин или электронная почта</string>
+    <string name="enter_username_and_pass">Введите ваш логин и пароль</string>
+    <string name="enter_data_correct">Укажите все данные верно</string>
 </resources>

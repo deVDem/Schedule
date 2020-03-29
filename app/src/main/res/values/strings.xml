@@ -121,4 +121,8 @@
     <string name="failed_get_user_info">Failed to get user information</string>
     <string name="user_already_registered">This user is already registered</string>
     <string name="unknown_error">An unknown error occurred</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="wrong_login_email">Wrong login or email</string>
+    <string name="enter_username_and_pass">Enter your username and password</string>
+    <string name="enter_data_correct">Enter all data correctly</string>
 </resources>

@@ -54,7 +54,6 @@ public class FirstActivity extends AppCompatActivity {
     private Button mRegisterButton;
 
 
-
     private int ANIM_DURATION = 700;
     private String PREFS_FIRST = "first";
 
@@ -193,7 +192,7 @@ public class FirstActivity extends AppCompatActivity {
             showHide(mRTextView, registerRl, true);
             mNetworkController.Register(mContext, login, name, email, password, spam, listener);
         } else
-            Snackbar.make(registerRl, "Укажите все данные верно", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(registerRl, R.string.enter_data_correct, Snackbar.LENGTH_LONG).show();
     }
 
     void showHide(View view, View relativeView, boolean show) {
@@ -217,6 +216,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void LoginFuncs() {
+        controlViews(false);
         String login = mLLoginEt.getText().toString();
         String password = mLPasswordEt.getText().toString();
         if (login.length() >= 6 || password.length() >= 6) {
@@ -257,26 +257,31 @@ public class FirstActivity extends AppCompatActivity {
                                 finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.failed_get_user_info, Toast.LENGTH_SHORT).show();
                                 showHide(mLTextView, loginRl, false);
+                                controlViews(true);
                             }
                         } else {
-                            Toast.makeText(mContext, "Wrong password.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.wrong_password, Toast.LENGTH_SHORT).show();
                             showHide(mLTextView, loginRl, false);
+                            controlViews(true);
                         }
                     } else {
-                        Toast.makeText(mContext, "Wrong login or email.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.wrong_login_email, Toast.LENGTH_SHORT).show();
                         showHide(mLTextView, loginRl, false);
+                        controlViews(true);
                     }
                 } catch (Exception e) {
-                    Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
+                    showHide(mLTextView, loginRl, false);
+                    controlViews(true);
                 }
             };
             showHide(mLTextView, loginRl, true);
             mNetworkController.Login(mContext, login, password, listener, mNetworkController.getErrorListener(mContext));
         } else {
-            Snackbar.make(loginRl, "Введите логин и\\или пароль.", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(loginRl, R.string.enter_username_and_pass, Snackbar.LENGTH_LONG).show();
         }
     }
 
