@@ -113,7 +113,7 @@ public class GroupListFragment extends Fragment {
             };
             Response.ErrorListener errorListener = error -> {
                 mErrorLayout.setVisibility(View.VISIBLE);
-                // TODO: доделать индикацию ошибок
+                // TODO: доделать индикацию ошибокы
             };
             networkController.getGroups(activity, listener, errorListener, params);
         }
