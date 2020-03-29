@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -143,10 +142,10 @@ public class DashboardFragment extends Fragment {
         inflater.inflate(R.menu.menu_dashboard, menu);
         MenuItem item = menu.findItem(R.id.menu_sort);
         if (sort_by_week) {
-            item.setIcon(R.drawable.ic_sort_by_alpha);
+            item.setIcon(R.drawable.ic_list_numbered);
             item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
         } else {
-            item.setIcon(R.drawable.ic_reorder);
+            item.setIcon(R.drawable.ic_list_bulleted);
             item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
         }
     }
@@ -154,19 +153,22 @@ public class DashboardFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_sort) {
-            AnimatedVectorDrawable drawable;
+            //TODO: сделать анимацию
+            //AnimatedVectorDrawable drawable;
             if (!sort_by_week) {
-                drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_dashboard);
-                item.setIcon(drawable);
+                //drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_dashboard);
+                //item.setIcon(drawable);
+                item.setIcon(R.drawable.ic_list_numbered);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
             } else {
-                drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_to_sort_by_alpha);
-                item.setIcon(drawable);
+                //drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_to_sort_by_alpha);
+                //item.setIcon(drawable);
+                item.setIcon(R.drawable.ic_list_bulleted);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
             }
-            if (drawable != null) {
+            /*if (drawable != null) {
                 drawable.start();
-            }
+            }*/
             sort_by_week = !sort_by_week;
             mSettings.edit().putBoolean("sort_by_week", sort_by_week).apply();
             update(false);
