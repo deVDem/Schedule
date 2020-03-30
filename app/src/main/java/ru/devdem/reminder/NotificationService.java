@@ -67,21 +67,23 @@ public class NotificationService extends Service {
                 int all = object.getInt("all");
                 if (mSettings.getInt("notifications_all_service", 0) != all && !mSettings.getBoolean("first_notifications", true)) {
                     Log.d(TAG, "checkNewNotifications: new notifications!");
-                    int need = all - mSettings.getInt("notifications_all_service", 0);
-                    for (int i = 0; i < need && i <= 5; i++) {
-                        NotificationCompat.Builder builder =
-                                mNotificationUtils.getNewNotificationNotification(
-                                        object.getJSONObject(String.valueOf(i)).getString("Title"),
-                                        object.getJSONObject(String.valueOf(i)).getString("Subtitle"));
-                        String dateString = object.getJSONObject(String.valueOf(i)).getString("date");
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                        builder.setWhen(!dateString.equals("null") ? format.parse(dateString).getTime() : new Date().getTime());
-                        Notification notification = builder.build();
-                        if (canGo) {
-                            mNotificationUtils.getManager().notify(104 + i, notification);
+                    if (all > mSettings.getInt("notifications_all_service", 0)) {
+                        int need = all - mSettings.getInt("notifications_all_service", 0);
+                        for (int i = 0; i < need && i <= 5; i++) {
+                            NotificationCompat.Builder builder =
+                                    mNotificationUtils.getNewNotificationNotification(
+                                            object.getJSONObject(String.valueOf(i)).getString("Title"),
+                                            object.getJSONObject(String.valueOf(i)).getString("Subtitle"));
+                            String dateString = object.getJSONObject(String.valueOf(i)).getString("date");
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            builder.setWhen(!dateString.equals("null") ? format.parse(dateString).getTime() : new Date().getTime());
+                            Notification notification = builder.build();
+                            if (canGo) {
+                                mNotificationUtils.getManager().notify(104 + i, notification);
+                            }
                         }
-                    }
-                    mSettings.edit().putInt("notifications_all_service", all).apply();
+                        mSettings.edit().putInt("notifications_all_service", all).apply();
+                    } else mSettings.edit().putInt("notifications_all_service", all).apply();
                 } else if (mSettings.getBoolean("first_notifications", true)) {
                     mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", all).apply();
                 } else Log.d(TAG, "checkNewNotifications: no new notifications");

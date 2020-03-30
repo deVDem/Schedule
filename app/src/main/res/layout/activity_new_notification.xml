@@ -8,9 +8,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        tools:visibility="visible">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,48 +16,84 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/etTitle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/title"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName"
-                android:textColor="@color/text_color"
-                app:met_baseColor="@color/text_color"
-                app:met_errorColor="@color/colorAccent"
-                app:met_floatingLabel="highlight"
-                app:met_maxCharacters="2048"
-                app:met_minCharacters="6"
-                app:met_primaryColor="@color/colorAccent" />
+                android:orientation="vertical">
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/etText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/message_text"
-                android:inputType="textMultiLine"
-                android:textColor="@color/text_color"
-                app:met_baseColor="@color/text_color"
-                app:met_errorColor="@color/colorAccent"
-                app:met_floatingLabel="highlight"
-                app:met_maxCharacters="2048"
-                app:met_minCharacters="6"
-                app:met_primaryColor="@color/colorAccent"
-                tools:ignore="HardcodedText" />
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/text_color"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="@color/colorAccent"
+                    app:met_floatingLabel="highlight"
+                    app:met_maxCharacters="256"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/colorAccent" />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/etUrlImage"
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/etText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/message_text"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/text_color"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="@color/colorAccent"
+                    app:met_floatingLabel="highlight"
+                    app:met_maxCharacters="256"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/colorAccent"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/imageLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/insert_a_link_to_the_image_here"
-                android:imeOptions="actionDone"
-                android:inputType="textUri"
-                app:met_baseColor="@color/text_color"
-                app:met_errorColor="@color/colorAccent"
-                app:met_floatingLabel="highlight"
-                app:met_helperTextColor="@color/colorAccent"
-                app:met_primaryColor="@color/colorAccent" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/attached_picture" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/box_shape"
+                    android:backgroundTint="@color/colorAccent">
+
+                    <ImageView
+                        android:id="@+id/imageNotification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/cat"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageButton
+                        android:id="@+id/deleteImageBtn"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/box_shape"
+                        android:backgroundTint="@color/line_color"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_delete"
+                        tools:ignore="ContentDescription" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -69,15 +103,30 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
         android:clickable="true"
         android:focusable="true"
-        app:srcCompat="@drawable/ic_done" />
+        android:src="@drawable/ic_done"
+        tools:ignore="RelativeOverlap" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonAddPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_add_a_photo" />
 
     <RelativeLayout
-        android:id="@+id/loading"
+        android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/cat"
         android:visibility="gone"
         tools:visibility="gone">
 

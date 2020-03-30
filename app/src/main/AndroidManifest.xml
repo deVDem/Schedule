@@ -14,17 +14,17 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:installLocation="internalOnly"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/StartApp"
-        android:allowBackup="false"
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7389415060915567~2742847091"/>
+            android:value="ca-app-pub-7389415060915567~2742847091" />
         <service
             android:name=".NotificationService"
             android:enabled="true"
@@ -55,6 +55,7 @@
                 <action android:name="YouWillNeverKillMe" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".FirstActivity"
             android:theme="@style/FirstTheme" />
@@ -78,11 +79,12 @@
         <activity
             android:name=".PurchaseActivity"
             android:theme="@style/SearchTheme" />
-        <activity android:name=".CreateGroupActivity"
+        <activity
+            android:name=".CreateGroupActivity"
             android:theme="@style/SearchTheme" />
         <activity
             android:name=".GroupInfoActivity"
-            android:theme="@style/SearchTheme"/>
+            android:theme="@style/SearchTheme" />
     </application>
 
 </manifest>

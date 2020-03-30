@@ -87,6 +87,8 @@ class ObjectsController {
         user.setPro(settings.getBoolean("pro", false));
         user.setUrlImage(settings.getString("urlImage", null));
         user.setPermission(settings.getInt("permission", 0));
+        user.setToken(settings.getString("token", "error"));
+        user.setGroupId(settings.getString("group", "error"));
         return user;
     }
     public static class User {
@@ -97,9 +99,27 @@ class ObjectsController {
         private String mEmail;
         private boolean mPro;
         private int mPermission;
+        private String mToken;
+        private String mGroupId;
 
         User() {
 
+        }
+
+        String getGroupId() {
+            return mGroupId;
+        }
+
+        void setGroupId(String groupId) {
+            mGroupId = groupId;
+        }
+
+        String getToken() {
+            return mToken;
+        }
+
+        void setToken(String token) {
+            mToken = token;
         }
 
         int getPermission() {
@@ -110,11 +130,11 @@ class ObjectsController {
             mPermission = permission;
         }
 
-        public String getEmail() {
+        String getEmail() {
             return mEmail;
         }
 
-        public void setEmail(String email) {
+        void setEmail(String email) {
             mEmail = email;
         }
 

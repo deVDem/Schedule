@@ -68,13 +68,13 @@ class NetworkController {
         queue.add(sendRequest);
     }
 
-    void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String urlImage) {
+    void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String image) {
         Map<String, String> map = new HashMap<>();
         map.put("token", token);
         map.put("group", group);
         map.put("title", title);
         map.put("message", message);
-        map.put("urlImage", urlImage);
+        if (image != null) map.put("image", image);
         goSend(context, listener, errorListener, URL_ADD_NOTIFICATION, map);
 
     }

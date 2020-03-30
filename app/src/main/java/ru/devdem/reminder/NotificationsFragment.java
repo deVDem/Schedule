@@ -39,12 +39,15 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import ru.devdem.reminder.ObjectsController.Notification;
 
+import static android.app.Activity.RESULT_OK;
+
 public class NotificationsFragment extends Fragment {
     private SharedPreferences mSettings;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RVAdapter mRVAdapter;
     private NetworkController mNetworkController;
+    private boolean needReload = false;
 
     @SuppressLint("InflateParams")
     @Nullable
@@ -70,17 +73,15 @@ public class NotificationsFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_profile, menu);
-        if (mSettings.getInt("permission", 0) < 1) {
-            MenuItem item = menu.findItem(R.id.menu_edit);
-            item.setVisible(false);
-        }
+        MenuItem item = menu.findItem(R.id.menu_edit);
+        item.setVisible(ObjectsController.getLocalUserInfo(mSettings).getPermission() > 1);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_reload:
-                createNotifications();
+                if (!mSwipeRefreshLayout.isRefreshing()) createNotifications();
                 return true;
             case R.id.menu_edit:
                 startActivityForResult(new Intent(getActivity(), NewNotificationActivity.class), 154);
@@ -115,6 +116,8 @@ public class NotificationsFragment extends Fragment {
                     notification.setDate(format.parse(jsonObject.getString("date")));
                     mNotifications.add(notification);
                 }
+                if (needReload)
+                    mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", all).apply();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -135,7 +138,15 @@ public class NotificationsFragment extends Fragment {
             updateUI(mNotifications);
             mSwipeRefreshLayout.setRefreshing(false);
         };
-        mNetworkController.getNotifications(getContext(), mSettings.getString("group", ""), mSettings.getString("token", ""), listener, errorListener);
+        mNetworkController.getNotifications(getContext(), ObjectsController.getLocalUserInfo(mSettings).getGroupId(), ObjectsController.getLocalUserInfo(mSettings).getToken(), listener, errorListener);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 154 && resultCode == RESULT_OK) {
+            createNotifications();
+        }
     }
 
     private void updateUI(ArrayList<Notification> mNotifications) {

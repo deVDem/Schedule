@@ -126,6 +126,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateUI() {
+        mProfileFrame.removeAllViews();
         User user = ObjectsController.getLocalUserInfo(mSettings);
         String name = user.getName();
         String login = "@" + user.getLogin();

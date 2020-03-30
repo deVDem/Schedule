@@ -130,4 +130,14 @@
     <string name="information_about_the_group">Информация о группе</string>
     <string name="get_pro">Получить PRO</string>
     <string name="login_must_be">Логин должен быть от 4 символов, и содержать только латинские буквы, цифры и нижнее подчеркивание</string>
+    <string name="new_notification">Новое уведомление</string>
+    <string name="photoFromCamera">Фото с камеры</string>
+    <string name="imagefromgallery">Изображение с галереи</string>
+    <string name="deleted">Удалено</string>
+    <string name="sended">Отправлено</string>
+    <string name="sure_exit">Вы уверены, что хотите выйти?</string>
+    <string name="message_will_delete">Сообщение будет удалено</string>
+    <string name="stay">Остаться</string>
+    <string name="exit">Выйти</string>
+    <string name="attached_picture">Прикрепленное изображение</string>
 </resources>

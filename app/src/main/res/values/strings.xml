@@ -129,4 +129,14 @@
     <string name="information_about_the_group">Information about the group</string>
     <string name="get_pro">Get PRO</string>
     <string name="login_must_be">The login must be at least 4 characters long and contain only Latin letters, numbers, and underscores</string>
+    <string name="new_notification">New notification</string>
+    <string name="photoFromCamera">Photo from the camera</string>
+    <string name="imagefromgallery">Image from the gallery</string>
+    <string name="deleted">Deleted</string>
+    <string name="sended">Sended</string>
+    <string name="sure_exit">Are you sure you want to get out?</string>
+    <string name="message_will_delete">The message will be deleted</string>
+    <string name="stay">Stay</string>
+    <string name="exit">Exit</string>
+    <string name="attached_picture">The attached picture</string>
 </resources>

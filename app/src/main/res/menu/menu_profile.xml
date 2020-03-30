@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_edit"
-        android:icon="@drawable/ic_edit"
-        android:title="@string/edit_profile"
-        app:showAsAction="ifRoom|withText" />
-    <item
         android:id="@+id/menu_reload"
         android:icon="@drawable/ic_refresh"
         android:title="@string/reload"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/menu_edit"
+        android:icon="@drawable/ic_add"
+        android:title="@string/new_notification"
         app:showAsAction="ifRoom|withText" />
 </menu>
