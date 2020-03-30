@@ -4,7 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,29 +17,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Response;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import ru.devdem.reminder.ObjectsController.User;
+
+
 public class ProfileFragment extends Fragment {
     private Context mContext;
     private SharedPreferences mSettings;
     private String[] permissions;
-    private TextView profileName;
-    private TextView profileLogin;
-    private TextView profileEmail;
-    private TextView profilePermission;
     private MainActivity mMainActivity;
     private NetworkController networkController;
+    private FrameLayout mProfileFrame;
 
     @Nullable
     @Override
@@ -45,10 +56,7 @@ public class ProfileFragment extends Fragment {
         networkController = NetworkController.get();
         permissions = getResources().getStringArray(R.array.permissions);
         mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        profileName = v.findViewById(R.id.profileName);
-        profileLogin = v.findViewById(R.id.profileLogin);
-        profileEmail = v.findViewById(R.id.profileEmail);
-        profilePermission = v.findViewById(R.id.profilePermission);
+        mProfileFrame = v.findViewById(R.id.profileFrame);
         setHasOptionsMenu(true);
         updateUI();
         Button mDetailButton = v.findViewById(R.id.buttonDetailGroup);
@@ -89,12 +97,6 @@ public class ProfileFragment extends Fragment {
         return v;
     }
 
-    private void restart() {
-        mMainActivity.startActivity(new Intent(mContext, SplashActivity.class));
-        mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-        mMainActivity.finish();
-    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -124,13 +126,88 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateUI() {
-        String name = mSettings.getString("name", "null");
-        String login = "@" + mSettings.getString("login", "null");
-        String email = mSettings.getString("email", "null");
-        String permission = permissions[mSettings.getInt("permission", 0)];
-        profileName.setText(name);
-        profileLogin.setText(login);
-        profileEmail.setText(email);
-        profilePermission.setText(permission);
+        User user = ObjectsController.getLocalUserInfo(mSettings);
+        String name = user.getName();
+        String login = "@" + user.getLogin();
+        String email = user.getEmail();
+        String permission = permissions[user.getPermission()];
+        String urlImage = user.getUrlImage();
+        View profileCard = View.inflate(mContext, R.layout.group_info_user_view_full, null);
+        TextView textName = profileCard.findViewById(R.id.profileName);
+        TextView textLogin = profileCard.findViewById(R.id.profileLogin);
+        TextView textEmail = profileCard.findViewById(R.id.profileEmail);
+        TextView textPermission = profileCard.findViewById(R.id.profilePermission);
+        ImageView imagePro = profileCard.findViewById(R.id.proImage);
+        CircleImageView imageProfile = profileCard.findViewById(R.id.profileImage);
+        Button goProBtn = profileCard.findViewById(R.id.goProBtn);
+        goProBtn.setOnClickListener(v -> {
+            startActivity(new Intent(mMainActivity, PurchaseActivity.class));
+        });
+        CardView cardView = profileCard.findViewById(R.id.card_view);
+        textName.setText(name);
+        textEmail.setText(email);
+        textPermission.setText(permission);
+        textLogin.setText(login);
+        imagePro.setVisibility(user.isPro() ? View.VISIBLE : View.GONE);
+        goProBtn.setVisibility(user.isPro() ? View.GONE : View.VISIBLE);
+        if (urlImage.length() > 1) Picasso.get().load(urlImage).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                new Thread(null, () -> {
+                    int width = 250;
+                    int height = Math.round((float) width / bitmap.getWidth() * bitmap.getHeight());
+                    Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
+                    Bitmap preparePixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
+                    int color = preparePixel.getPixel(0, 0);
+                    int rez = 0xFFF - color + 0xFF000000;
+                    float[] hsv = new float[3];
+                    Color.colorToHSV(rez, hsv);
+                    hsv[0] = hsv[0] + 180;
+                    int cardColor = Color.HSVToColor(hsv);
+                    int textColor = -1 * cardColor + 0xFF000000;
+                    mMainActivity.runOnUiThread(() -> {
+                        imageProfile.setImageBitmap(scaled);
+                        imageProfile.setBorderColor(textColor);
+                        if (user.isPro()) {
+                            int[][] states = new int[][]{
+                                    new int[]{android.R.attr.state_enabled}
+                            };
+                            int[] colors = new int[]{
+                                    cardColor
+                            };
+                            textName.setTextColor(textColor);
+                            textLogin.setTextColor(textColor);
+                            textEmail.setTextColor(textColor);
+                            textPermission.setTextColor(textColor);
+                            cardView.setBackgroundTintList(new ColorStateList(states, colors));
+                            imagePro.setColorFilter(textColor);
+                        }
+                        new CountDownTimer(2000, 16) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                float alpha = (10000f - millisUntilFinished) / 10000f;
+                                imageProfile.setAlpha(alpha);
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                imageProfile.setAlpha(1.0f);
+                            }
+                        }.start();
+                    });
+                }, "Card background").start();
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
+        mProfileFrame.addView(profileCard);
     }
 }

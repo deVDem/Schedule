@@ -60,7 +60,7 @@
     <string name="swipedowntoretry">Swipe down to retry</string>
     <string name="reload">Reload</string>
     <string name="replacement">(replacement)</string>
-    <string name="today">(сегодня)</string>
+    <string name="today">(today)</string>
     <string name="edit_profile">Edit profile</string>
     <string name="editing_a_profile">Editing a profile</string>
     <string name="enter_the_correct_address">Enter the correct address</string>
@@ -127,4 +127,5 @@
     <string name="enter_data_correct">Enter all data correctly</string>
     <string name="management">Management</string>
     <string name="information_about_the_group">Information about the group</string>
+    <string name="get_pro">Get PRO</string>
 </resources>

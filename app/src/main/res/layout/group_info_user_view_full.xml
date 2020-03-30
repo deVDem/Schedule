@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/card_color"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/proImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profileImage"
+                android:layout_alignStart="@+id/profileImage"
+                android:layout_alignEnd="@+id/profileImage"
+                android:layout_marginTop="5dp"
+                android:adjustViewBounds="false"
+                android:backgroundTint="@color/colorAccent"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_pro"
+                tools:ignore="ContentDescription" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:maxWidth="75dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile"
+                app:civ_border_color="@color/colorAccent"
+                app:civ_border_overlay="true"
+                app:civ_border_width="3dp"
+                app:civ_fill_color="@color/card_color"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/lll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/profileImage"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/profileName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_bold_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="Имя и Фамилия" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/profileLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color"
+                    tools:text="\@логин" />
+
+                <TextView
+                    android:id="@+id/profileEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color"
+                    tools:text="hello@world.ru" />
+
+                <TextView
+                    android:id="@+id/profilePermission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color"
+                    tools:text="Пользователь" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/goProBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="30sp"
+                android:layout_below="@+id/lll"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_corn"
+                android:backgroundTint="@color/colorAccent"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/get_pro"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

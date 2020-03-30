@@ -1,5 +1,7 @@
 package ru.devdem.reminder;
 
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -76,15 +78,44 @@ class ObjectsController {
         }
     }
 
+    static User getLocalUserInfo(SharedPreferences settings) {
+        User user = new User();
+        user.setId(settings.getInt("user_id", 0));
+        user.setName(settings.getString("name", "error"));
+        user.setEmail(settings.getString("email", "error"));
+        user.setLogin(settings.getString("login", "error"));
+        user.setPro(settings.getBoolean("pro", false));
+        user.setUrlImage(settings.getString("urlImage", null));
+        user.setPermission(settings.getInt("permission", 0));
+        return user;
+    }
     public static class User {
         private int mId;
         private String mName;
         private String mLogin;
         private String mUrlImage;
+        private String mEmail;
         private boolean mPro;
+        private int mPermission;
 
         User() {
 
+        }
+
+        int getPermission() {
+            return mPermission;
+        }
+
+        void setPermission(int permission) {
+            mPermission = permission;
+        }
+
+        public String getEmail() {
+            return mEmail;
+        }
+
+        public void setEmail(String email) {
+            mEmail = email;
         }
 
         boolean isPro() {

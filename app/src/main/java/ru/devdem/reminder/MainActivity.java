@@ -200,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
                             String login1 = jsonUserInfo.getString("login");
                             String group = jsonUserInfo.getString("groups");
                             String password_hash = jsonUserInfo.getString("password");
+                            boolean pro = jsonUserInfo.getString("pro").equals("Yes");
+                            String urlImage = jsonUserInfo.getString("urlImage");
                             boolean spam = jsonUserInfo.getString("spam").equals("1");
                             int permission = jsonUserInfo.getInt("permission");
                             String token = jsonUserInfo.getString("token");
@@ -210,7 +212,9 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("login", login1);
                             editor.putString("group", group);
                             editor.putBoolean("spam", spam);
+                            editor.putBoolean("pro", pro);
                             editor.putString("password", password_hash);
+                            editor.putString("urlImage", urlImage);
                             editor.putInt("permission", permission);
                             editor.putString("token", token);
                             editor.apply();
