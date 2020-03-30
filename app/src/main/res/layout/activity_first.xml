@@ -84,7 +84,7 @@
                 app:met_errorColor="#ddaa00"
                 app:met_floatingLabel="highlight"
                 app:met_helperText="@string/helperLogin"
-                app:met_minCharacters="6"
+                app:met_minCharacters="4"
                 app:met_primaryColor="@color/white" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -183,7 +183,7 @@
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
                     app:met_helperText="@string/helperLogin"
-                    app:met_minCharacters="6"
+                    app:met_minCharacters="4"
                     app:met_primaryColor="@color/white" />
 
                 <com.rengwuxian.materialedittext.MaterialEditText
@@ -197,7 +197,7 @@
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
                     app:met_helperText="@string/real_data_please"
-                    app:met_minCharacters="6"
+                    app:met_maxCharacters="255"
                     app:met_primaryColor="@color/white" />
 
                 <com.rengwuxian.materialedittext.MaterialEditText
@@ -211,7 +211,6 @@
                     app:met_errorColor="#ddaa00"
                     app:met_floatingLabel="highlight"
                     app:met_helperText="@string/real_data_please"
-                    app:met_minCharacters="9"
                     app:met_primaryColor="@color/white"
                     tools:ignore="HardcodedText" />
 

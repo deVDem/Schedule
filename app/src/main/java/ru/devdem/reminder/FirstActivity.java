@@ -13,7 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +33,8 @@ public class FirstActivity extends AppCompatActivity {
     private RelativeLayout helloRl;
     private RelativeLayout loginRl;
     private RelativeLayout registerRl;
-    private EditText mLLoginEt;
-    private EditText mLPasswordEt;
+    private static String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    private static String loginRegex = "[A-Za-z0-9_]{4,255}";
     private TextView mLTextView;
     private Button mLoginButton;
     private TextView mLoginTVNotReg;
@@ -44,18 +43,17 @@ public class FirstActivity extends AppCompatActivity {
     private SharedPreferences mSettings;
 
     private NetworkController mNetworkController;
-
-    private EditText mRLoginEt;
-    private EditText mRNameEt;
+    private static String nameRegex = "(^[A-Z]{1}[a-z]{1,30} [A-Z]{1}[a-z]{1,30}$)|(^[А-Я]{1}[а-я]{1,30} [А-Я]{1}[а-я]{1,30}$)";
+    private MaterialEditText mLLoginEt;
     private MaterialEditText mREmailEt;
-    private EditText mRPassEt;
-    private EditText mRConPassEt;
+    private MaterialEditText mLPasswordEt;
+    private MaterialEditText mRLoginEt;
     private CheckBox mRCheckSpam;
     private TextView mRTextView;
     private Button mRegisterButton;
-
-    private String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-
+    private MaterialEditText mRNameEt;
+    private MaterialEditText mRPassEt;
+    private MaterialEditText mRConPassEt;
 
     private int ANIM_DURATION = 700;
     private String PREFS_FIRST = "first";
@@ -133,7 +131,7 @@ public class FirstActivity extends AppCompatActivity {
         String password = mRPassEt.getText().toString();
         String confirmPassword = mRConPassEt.getText().toString();
         String spam = mRCheckSpam.isChecked() ? "1" : "0";
-        if (login.length() > 5 && name.length() > 5 && mREmailEt.validate(emailRegex, getText(R.string.enter_the_correct_address)) && password.length() > 5 && password.equals(confirmPassword)) {
+        if (mRLoginEt.validate(loginRegex, getString(R.string.login_must_be)) && mRNameEt.validate(nameRegex, getString(R.string.type_first_and_last_name)) && mREmailEt.validate(emailRegex, getText(R.string.enter_the_correct_address)) && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
@@ -224,7 +222,7 @@ public class FirstActivity extends AppCompatActivity {
         controlViews(false);
         String login = mLLoginEt.getText().toString();
         String password = mLPasswordEt.getText().toString();
-        if (login.length() >= 6 || password.length() >= 6) {
+        if (mLLoginEt.validate(loginRegex, getString(R.string.login_must_be)) || password.length() >= 6) {
             Response.Listener<String> listener = response -> {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
