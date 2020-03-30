@@ -86,6 +86,7 @@ public class DashboardFragment extends Fragment {
     }
 
     void update(boolean why) {
+        swipeRefreshLayout.setRefreshing(true);
         if (why) {
             Response.Listener<String> listener = response -> {
                 try {
@@ -117,7 +118,7 @@ public class DashboardFragment extends Fragment {
             animationAdapter.setDuration(1000);
             animationAdapter.setFirstOnly(false);
             mRecyclerView.setAdapter(animationAdapter);
-            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.setRefreshing(mLessonsController.getLessons().size() < 1);
         }
     }
 

@@ -142,6 +142,7 @@ public class ProfileFragment extends Fragment {
         Button goProBtn = profileCard.findViewById(R.id.goProBtn);
         goProBtn.setOnClickListener(v -> {
             startActivity(new Intent(mMainActivity, PurchaseActivity.class));
+            mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         });
         CardView cardView = profileCard.findViewById(R.id.card_view);
         textName.setText(name);
@@ -150,64 +151,65 @@ public class ProfileFragment extends Fragment {
         textLogin.setText(login);
         imagePro.setVisibility(user.isPro() ? View.VISIBLE : View.GONE);
         goProBtn.setVisibility(user.isPro() ? View.GONE : View.VISIBLE);
-        if (urlImage.length() > 1) Picasso.get().load(urlImage).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                new Thread(null, () -> {
-                    int width = 250;
-                    int height = Math.round((float) width / bitmap.getWidth() * bitmap.getHeight());
-                    Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
-                    Bitmap preparePixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
-                    int color = preparePixel.getPixel(0, 0);
-                    int rez = 0xFFF - color + 0xFF000000;
-                    float[] hsv = new float[3];
-                    Color.colorToHSV(rez, hsv);
-                    hsv[0] = hsv[0] + 180;
-                    int cardColor = Color.HSVToColor(hsv);
-                    int textColor = -1 * cardColor + 0xFF000000;
-                    mMainActivity.runOnUiThread(() -> {
-                        imageProfile.setImageBitmap(scaled);
-                        imageProfile.setBorderColor(textColor);
-                        if (user.isPro()) {
-                            int[][] states = new int[][]{
-                                    new int[]{android.R.attr.state_enabled}
-                            };
-                            int[] colors = new int[]{
-                                    cardColor
-                            };
-                            textName.setTextColor(textColor);
-                            textLogin.setTextColor(textColor);
-                            textEmail.setTextColor(textColor);
-                            textPermission.setTextColor(textColor);
-                            cardView.setBackgroundTintList(new ColorStateList(states, colors));
-                            imagePro.setColorFilter(textColor);
-                        }
-                        new CountDownTimer(2000, 16) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                float alpha = (10000f - millisUntilFinished) / 10000f;
-                                imageProfile.setAlpha(alpha);
+        if (urlImage != null && urlImage.length() > 1)
+            Picasso.get().load(urlImage).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    new Thread(null, () -> {
+                        int width = 250;
+                        int height = Math.round((float) width / bitmap.getWidth() * bitmap.getHeight());
+                        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
+                        Bitmap preparePixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
+                        int color = preparePixel.getPixel(0, 0);
+                        int rez = 0xFFF - color + 0xFF000000;
+                        float[] hsv = new float[3];
+                        Color.colorToHSV(rez, hsv);
+                        hsv[0] = hsv[0] + 180;
+                        int cardColor = Color.HSVToColor(hsv);
+                        int textColor = -1 * cardColor + 0xFF000000;
+                        mMainActivity.runOnUiThread(() -> {
+                            imageProfile.setImageBitmap(scaled);
+                            imageProfile.setBorderColor(textColor);
+                            if (user.isPro()) {
+                                int[][] states = new int[][]{
+                                        new int[]{android.R.attr.state_enabled}
+                                };
+                                int[] colors = new int[]{
+                                        cardColor
+                                };
+                                textName.setTextColor(textColor);
+                                textLogin.setTextColor(textColor);
+                                textEmail.setTextColor(textColor);
+                                textPermission.setTextColor(textColor);
+                                cardView.setBackgroundTintList(new ColorStateList(states, colors));
+                                imagePro.setColorFilter(textColor);
                             }
+                            new CountDownTimer(2000, 16) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    float alpha = (10000f - millisUntilFinished) / 10000f;
+                                    imageProfile.setAlpha(alpha);
+                                }
 
-                            @Override
-                            public void onFinish() {
-                                imageProfile.setAlpha(1.0f);
-                            }
-                        }.start();
-                    });
-                }, "Card background").start();
-            }
+                                @Override
+                                public void onFinish() {
+                                    imageProfile.setAlpha(1.0f);
+                                }
+                            }.start();
+                        });
+                    }, "Card background").start();
+                }
 
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
 
-            }
+                }
 
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-            }
-        });
+                }
+            });
         mProfileFrame.addView(profileCard);
     }
 }
