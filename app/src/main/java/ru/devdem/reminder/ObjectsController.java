@@ -2,11 +2,32 @@ package ru.devdem.reminder;
 
 import android.content.SharedPreferences;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 class ObjectsController {
 
+
+    static User parseUser(JSONObject jsonUser) {
+        User user = new User();
+        try {
+            if (!jsonUser.isNull("id")) user.setId(jsonUser.getInt("id"));
+            if (!jsonUser.isNull("name")) user.setName(jsonUser.getString("name"));
+            if (!jsonUser.isNull("email")) user.setEmail(jsonUser.getString("email"));
+            if (!jsonUser.isNull("login")) user.setLogin(jsonUser.getString("login"));
+            if (!jsonUser.isNull("urlImage")) user.setUrlImage(jsonUser.getString("urlImage"));
+            if (!jsonUser.isNull("pro")) user.setPro(jsonUser.getString("pro").equals("Yes"));
+            if (!jsonUser.isNull("permission")) user.setPermission(jsonUser.getInt("permission"));
+            if (!jsonUser.isNull("token")) user.setToken(jsonUser.getString("token"));
+            if (!jsonUser.isNull("groups")) user.setGroupId(jsonUser.getString("groups"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            user = null;
+        }
+        return user;
+    }
 
     static class Notification {
         private int mId;
@@ -21,11 +42,11 @@ class ObjectsController {
 
         }
 
-        public User getAuthor() {
+        User getAuthor() {
             return mAuthor;
         }
 
-        public void setAuthor(User author) {
+        void setAuthor(User author) {
             mAuthor = author;
         }
 
@@ -91,13 +112,14 @@ class ObjectsController {
         user.setGroupId(settings.getString("group", "error"));
         return user;
     }
+
     public static class User {
         private int mId;
         private String mName;
         private String mLogin;
         private String mUrlImage;
         private String mEmail;
-        private boolean mPro;
+        private boolean mPro = false;
         private int mPermission;
         private String mToken;
         private String mGroupId;

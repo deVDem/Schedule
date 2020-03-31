@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
@@ -35,11 +39,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import ru.devdem.reminder.ObjectsController.Notification;
+import ru.devdem.reminder.ObjectsController.User;
 
 import static android.app.Activity.RESULT_OK;
+
 
 public class NotificationsFragment extends Fragment {
     private SharedPreferences mSettings;
@@ -114,6 +121,16 @@ public class NotificationsFragment extends Fragment {
                     notification.setGroup(group);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     notification.setDate(format.parse(jsonObject.getString("date")));
+                    User author;
+                    if (!jsonObject.isNull("author"))
+                        author = ObjectsController.parseUser(jsonObject.getJSONObject("author"));
+                    else {
+                        author = new User();
+                        author.setName(getString(R.string.system));
+                        author.setUrlImage("https://files.devdem.ru/apps/schedule/user_images/server.jpg");
+                        author.setLogin("system");
+                    }
+                    notification.setAuthor(author);
                     mNotifications.add(notification);
                 }
                 if (needReload)
@@ -134,6 +151,11 @@ public class NotificationsFragment extends Fragment {
             notification.setTitle(getString(R.string.error));
             notification.setSubTitle(getString(R.string.swipedowntoretry));
             notification.setGroup(-1);
+            User author = new User();
+            author.setName(getString(R.string.system));
+            author.setUrlImage("https://files.devdem.ru/apps/schedule/user_images/server.jpg");
+            author.setLogin("system");
+            notification.setAuthor(author);
             mNotifications.add(notification);
             updateUI(mNotifications);
             mSwipeRefreshLayout.setRefreshing(false);
@@ -179,29 +201,75 @@ public class NotificationsFragment extends Fragment {
             return new NotificationsFragment.RVAdapter.NotificationViewer(v);
         }
 
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
         @Override
         public void onBindViewHolder(@NonNull NotificationViewer holder, int position) {
-            Notification notification = mNotifications.get(position);
-            holder.mTitleView.setText(notification.getTitle());
-            holder.mSubTitleView.setText(notification.getSubTitle());
-            Date date = notification.getDate();
-            String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
-            holder.mDateView.setText(dateString);
-            String urlImage = notification.getUrlImage();
-            if (notification.getGroup() == -1) {
-                holder.itemView.setBackgroundColor(getResources().getColor(R.color.notification_color_server));
-            }
-            if (urlImage.length() > 0 && holder.mImageView.getVisibility() == View.GONE) {
-                holder.mImageView.setVisibility(View.VISIBLE);
-                Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
-                holder.mImageView.setOnClickListener(v -> {
-                    Activity activity = Objects.requireNonNull(getActivity());
-                    startActivity(FullImageActivity.newInstance(activity, urlImage));
-                    activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                });
-            } else holder.mImageView.setVisibility(View.GONE);
-            if (position + 1 == getItemCount()) {
-                holder.mSpace.setVisibility(View.VISIBLE);
+            if (!prepared[position]) {
+                Notification notification = mNotifications.get(position);
+                User author = notification.getAuthor();
+                holder.mSubTitleView.setText(notification.getSubTitle());
+                if (author != null) {
+                    holder.mAuthorName.setText(author.getName());
+                    holder.mAuthorPro.setVisibility(author.isPro() ? View.VISIBLE : View.GONE);
+                    String login = "@" + author.getLogin();
+                    holder.mAuthorLogin.setText(login);
+                    if (author.getUrlImage().length() > 5) {
+                        Target target = new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                CircleImageView targetView = holder.mAuthorImage;
+                                int width = 250;
+                                int height = Math.round((float) width / bitmap.getWidth() * bitmap.getHeight());
+                                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
+                                Bitmap preparePixel = Bitmap.createScaledBitmap(scaled, 1, 1, true);
+                                targetView.setImageBitmap(scaled);
+                                int color = preparePixel.getPixel(0, 0);
+                                targetView.setBorderColor(color);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        };
+                        Picasso.get().load(author.getUrlImage()).into(target);
+                    }
+                }
+                holder.mTitleView.setText(notification.getTitle());
+                Date date = notification.getDate();
+                String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
+                holder.mDateView.setText(dateString);
+                String urlImage = notification.getUrlImage();
+                if (notification.getGroup() == -1) {
+                    CardView cardView = (CardView) holder.itemView;
+                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server));
+                }
+                if (urlImage.length() > 0) {
+                    holder.mImageView.setVisibility(View.VISIBLE);
+                    Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
+                    holder.mImageView.setOnClickListener(v -> {
+                        Activity activity = Objects.requireNonNull(getActivity());
+                        startActivity(FullImageActivity.newInstance(activity, urlImage));
+                        activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                    });
+                } else holder.mImageView.setVisibility(View.GONE);
+                if (position + 1 == getItemCount()) {
+                    holder.mSpace.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -212,6 +280,10 @@ public class NotificationsFragment extends Fragment {
 
 
         class NotificationViewer extends RecyclerView.ViewHolder {
+            CircleImageView mAuthorImage;
+            TextView mAuthorName;
+            ImageView mAuthorPro;
+            TextView mAuthorLogin;
             ImageView mImageView;
             TextView mTitleView;
             TextView mSubTitleView;
@@ -220,6 +292,10 @@ public class NotificationsFragment extends Fragment {
 
             NotificationViewer(View v) {
                 super(v);
+                mAuthorImage = v.findViewById(R.id.authorImage);
+                mAuthorName = v.findViewById(R.id.authorName);
+                mAuthorPro = v.findViewById(R.id.proImage);
+                mAuthorLogin = v.findViewById(R.id.authorLogin);
                 mImageView = v.findViewById(R.id.imageViewNotificationImage);
                 mTitleView = v.findViewById(R.id.textViewTitle);
                 mSubTitleView = v.findViewById(R.id.textViewSubTitle);

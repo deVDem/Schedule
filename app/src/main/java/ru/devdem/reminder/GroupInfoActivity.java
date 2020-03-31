@@ -103,12 +103,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                     ArrayList<User> users = new ArrayList<>();
                     for (int j = 0; j < users_all; j++) {
                         JSONObject userJson = usersJson.getJSONObject(String.valueOf(j));
-                        User user = new User();
-                        user.setId(userJson.getInt("id"));
-                        user.setName(userJson.getString("name"));
-                        user.setLogin(userJson.getString("login"));
-                        user.setUrlImage(userJson.getString("urlImage"));
-                        user.setPro(userJson.getString("pro").equals("Yes"));
+                        User user = ObjectsController.parseUser(userJson);
                         if (groupJson.getInt("author_id") == user.getId()) {
                             group.setAuthor(user);
                         } else group.setAuthor(null);

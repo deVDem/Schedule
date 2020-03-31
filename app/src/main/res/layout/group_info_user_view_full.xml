@@ -32,7 +32,6 @@
                 android:layout_alignEnd="@+id/profileImage"
                 android:layout_marginTop="5dp"
                 android:adjustViewBounds="false"
-                android:backgroundTint="@color/colorAccent"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_pro"
                 tools:ignore="ContentDescription" />
