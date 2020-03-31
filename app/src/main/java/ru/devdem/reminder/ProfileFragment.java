@@ -119,7 +119,7 @@ public class ProfileFragment extends Fragment {
                 mMainActivity.checkAccount();
                 updateUI();
                 return true;
-            case R.id.menu_edit:
+            case R.id.menu_settings:
                 startActivityForResult(new Intent(mContext, EditProfileActivity.class), 228);
                 Objects.requireNonNull(getActivity()).overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 return true;

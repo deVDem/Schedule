@@ -79,7 +79,7 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_profile, menu);
+        inflater.inflate(R.menu.menu_notifications, menu);
         MenuItem item = menu.findItem(R.id.menu_edit);
         item.setVisible(ObjectsController.getLocalUserInfo(mSettings).getPermission() > 1);
     }
