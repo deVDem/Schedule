@@ -1,29 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textView9"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/btnMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Month" />
+            <ImageView
+                android:id="@+id/imageGroup"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_pro"
+                android:tint="@color/text_color"
+                tools:ignore="ContentDescription" />
 
-        <Button
-            android:id="@+id/btnYear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Year" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/pro_status"
+                android:textColor="@color/text_bold_color"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:id="@+id/markerY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/support_the_operation_and_maintenance_of_the_app_by_purchasing_a_pro_status_subscription"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:text="@string/what_does_a_subscription_do"
+                android:textColor="@color/text_bold_color"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:drawableStart="@drawable/ic_do_not_disturb"
+                android:gravity="start|center"
+                android:text="@string/disabling_ads"
+                android:textColor="@color/text_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:drawableStart="@drawable/ic_storage"
+                android:gravity="start|center"
+                android:text="@string/lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb"
+                android:textColor="@color/text_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:drawableStart="@drawable/ic_pro"
+                android:gravity="start|center"
+                android:text="@string/exclusive_pro_icon_in_your_profile"
+                android:textColor="@color/text_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="start|center"
+                android:text="@string/the_profile_card_will_always_be_colored_in_adaptive_colors_for_example"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/profileFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/line"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/improve_your_in_app_experience_by_purchasing_a_subscription_for_a_small_fee"
+                android:textColor="@color/text_bold_color"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/year"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/card_color"
+                android:text="@string/month"
+                android:textColor="@color/text_bold_color" />
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

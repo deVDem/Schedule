@@ -27,6 +27,7 @@ class NetworkController {
     private String URL_UPDATE_PROFILE = "/accounts/update.php";
     private String URL_ADD_NOTIFICATION = "/notifications/add.php";
     private String URL_JOIN_GROUP = "/accounts/join.php";
+    private String URL_CHECK_SUB = "https://api.devdem.ru/google/checksub.php";
     private static RequestQueue queue;
 
     private NetworkController() {
@@ -78,6 +79,15 @@ class NetworkController {
         map.put("message", message);
         if (image != null) map.put("image", image);
         goSend(context, listener, errorListener, URL_ADD_NOTIFICATION, map);
+    }
+
+    void checkSubs(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String packageName, String subId, String token, String user_id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("packageName", packageName);
+        map.put("subscriptionId", subId);
+        map.put("token", token);
+        map.put("user_id", user_id);
+        goSend(context, listener, errorListener, URL_CHECK_SUB, map);
     }
 
     void addGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String name, String city, String building, String description, String image) {

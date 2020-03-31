@@ -151,4 +151,17 @@
     <string name="you_in_group">you are in a group</string>
     <string name="success_created_group">Successfully created. Log in to the group..</string>
     <string name="out_of_the_group">Out of the group</string>
+    <string name="pro_status">PRO-status</string>
+    <string name="support_the_operation_and_maintenance_of_the_app_by_purchasing_a_pro_status_subscription">Support the operation and maintenance of the app by purchasing a PRO-status subscription</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="what_does_a_subscription_do">What does a subscription do?</string>
+    <string name="disabling_ads">Disabling ads</string>
+    <string name="lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb">Lowering the file size limit to 50 MB (without a subscription - 4 MB)</string>
+    <string name="exclusive_pro_icon_in_your_profile">Exclusive PRO icon in your profile</string>
+    <string name="the_profile_card_will_always_be_colored_in_adaptive_colors_for_example">The profile card will always be colored in adaptive colors, for example:</string>
+    <string name="improve_your_in_app_experience_by_purchasing_a_subscription_for_a_small_fee">Improve your in-app experience by purchasing a subscription for a small fee.</string>
+    <string name="you_canceled_your_purchase">You canceled your purchase</string>
+    <string name="you_have_already_purchased">You have already purchased a subscription. Wait for processing</string>
+    <string name="error_payment">An error occurred during the payment process. Try again</string>
 </resources>

@@ -152,4 +152,17 @@
     <string name="you_in_group">вы находитесь в группе</string>
     <string name="success_created_group">Успешно создано. Вход в группу..</string>
     <string name="out_of_the_group">Выход из группы</string>
+    <string name="pro_status">PRO-статус</string>
+    <string name="support_the_operation_and_maintenance_of_the_app_by_purchasing_a_pro_status_subscription">Поддержите работу и обслуживание приложения купив подписку PRO-статуса</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="what_does_a_subscription_do">Что даёт подписка?</string>
+    <string name="disabling_ads">Отключение рекламы</string>
+    <string name="lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb">Понижение лимита на размер файла до 50 МБ (без подписки - 4 МБ)</string>
+    <string name="exclusive_pro_icon_in_your_profile">Эксклюзивный значок PRO в профиле</string>
+    <string name="the_profile_card_will_always_be_colored_in_adaptive_colors_for_example">Карточка профиля будет всегда окрашена в адаптивные цвета, например:</string>
+    <string name="improve_your_in_app_experience_by_purchasing_a_subscription_for_a_small_fee">Улучшите свои возможности в приложении, купив подписку за небольшую плату.</string>
+    <string name="you_canceled_your_purchase">Вы отменили покупку</string>
+    <string name="you_have_already_purchased">Вы уже купили подписку. Ожидайте обработки</string>
+    <string name="error_payment">Произошла ошибка при оплате. Попробуйте ещё раз</string>
 </resources>

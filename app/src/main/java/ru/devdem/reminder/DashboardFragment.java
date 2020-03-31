@@ -44,6 +44,7 @@ import java.util.Objects;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import ru.devdem.reminder.ObjectsController.User;
 
 public class DashboardFragment extends Fragment {
 
@@ -62,6 +63,7 @@ public class DashboardFragment extends Fragment {
             "ca-app-pub-7389415060915567/3301148008"};
     private MainActivity activity;
     private TextView mNoLessonsText;
+    private User mUser;
 
     @Nullable
     @Override
@@ -70,6 +72,7 @@ public class DashboardFragment extends Fragment {
         mContext = Objects.requireNonNull(getContext());
         activity = (MainActivity) getActivity();
         mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        mUser = ObjectsController.getLocalUserInfo(mSettings);
         days = getResources().getStringArray(R.array.days);
         mTimeController = TimeController.get(getContext());
         mLessonsController = LessonsController.get(mContext);
@@ -215,7 +218,7 @@ public class DashboardFragment extends Fragment {
             if (!prepared[position]) {
                 prepared[position] = true;
                 ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
-                if (position % 2 == 0) {
+                if (position % 2 == 0 && !mUser.isPro()) {
                     AdView adView = new AdView(mContext);
                     if (!BuildConfig.DEBUG)
                         adView.setAdUnitId(adIds[position / 2]);

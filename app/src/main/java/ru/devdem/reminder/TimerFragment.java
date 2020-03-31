@@ -61,20 +61,22 @@ public class TimerFragment extends Fragment {
         mTimeController = TimeController.get(mContext);
         mLessonsController = LessonsController.get(mContext);
         mActivity = getActivity();
+        mMainActivity = (MainActivity) mActivity;
         countText = view.findViewById(R.id.countText);
         counterText = view.findViewById(R.id.counterText);
         lessonNextText = view.findViewById(R.id.lessonNextText);
         lessonNext = view.findViewById(R.id.lessonNext);
-        AdView adView = new AdView(mContext);
-        if (!BuildConfig.DEBUG)
-            adView.setAdUnitId("ca-app-pub-7389415060915567/7081052515");
-        else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        RelativeLayout relativeLayout = view.findViewById(R.id.relativeTimer);
-        adView.setAdSize(getAdSize());
-        relativeLayout.addView(adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        mMainActivity = (MainActivity) mActivity;
+        if (!ObjectsController.getLocalUserInfo(mActivity.getSharedPreferences("settings", Context.MODE_PRIVATE)).isPro()) {
+            AdView adView = new AdView(mContext);
+            if (!BuildConfig.DEBUG)
+                adView.setAdUnitId("ca-app-pub-7389415060915567/7081052515");
+            else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+            RelativeLayout relativeLayout = view.findViewById(R.id.relativeTimer);
+            adView.setAdSize(getAdSize());
+            relativeLayout.addView(adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
         return view;
     }
 

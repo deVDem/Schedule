@@ -78,7 +78,7 @@
             android:theme="@style/SearchTheme" />
         <activity
             android:name=".PurchaseActivity"
-            android:theme="@style/SearchTheme" />
+            android:theme="@style/StartApp" />
         <activity
             android:name=".CreateGroupActivity"
             android:theme="@style/StartApp" />

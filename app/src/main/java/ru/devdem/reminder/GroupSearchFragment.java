@@ -1,6 +1,7 @@
 package ru.devdem.reminder;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -23,12 +24,15 @@ import com.google.android.gms.ads.AdView;
 
 import java.util.Objects;
 
+import ru.devdem.reminder.ObjectsController.User;
+
 public class GroupSearchFragment extends Fragment {
 
     private EditText mETGroupName;
     private EditText mETCity;
     private EditText mETBuilding;
     private Switch mSwConfirmed;
+    private User mUser;
 
     public GroupSearchFragment() {
     }
@@ -37,6 +41,7 @@ public class GroupSearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_grouplist_search, null);
+        mUser = ObjectsController.getLocalUserInfo(getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE));
         mETGroupName = view.findViewById(R.id.etGroupName);
         mETCity = view.findViewById(R.id.etGroupCity);
         mETBuilding = view.findViewById(R.id.etGroupBuilding);
@@ -53,15 +58,17 @@ public class GroupSearchFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.search_group);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        AdView adView = new AdView(getContext());
-        if (!BuildConfig.DEBUG)
-            adView.setAdUnitId("ca-app-pub-7389415060915567/6177952150");
-        else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        adView.setAdSize(getAdSize());
-        LinearLayout mAdContainer = view.findViewById(R.id.adContainer);
-        mAdContainer.addView(adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        if (!mUser.isPro()) {
+            AdView adView = new AdView(getContext());
+            if (!BuildConfig.DEBUG)
+                adView.setAdUnitId("ca-app-pub-7389415060915567/6177952150");
+            else adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+            adView.setAdSize(getAdSize());
+            LinearLayout mAdContainer = view.findViewById(R.id.adContainer);
+            mAdContainer.addView(adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
         return view;
     }
 

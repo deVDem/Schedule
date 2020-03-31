@@ -43,6 +43,8 @@ public class SettingsFragment extends Fragment {
             activity.startActivity(new Intent(context, PurchaseActivity.class));
             activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_out);
         });
+        if (ObjectsController.getLocalUserInfo(mSettings).isPro())
+            btnDisableAd.setVisibility(View.GONE);
         int[][] states = new int[][]{
                 new int[]{android.R.attr.state_checked},
                 new int[]{-android.R.attr.state_checked}
