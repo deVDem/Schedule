@@ -142,4 +142,5 @@
     <string name="attached_picture">Прикрепленное изображение</string>
     <string name="no">Нет</string>
     <string name="yes">Да</string>
+    <string name="no_lessons">Нет уроков</string>
 </resources>

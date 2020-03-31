@@ -61,6 +61,7 @@ public class DashboardFragment extends Fragment {
             "ca-app-pub-7389415060915567/1285073344",
             "ca-app-pub-7389415060915567/3301148008"};
     private MainActivity activity;
+    private TextView mNoLessonsText;
 
     @Nullable
     @Override
@@ -74,6 +75,7 @@ public class DashboardFragment extends Fragment {
         mLessonsController = LessonsController.get(mContext);
         mNetworkController = NetworkController.get();
         mRecyclerView = v.findViewById(R.id.recyclerViewDash);
+        mNoLessonsText = v.findViewById(R.id.no_lessons);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(llm);
@@ -118,7 +120,11 @@ public class DashboardFragment extends Fragment {
             animationAdapter.setDuration(1000);
             animationAdapter.setFirstOnly(false);
             mRecyclerView.setAdapter(animationAdapter);
-            swipeRefreshLayout.setRefreshing(mLessonsController.getLessons().size() < 1);
+            swipeRefreshLayout.setRefreshing(false);
+            mNoLessonsText.setVisibility(mLessonsController.getLessons().size() < 1 ? View.VISIBLE : View.GONE);
+        } else {
+            mNoLessonsText.setVisibility(View.VISIBLE);
+            mNoLessonsText.setText(R.string.unknown_error);
         }
     }
 

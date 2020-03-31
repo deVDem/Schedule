@@ -141,4 +141,5 @@
     <string name="attached_picture">The attached picture</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="no_lessons">No lessons</string>
 </resources>

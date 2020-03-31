@@ -146,6 +146,7 @@ public class TimerFragment extends Fragment {
                         int finalDay = day;
                         mActivity.runOnUiThread(() -> {
                             try {
+                                lessonNextText.setVisibility(View.VISIBLE);
                                 LessonsController.Lesson mLesson = mLessons.get(params[1]);
                                 LessonsController.Lesson mLessonNext = mLessons.get(params[2]);
                                 if (params[3] == 3) {
@@ -184,8 +185,8 @@ public class TimerFragment extends Fragment {
                     } else {
                         mActivity.runOnUiThread(() -> {
                             countText.setVisibility(View.INVISIBLE);
-                            counterText.setText(R.string.loading);
-                            lessonNextText.setText(R.string.wait);
+                            counterText.setText(R.string.no_lessons);
+                            lessonNextText.setVisibility(View.INVISIBLE);
                             lessonNext.setVisibility(View.INVISIBLE);
                         });
                         Thread.sleep(250);
