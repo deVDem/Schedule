@@ -218,6 +218,10 @@ public class NotificationsFragment extends Fragment {
                 Notification notification = mNotifications.get(position);
                 User author = notification.getAuthor();
                 holder.mSubTitleView.setText(notification.getSubTitle());
+                CardView cardView = (CardView) holder.itemView;
+                if (notification.getGroup() == -1) {
+                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server));
+                }
                 if (author != null) {
                     holder.mAuthorName.setText(author.getName());
                     holder.mAuthorPro.setVisibility(author.isPro() ? View.VISIBLE : View.GONE);
@@ -235,6 +239,8 @@ public class NotificationsFragment extends Fragment {
                                 targetView.setImageBitmap(scaled);
                                 int color = preparePixel.getPixel(0, 0);
                                 targetView.setBorderColor(color);
+                                int rez = cardView.getCardBackgroundColor().getDefaultColor() - color;
+                                holder.mAuthorPro.setColorFilter(rez);
                             }
 
                             @Override
@@ -254,10 +260,6 @@ public class NotificationsFragment extends Fragment {
                 String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
                 holder.mDateView.setText(dateString);
                 String urlImage = notification.getUrlImage();
-                if (notification.getGroup() == -1) {
-                    CardView cardView = (CardView) holder.itemView;
-                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server));
-                }
                 if (urlImage.length() > 0) {
                     holder.mImageView.setVisibility(View.VISIBLE);
                     Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);

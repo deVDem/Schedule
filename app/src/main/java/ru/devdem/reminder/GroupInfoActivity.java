@@ -106,7 +106,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                         User user = ObjectsController.parseUser(userJson);
                         if (groupJson.getInt("author_id") == user.getId()) {
                             group.setAuthor(user);
-                        } else group.setAuthor(null);
+                        }
                         users.add(user);
                     }
                     group.setMembers(users);

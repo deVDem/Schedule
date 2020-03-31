@@ -61,7 +61,7 @@ public class ProfileFragment extends Fragment {
         updateUI();
         Button mDetailButton = v.findViewById(R.id.buttonDetailGroup);
         mDetailButton.setOnClickListener(view -> {
-            mMainActivity.startActivity(GroupInfoActivity.getAIntent(mContext, 1, false));
+            mMainActivity.startActivity(GroupInfoActivity.getAIntent(mContext, Integer.parseInt(mSettings.getString("group", "0")), false));
             mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         });
         Button mLeaveButton = v.findViewById(R.id.buttonLeaveGroup);
