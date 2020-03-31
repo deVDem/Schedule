@@ -139,4 +139,6 @@
     <string name="stay">Stay</string>
     <string name="exit">Exit</string>
     <string name="attached_picture">The attached picture</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

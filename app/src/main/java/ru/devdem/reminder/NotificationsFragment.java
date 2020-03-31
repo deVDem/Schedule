@@ -239,7 +239,7 @@ public class NotificationsFragment extends Fragment {
                                 targetView.setImageBitmap(scaled);
                                 int color = preparePixel.getPixel(0, 0);
                                 targetView.setBorderColor(color);
-                                int rez = cardView.getCardBackgroundColor().getDefaultColor() - color;
+                                int rez = getResources().getColor(R.color.card_color) - color + 0xFF000000;
                                 holder.mAuthorPro.setColorFilter(rez);
                             }
 

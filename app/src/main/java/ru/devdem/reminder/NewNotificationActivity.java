@@ -92,7 +92,6 @@ public class NewNotificationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         mDialogBack.show();
     }
 

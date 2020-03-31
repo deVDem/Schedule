@@ -1,6 +1,7 @@
 package ru.devdem.reminder;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,35 +67,49 @@ public class ProfileFragment extends Fragment {
         });
         Button mLeaveButton = v.findViewById(R.id.buttonLeaveGroup);
         mLeaveButton.setOnClickListener(v1 -> {
-            Toast.makeText(mContext, R.string.loading, Toast.LENGTH_LONG).show();
-            v1.setEnabled(false);
-            Response.Listener<String> listener = response -> {
-                try {
-                    JSONObject jsonResponse = new JSONObject(response);
-                    String status = jsonResponse.getString("status");
-                    String error = jsonResponse.getString("error");
-                    if (status.equals("error")) {
-                        if (error.equals("WRONG_TOKEN")) {
-                            mMainActivity.checkAccount();
-                            mContext.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
-                        }
-                        Toast.makeText(mContext, error, Toast.LENGTH_LONG).show();
-                    } else if (status.equals("JOINED")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            AlertDialog dialog = builder
+                    .setTitle(R.string.sure_exit)
+                    .setNegativeButton(R.string.no, ((dialog1, which) -> dialog1.cancel()))
+                    .setPositiveButton(R.string.yes, ((dialog1, which) -> {
+                        exitGroup();
+                        dialog1.cancel();
+                    }))
+                    .create();
+            dialog.show();
+        });
+        return v;
+    }
+
+    private void exitGroup() {
+        AlertDialog dialog = new AlertDialog.Builder(mContext).setMessage(R.string.wait).setCancelable(false).create();
+        dialog.show();
+        Response.Listener<String> listener = response -> {
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                String status = jsonResponse.getString("status");
+                String error = jsonResponse.getString("error");
+                if (status.equals("error")) {
+                    if (error.equals("WRONG_TOKEN")) {
                         mMainActivity.checkAccount();
                         mContext.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    v1.setEnabled(true);
+                    Toast.makeText(mContext, error, Toast.LENGTH_LONG).show();
+                } else if (status.equals("JOINED")) {
+                    mMainActivity.checkAccount();
+                    mContext.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
+                    dialog.cancel();
                 }
-            };
-            Response.ErrorListener errorListener = error -> {
-                v1.setEnabled(true);
-                Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-            };
-            networkController.joinToGroup(mContext, listener, errorListener, "0", mSettings.getString("token", "null"));
-        });
-        return v;
+            } catch (Exception e) {
+                e.printStackTrace();
+                dialog.cancel();
+            }
+        };
+        Response.ErrorListener errorListener = error -> {
+            Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            dialog.cancel();
+        };
+        networkController.joinToGroup(mContext, listener, errorListener, "0", mSettings.getString("token", "null"));
     }
 
     @Override
