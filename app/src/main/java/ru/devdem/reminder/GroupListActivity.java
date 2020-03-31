@@ -45,7 +45,6 @@ public class GroupListActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean("prepared", true);
         super.onSaveInstanceState(outState);
     }
 
@@ -113,6 +112,13 @@ public class GroupListActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+        Intent intent;
+        if (getIntent() != null) {
+            intent = getIntent();
+            if (intent.getBooleanExtra("join", false)) {
+                joinToGroup(intent.getIntExtra("group_id", 0));
+            }
+        }
     }
 
     void detailedGroup(int id) {

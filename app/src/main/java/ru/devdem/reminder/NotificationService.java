@@ -179,6 +179,25 @@ public class NotificationService extends Service {
                         Thread.sleep(500);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e(TAG, "createThread: ", e);
+                    }
+                } else {
+                    try {
+                        NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(getApplicationContext().getString(R.string.no_lessons), getApplicationContext().getString(R.string.service_stopped));
+                        Notification notification = builder.build();
+                        Intent reloadIntent = new Intent(getApplicationContext(), SplashActivity.class);
+                        reloadIntent.setAction("ru.devdem.reminder.openApp");
+                        notification.contentIntent = PendingIntent.getActivity(this, 0, reloadIntent, 0);
+                        notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
+                        if (canGo) {
+                            mNotificationUtils.getManager().notify(103, notification);
+                            startForeground(103, notification);
+                        }
+                        count++;
+                        if (count >= 30) checkNewNotifications();
+                        Thread.sleep(500);
+                    } catch (Exception e) {
+                        Log.e(TAG, "createThread: ", e);
                     }
                 }
             }

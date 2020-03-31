@@ -1,62 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" />
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:layout_scrollInterpolator="@android:anim/decelerate_interpolator"
-            app:toolbarId="@+id/toolbar">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <ImageView
-                android:id="@+id/app_bar_image"
+                android:id="@+id/imageGroup"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_group"
+                android:tint="@color/text_color"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/group_creation"
+                android:textColor="@color/text_bold_color"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
-                android:src="@drawable/cat"
-                app:layout_collapseMode="pin" />
+            <Space
+                android:id="@+id/markerY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                style="@style/AppTheme"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:subtitleTextColor="@color/white"
-                app:titleTextColor="@color/white" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/group_create_desc"
+                android:textColor="@color/text_color" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/group_name"
+                android:inputType="textPersonName"
+                android:textColor="@color/text_bold_color"
+                android:textColorHighlight="@color/text_color"
+                app:met_baseColor="@color/text_bold_color"
+                app:met_floatingLabel="highlight"
+                app:met_helperText="@string/group_name_helper"
+                app:met_maxCharacters="255"
+                app:met_minCharacters="2"
+                app:met_primaryColor="@color/text_color" />
 
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/city"
+                android:inputType="textPostalAddress"
+                android:textColor="@color/text_bold_color"
+                android:textColorHighlight="@color/text_color"
+                app:met_baseColor="@color/text_bold_color"
+                app:met_floatingLabel="highlight"
+                app:met_helperText="@string/group_city_helper"
+                app:met_maxCharacters="32"
+                app:met_minCharacters="2"
+                app:met_primaryColor="@color/text_color" />
 
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupBuilding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/building"
+                android:inputType="textPostalAddress"
+                android:textColor="@color/text_bold_color"
+                android:textColorHighlight="@color/text_color"
+                app:met_baseColor="@color/text_bold_color"
+                app:met_floatingLabel="highlight"
+                app:met_helperText="@string/group_building_helper"
+                app:met_maxCharacters="255"
+                app:met_minCharacters="4"
+                app:met_primaryColor="@color/text_color" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/etGroupDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                android:textColor="@color/text_bold_color"
+                android:textColorHighlight="@color/text_color"
+                app:met_baseColor="@color/text_bold_color"
+                app:met_floatingLabel="highlight"
+                app:met_maxCharacters="255"
+                app:met_primaryColor="@color/text_color" />
+        </LinearLayout>
+    </ScrollView>
 
-    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_send" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

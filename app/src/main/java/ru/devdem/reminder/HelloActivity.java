@@ -16,7 +16,6 @@ public class HelloActivity extends AppCompatActivity {
     private boolean exit = false;
     private CountDownTimer mExitTimer;
     private SharedPreferences mSettings;
-    private LessonsController mLessonController;
 
 
     @Override
@@ -44,8 +43,8 @@ public class HelloActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mSettings = getSharedPreferences("settings", MODE_PRIVATE);
-        mLessonController = LessonsController.get(this);
-        mLessonController.removeLessons();
+        LessonsController lessonController = LessonsController.get(this);
+        lessonController.removeLessons();
         this.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
         super.onCreate(savedInstanceState);
         View view = View.inflate(this, R.layout.activity_hello, null);

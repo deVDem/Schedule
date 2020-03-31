@@ -143,4 +143,13 @@
     <string name="no">Нет</string>
     <string name="yes">Да</string>
     <string name="no_lessons">Нет уроков</string>
+    <string name="group_creation">Создание группы</string>
+    <string name="group_create_desc">Общайтесь и делитесь информацией с одноклассниками, одногруппниками и коллегами</string>
+    <string name="description">Описание</string>
+    <string name="your_user_does_not_exit">вашего пользователя не существует :/</string>
+    <string name="you_already_created_group">вы уже создали группу</string>
+    <string name="group_already_exist">такая группа уже существует</string>
+    <string name="you_in_group">вы находитесь в группе</string>
+    <string name="success_created_group">Успешно создано. Вход в группу..</string>
+    <string name="out_of_the_group">Выход из группы</string>
 </resources>

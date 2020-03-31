@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void exitGroup() {
-        AlertDialog dialog = new AlertDialog.Builder(mContext).setMessage(R.string.wait).setCancelable(false).create();
+        AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.out_of_the_group).setMessage(R.string.wait).setCancelable(false).create();
         dialog.show();
         Response.Listener<String> listener = response -> {
             try {

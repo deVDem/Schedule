@@ -142,4 +142,13 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="no_lessons">No lessons</string>
+    <string name="group_creation">Group creation</string>
+    <string name="group_create_desc">Communicate and share information with your classmates, classmates, and colleagues</string>
+    <string name="description">Description</string>
+    <string name="your_user_does_not_exit">your user does not exist :/</string>
+    <string name="you_already_created_group">you have already created a group</string>
+    <string name="group_already_exist">this group already exists</string>
+    <string name="you_in_group">you are in a group</string>
+    <string name="success_created_group">Successfully created. Log in to the group..</string>
+    <string name="out_of_the_group">Out of the group</string>
 </resources>

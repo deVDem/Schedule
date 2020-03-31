@@ -20,6 +20,7 @@ class NetworkController {
     private String URL_LOGIN = "/accounts/login.php";
     private String URL_REGISTER = "/accounts/register.php";
     private String URL_GET_GROUPS = "/groups/get.php";
+    private String URL_ADD_GROUP = "/groups/add.php";
     private String URL_NOTIFICATIONS_GET = "/notifications/get.php";
     private String URL_LESSONS_GET = "/lessons/get.php";
     private String URL_GET_VER_INT = "/getver.php";
@@ -33,6 +34,7 @@ class NetworkController {
         URL_LOGIN = URL_ROOT + URL_LOGIN;
         URL_REGISTER = URL_ROOT + URL_REGISTER;
         URL_GET_GROUPS = URL_ROOT + URL_GET_GROUPS;
+        URL_ADD_GROUP = URL_ROOT + URL_ADD_GROUP;
         URL_NOTIFICATIONS_GET = URL_ROOT + URL_NOTIFICATIONS_GET;
         URL_LESSONS_GET = URL_ROOT + URL_LESSONS_GET;
         URL_GET_VER_INT = URL_ROOT + URL_GET_VER_INT;
@@ -76,8 +78,19 @@ class NetworkController {
         map.put("message", message);
         if (image != null) map.put("image", image);
         goSend(context, listener, errorListener, URL_ADD_NOTIFICATION, map);
-
     }
+
+    void addGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String name, String city, String building, String description, String image) {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        map.put("name", name);
+        map.put("city", city);
+        map.put("building", building);
+        map.put("description", description);
+        if (image != null) map.put("image", image);
+        goSend(context, listener, errorListener, URL_ADD_GROUP, map);
+    }
+
 
     void editProfile(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String name, String email, String login, String token) {
         Map<String, String> map = new HashMap<>();
