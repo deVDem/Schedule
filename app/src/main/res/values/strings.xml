@@ -157,7 +157,7 @@
     <string name="year">Year</string>
     <string name="what_does_a_subscription_do">What does a subscription do?</string>
     <string name="disabling_ads">Disabling ads</string>
-    <string name="lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb">Lowering the file size limit to 50 MB (without a subscription - 4 MB)</string>
+    <string name="lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb">Increasing the size of the downloaded file to 50 MB (without a subscription - 4 MB)</string>
     <string name="exclusive_pro_icon_in_your_profile">Exclusive PRO icon in your profile</string>
     <string name="the_profile_card_will_always_be_colored_in_adaptive_colors_for_example">The profile card will always be colored in adaptive colors, for example:</string>
     <string name="improve_your_in_app_experience_by_purchasing_a_subscription_for_a_small_fee">Improve your in-app experience by purchasing a subscription for a small fee.</string>

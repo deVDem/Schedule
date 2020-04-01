@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment {
         btnDisableAd.setOnClickListener(v -> {
             Activity activity = getActivity();
             activity.startActivity(new Intent(context, PurchaseActivity.class));
-            activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_out);
+            activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         });
         if (ObjectsController.getLocalUserInfo(mSettings).isPro())
             btnDisableAd.setVisibility(View.GONE);

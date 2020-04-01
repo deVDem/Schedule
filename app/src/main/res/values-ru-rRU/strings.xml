@@ -158,7 +158,7 @@
     <string name="year">Год</string>
     <string name="what_does_a_subscription_do">Что даёт подписка?</string>
     <string name="disabling_ads">Отключение рекламы</string>
-    <string name="lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb">Понижение лимита на размер файла до 50 МБ (без подписки - 4 МБ)</string>
+    <string name="lowering_the_file_size_limit_to_100_mb_without_a_subscription_8_mb">Увеличение размера загружаемого файла до 50 МБ (без подписки - 4 МБ)</string>
     <string name="exclusive_pro_icon_in_your_profile">Эксклюзивный значок PRO в профиле</string>
     <string name="the_profile_card_will_always_be_colored_in_adaptive_colors_for_example">Карточка профиля будет всегда окрашена в адаптивные цвета, например:</string>
     <string name="improve_your_in_app_experience_by_purchasing_a_subscription_for_a_small_fee">Улучшите свои возможности в приложении, купив подписку за небольшую плату.</string>
