@@ -1,6 +1,8 @@
 package ru.devdem.reminder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -52,6 +54,7 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
     private Activity mActivity;
     private NetworkController mNetworkController;
     private User mUser;
+    private Dialog mDialog;
 
     @Override
     public void onBackPressed() {
@@ -103,11 +106,10 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
                                             text = text + " / " + getString(R.string.month);
                                             btnMonth.setText(text);
                                             btnMonth.setOnClickListener(v -> {
-                                                // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
                                                 BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                                                         .setSkuDetails(skuDetails)
                                                         .build();
-                                                billingClient.launchBillingFlow(mActivity, flowParams);
+                                                buy(mActivity, flowParams);
                                             });
                                         } else if ("disablead_year".equals(sku)) {
                                             text = text + " / " + getString(R.string.year);
@@ -139,6 +141,16 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
 
         };
         updateUI(profileFrame, mUser);
+    }
+
+    private void buy(Activity activity, BillingFlowParams flowParams) {
+        mDialog = new AlertDialog.Builder(this)
+                .setTitle("Оформление подписки")
+                .setMessage(R.string.wait)
+                .setCancelable(false)
+                .create();
+        mDialog.show();
+        billingClient.launchBillingFlow(activity, flowParams);
     }
 
     private void updateUI(FrameLayout profileFrame, User user) {
@@ -229,12 +241,11 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
 
             Response.Listener<String> listener = response -> {
                 try {
-                    Log.d("responseee", "handlePurchase: " + response);
                     JSONObject jsonResponse = new JSONObject(response);
                     String status = jsonResponse.getString("status");
-                    Toast.makeText(mContext, response, Toast.LENGTH_SHORT).show();
                     switch (status) {
                         case "ORDERED":
+                            mDialog.cancel();
                             if (!purchase.isAcknowledged()) {
                                 AcknowledgePurchaseParams acknowledgePurchaseParams =
                                         AcknowledgePurchaseParams.newBuilder()
@@ -269,12 +280,16 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
             for (Purchase purchase : list) {
                 handlePurchase(purchase);
             }
+            mDialog.setTitle("Успешно");
         } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
             Toast.makeText(mContext, R.string.you_canceled_your_purchase, Toast.LENGTH_SHORT).show();
+            mDialog.cancel();
         } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
             Toast.makeText(mContext, R.string.you_have_already_purchased, Toast.LENGTH_SHORT).show();
+            mDialog.cancel();
         } else {
             Toast.makeText(mContext, R.string.error_payment, Toast.LENGTH_SHORT).show();
+            mDialog.cancel();
         }
     }
 }
