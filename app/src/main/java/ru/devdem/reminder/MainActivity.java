@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
@@ -170,11 +171,25 @@ public class MainActivity extends AppCompatActivity {
         getVerInt();
         if (mSettings.getBoolean("notification", true)) {
             startService(new Intent(this, NotificationService.class));
-            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-            boolean inWhiteList = powerManager.isIgnoringBatteryOptimizations(getPackageName());
-            if (!inWhiteList) {
-                startActivity(new
-                        Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+            if (mSettings.getBoolean("power", true)) {
+                PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+                boolean inWhiteList = powerManager.isIgnoringBatteryOptimizations(getPackageName());
+                if (!inWhiteList) {
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setTitle("Ограничения на фоновую активность приложения")
+                            .setMessage("Запретите ограничения на фоновую активность приложения в настройках")
+                            .setNegativeButton("Больше не справивать", (dialog1, which) -> {
+                                mSettings.edit().putBoolean("power", false).apply();
+                            })
+                            .setPositiveButton("Запретить", (dialog1, which) -> {
+                                startActivity(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+                            })
+                            .setNeutralButton("Нет", (dialog1, which) -> {
+                                dialog1.cancel();
+                            })
+                            .create();
+                    dialog.show();
+                }
             }
         }
         checkAccount();
