@@ -96,7 +96,7 @@ public class DashboardFragment extends Fragment {
             Response.Listener<String> listener = response -> {
                 try {
                     if (new JSONObject(response).getString("error").equals("NO_TOKEN")) {
-                        Objects.requireNonNull(activity).checkAccount();
+                        activity.checkAccount();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

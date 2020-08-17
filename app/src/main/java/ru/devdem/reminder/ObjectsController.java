@@ -123,6 +123,15 @@ class ObjectsController {
         private int mPermission;
         private String mToken;
         private String mGroupId;
+        private String mPassword;
+
+        public String getPassword() {
+            return mPassword;
+        }
+
+        public void setPassword(String password) {
+            mPassword = password;
+        }
 
         User() {
 
