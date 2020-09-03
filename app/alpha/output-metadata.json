@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "ru.devdem.reminder",
+  "variantName": "alpha",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 7,
+      "versionName": "0.0.3 fixed alpha",
+      "enabled": true,
+      "outputFile": "app-alpha.apk"
+    }
+  ]
+}

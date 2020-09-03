@@ -40,4 +40,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/create_group" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnjoingroup"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="Для продолжения присоединитесь в группу или создайте свою группу (не забудьте пригласить друзей!)" />
 </RelativeLayout>

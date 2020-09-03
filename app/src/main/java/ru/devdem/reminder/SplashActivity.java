@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -40,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         ImageView button = findViewById(R.id.button);
         ImageView count = findViewById(R.id.count);
         ImageView circle = findViewById(R.id.circle);
-        TextView textView = findViewById(R.id.textViewAppName);
+        View textView = findViewById(R.id.textViewAppName);
         Animation anim_text = AnimationUtils.loadAnimation(this, R.anim.text);
         textView.setAnimation(anim_text);
         Animation anim_arrow = AnimationUtils.loadAnimation(this, R.anim.arrow);

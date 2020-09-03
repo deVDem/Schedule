@@ -3,6 +3,7 @@ package ru.devdem.reminder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -74,6 +77,7 @@ public class GroupInfoActivity extends AppCompatActivity {
             go_button = getIntent().getBooleanExtra("go_button", false);
         }
         v = View.inflate(this, R.layout.activity_group_info, null);
+        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
         setContentView(v);
         FloatingActionButton actionButton = v.findViewById(R.id.floatingActionButton);
         actionButton.hide();
@@ -84,9 +88,10 @@ public class GroupInfoActivity extends AppCompatActivity {
             Log.d(TAG, "listener returned: " + response);
             try {
                 JSONObject object = new JSONObject(response);
-                int all = object.getInt("all");
-                for (int i = 0; i < all; i++) {
-                    JSONObject groupJson = object.getJSONObject(String.valueOf(i));
+                if (object.isNull("error") && !object.isNull("response")) {
+                    JSONObject responseJson=object.getJSONObject("response");
+                    JSONArray groupsJson = responseJson.getJSONArray("group_list");
+                    JSONObject groupJson = groupsJson.getJSONObject(0);
                     Group group = new Group();
                     group.setId(groupJson.getInt("id"));
                     group.setName(groupJson.getString("name"));
@@ -111,8 +116,13 @@ public class GroupInfoActivity extends AppCompatActivity {
                     }
                     group.setMembers(users);
                     mGroup = group;
+                    start();
+                } else {
+                    Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+                    setResult(RESULT_CANCELED, null);
+                    finish();
+
                 }
-                start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -122,7 +132,7 @@ public class GroupInfoActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, null);
             finish();
         };
-        networkController.getGroups(this, listener, errorListener, new String[]{"", "", "", "", String.valueOf(group_id), "true"});
+        networkController.getGroups(this, listener, errorListener, sharedPreferences.getString("token", ""), new String[]{"", "", "", "", String.valueOf(group_id), "true"});
     }
 
     private void start() {

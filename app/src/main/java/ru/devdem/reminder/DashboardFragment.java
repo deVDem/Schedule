@@ -218,7 +218,7 @@ public class DashboardFragment extends Fragment {
             if (!prepared[position]) {
                 prepared[position] = true;
                 ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
-                if (position % 2 == 0 && !mUser.isPro()) {
+                if (position % 3 == 0 && !mUser.isPro()) {
                     AdView adView = new AdView(mContext);
                     if (!BuildConfig.DEBUG)
                         adView.setAdUnitId(adIds[position / 2]);

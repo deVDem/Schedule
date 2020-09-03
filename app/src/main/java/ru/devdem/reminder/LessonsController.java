@@ -1,7 +1,9 @@
 package ru.devdem.reminder;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -45,25 +47,34 @@ class LessonsController {
         mLessons.add(l);
     }
 
+    private static final String TAG = "LessonsController";
+
     void parseLessons(String response) {
+        Log.d(TAG, "parseLessons: " + response);
         removeLessons();
         try {
             JSONObject object = new JSONObject(response);
-            int all = object.getInt("all");
-            for (int i = 0; i < all; i++) {
-                JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
-                String name = jsonObject.getString("text");
-                String cab = jsonObject.getString("cab");
-                String numberText = jsonObject.getString("n");
-                int day = jsonObject.getInt("day");
-                Date start = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("start"));
-                Date end = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonObject.getString("end"));
-                boolean isZamena = jsonObject.getBoolean("zamena");
-                String desc = jsonObject.getString("description");
-                if (desc.equals("null")) desc = "";
-                addLesson(name, numberText, day, cab, start, end, isZamena, desc);
+            if (object.isNull("error") && !object.isNull("response")) { // TODO: разделить условия
+                JSONObject jsonResponse = object.getJSONObject("response");
+                JSONArray jsonLessons = jsonResponse.getJSONArray("lessons");
+                for (int i = 0; i < jsonLessons.length(); i++) {
+                    JSONObject jsonLesson = jsonLessons.getJSONObject(i);
+                    String name = jsonLesson.getString("name");
+                    String cab = jsonLesson.getString("cab");
+                    String numberText = jsonLesson.getString("n");
+                    int day = jsonLesson.getInt("day");
+                    Date start = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonLesson.getString("start"));
+                    Date end = new SimpleDateFormat("d HH:mm:ss", Locale.getDefault()).parse(day + 1 + " " + jsonLesson.getString("end"));
+                    boolean isZamena = jsonLesson.getInt("zamena")==1;
+                    String desc = jsonLesson.getString("description");
+                    if (desc.equals("null")) desc = "";
+                    addLesson(name, numberText, day, cab, start, end, isZamena, desc);
+                }
+                saveLessons(response);
+            } else {
+                // ошибка
             }
-            saveLessons(response);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

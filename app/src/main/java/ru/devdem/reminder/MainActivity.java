@@ -3,6 +3,7 @@ package ru.devdem.reminder;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.Html;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -62,6 +64,21 @@ public class MainActivity extends AppCompatActivity {
         mLessonsController.loadLessons();
         notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
+            if(mSettings.getBoolean("alpha_warn", true)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Предупреждение");
+                builder.setMessage("Данная версия приложения находится в альфа-тестировании, " +
+                        "поэтому не все функции могут быть доступны, а так же в каких-то моментах " +
+                        "приложение может вылетать(не замечал, но может). В общем, дайте время плс :)");
+                builder.setPositiveButton("Окей", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();;
+                    }
+                });
+                builder.setCancelable(false);
+                builder.show();
+            }
             if (mSettings.getString("group", "0").equals("0")) {
                 startActivity(new Intent(MainActivity.this, HelloActivity.class));
                 finish();
@@ -203,22 +220,21 @@ public class MainActivity extends AppCompatActivity {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonResponse = new JSONObject(response);
-                boolean ok = jsonResponse.getBoolean("ok");
-                if (ok) {
-                    boolean password_ok = jsonResponse.getBoolean("password_ok");
-                    if (password_ok) {
+                if (jsonResponse.isNull("error")) {
+                    if (!jsonResponse.isNull("response")) {
                         try {
-                            JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
+                            JSONObject jsonObjectResponse = jsonResponse.getJSONObject("response");
+                            JSONObject jsonUserInfo = jsonObjectResponse.getJSONObject("user_data");
                             int user_id = jsonUserInfo.getInt("id");
-                            String name = jsonUserInfo.getString("name");
+                            String name = jsonUserInfo.getString("names");
                             String email = jsonUserInfo.getString("email");
                             String login1 = jsonUserInfo.getString("login");
-                            String group = jsonUserInfo.getString("groups");
+                            String group = jsonUserInfo.getString("groupId");
                             String password_hash = jsonUserInfo.getString("password");
                             boolean pro = jsonUserInfo.getString("pro").equals("Yes");
-                            String urlImage = jsonUserInfo.getString("urlImage");
-                            boolean spam = jsonUserInfo.getString("spam").equals("1");
-                            int permission = jsonUserInfo.getInt("permission");
+                            //String urlImage = jsonUserInfo.getString("urlImage");
+                            boolean spam = jsonUserInfo.getString("spam").equals("Yes");
+                            int permission = jsonUserInfo.isNull("permission") ? 0 : jsonUserInfo.getInt("permission");
                             String token = jsonUserInfo.getString("token");
                             SharedPreferences.Editor editor = mSettings.edit();
                             editor.putInt("user_id", user_id);
@@ -229,11 +245,11 @@ public class MainActivity extends AppCompatActivity {
                             editor.putBoolean("spam", spam);
                             editor.putBoolean("pro", pro);
                             editor.putString("password", password_hash);
-                            editor.putString("urlImage", urlImage);
+                            //editor.putString("urlImage", urlImage);
                             editor.putInt("permission", permission);
                             editor.putString("token", token);
                             editor.apply();
-                            if (mSettings.getString("group", "0").equals("0")) {
+                            if (mSettings.getString("group", "-1").equals("-1")) {
                                 startActivity(new Intent(MainActivity.this, HelloActivity.class));
                                 overridePendingTransition(R.anim.transition_in_back, R.anim.transition_out_back);
                                 finish();
@@ -248,8 +264,9 @@ public class MainActivity extends AppCompatActivity {
                         exit();
                     }
                 } else {
-                    Toast.makeText(this, "Wrong login or email.", Toast.LENGTH_SHORT).show();
-                    exit();
+                    JSONObject errorJson = jsonResponse.getJSONObject("error");
+                    Toast.makeText(this, errorJson.getInt("code") + " " + errorJson.getString("text"), Toast.LENGTH_SHORT).show();
+                    if(errorJson.getInt("code")!=1) exit();
                 }
             } catch (Exception e) {
                 Toast.makeText(this, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();

@@ -142,27 +142,24 @@ public class GroupListActivity extends AppCompatActivity {
         Response.Listener<String> listener = response -> {
             Log.d(TAG, "joinToGroup: " + response);
             try {
-                JSONObject jsonResponse = new JSONObject(response);
-                String status = jsonResponse.getString("status");
-                String error = jsonResponse.getString("error");
-                if (status.equals("error")) {
-                    if (error.equals("WRONG_TOKEN")) {
+                JSONObject jsonObject = new JSONObject(response);
+                if (jsonObject.isNull("error") && !jsonObject.isNull("response")) { // TODO: разделить условия для стабильности
+                    JSONObject jsonResponse = jsonObject.getJSONObject("response");
+                    if(jsonResponse.getBoolean("success")) {
+                        startActivity(new Intent(this, MainActivity.class));
+                        overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                        finish();
+                    }
+                } else {
+                    JSONObject errorJson = jsonObject.getJSONObject("error");
+                    if (errorJson.getInt("code")==10){ //
                         mSettings.edit().clear().apply();
                         mSettings.edit().putBoolean("notification", false).apply();
                         this.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
                         restart();
                     }
                     mLoadingLayout.setVisibility(View.GONE);
-                    Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-                } else if (status.equals("JOINED")) {
-                    JSONObject group_info = jsonResponse.getJSONObject("group_info");
-                    mSettings.edit()
-                            .putString("group", group_info.getString("id"))
-                            .putString("group_name", group_info.getString("name"))
-                            .apply();
-                    startActivity(new Intent(this, MainActivity.class));
-                    overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                    finish();
+                    Toast.makeText(this, errorJson.getInt("code")+" "+errorJson.getString("text"), Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -44,19 +44,18 @@ public class AccountManager {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonResponse = new JSONObject(response);
-                boolean ok = jsonResponse.getBoolean("ok");
-                if (ok) {
-                    boolean password_ok = jsonResponse.getBoolean("password_ok");
-                    if (password_ok) {
+                if (jsonResponse.isNull("error")) {
+                    if (!jsonResponse.isNull("response")) {
                         try {
-                            JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
+                            JSONObject jsonObjectResponse = jsonResponse.getJSONObject("response");
+                            JSONObject jsonUserInfo = jsonObjectResponse.getJSONObject("user_info");
                             mAccount.setId(jsonUserInfo.getInt("id"));
-                            mAccount.setName(jsonUserInfo.getString("name"));
+                            mAccount.setName(jsonUserInfo.getString("names"));
                             mAccount.setEmail(jsonUserInfo.getString("email"));
                             mAccount.setLogin(jsonUserInfo.getString("login"));
-                            mAccount.setGroupId(jsonUserInfo.getString("groups"));
+                            mAccount.setGroupId(jsonUserInfo.getString("groupId"));
                             mAccount.setPro(jsonUserInfo.getString("pro").equals("Yes"));
-                            mAccount.setUrlImage(jsonUserInfo.getString("urlImage"));
+                            //mAccount.setUrlImage(jsonUserInfo.getString("urlImage"));
                             mAccount.setPermission(jsonUserInfo.getInt("permission"));
                             mAccount.setToken(jsonUserInfo.getString("token"));
                             mAccount.setPassword(jsonUserInfo.getString("password"));
@@ -69,7 +68,8 @@ public class AccountManager {
                         Toast.makeText(mContext, "Wrong password.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(mContext, "Wrong login or email.", Toast.LENGTH_SHORT).show();
+                    JSONObject jsonError = jsonResponse.getJSONObject("error");
+                    Toast.makeText(mContext, jsonError.getInt("code")+" "+jsonError.getString("text"), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Toast.makeText(mContext, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();

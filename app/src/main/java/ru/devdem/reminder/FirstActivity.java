@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -57,6 +58,7 @@ public class FirstActivity extends AppCompatActivity {
 
     private int ANIM_DURATION = 700;
     private String PREFS_FIRST = "first";
+    private static final String TAG = "FirstActivity";
 
     @Override
     public void onBackPressed() {
@@ -135,54 +137,50 @@ public class FirstActivity extends AppCompatActivity {
             Response.Listener<String> listener = response -> {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
-                    boolean ok = jsonResponse.getBoolean("ok");
-                    if (ok) {
-                        boolean password_ok = jsonResponse.getBoolean("not_registed");
-                        if (password_ok) {
-                            try {
-                                JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
-                                int user_id = jsonUserInfo.getInt("id");
-                                String name1 = jsonUserInfo.getString("name");
-                                String email1 = jsonUserInfo.getString("email");
-                                String login1 = jsonUserInfo.getString("login");
-                                String group = jsonUserInfo.getString("groups");
-                                boolean spam1 = jsonUserInfo.getString("spam").equals("1");
-                                int permission = jsonUserInfo.getInt("permission");
-                                String token = jsonUserInfo.getString("token");
-                                String password_hash = jsonUserInfo.getString("password");
-                                mSettings.edit().clear().apply();
-                                SharedPreferences.Editor editor = mSettings.edit();
-                                editor.putInt("user_id", user_id);
-                                editor.putString("name", name1);
-                                editor.putString("email", email1);
-                                editor.putString("login", login1);
-                                editor.putString("group", group);
-                                editor.putBoolean("spam", spam1);
-                                editor.putInt("permission", permission);
-                                editor.putString("token", token);
-                                editor.putString("password", password_hash);
-                                editor.putBoolean(PREFS_FIRST, false);
-                                editor.apply();
-                                Toast.makeText(mContext, R.string.success_registration, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(FirstActivity.this, SplashActivity.class));
-                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                controlViews(true);
-                                Toast.makeText(mContext, R.string.failed_get_user_info, Toast.LENGTH_SHORT).show();
-                                showHide(mRTextView, registerRl, false);
-                            }
-                        } else {
-                            Toast.makeText(mContext, R.string.user_already_registered, Toast.LENGTH_SHORT).show();
-                            showHide(mRTextView, registerRl, false);
+                    if (jsonResponse.isNull("error") && !jsonResponse.isNull("response")) {
+                        try {
+                            JSONObject jsonResponseAll = jsonResponse.getJSONObject("response");
+                            JSONObject jsonUserInfo = jsonResponseAll.getJSONObject("user_data");
+                            int user_id = jsonUserInfo.getInt("id");
+                            String name1 = jsonUserInfo.getString("names");
+                            String email1 = jsonUserInfo.getString("email");
+                            String login1 = jsonUserInfo.getString("login");
+                            String group = jsonUserInfo.getString("groupId");
+                            boolean spam1 = jsonUserInfo.getString("spam").equals("Yes");
+                            int permission = jsonUserInfo.isNull("permission") ? 0 : jsonUserInfo.getInt("permission");
+                            String token = jsonUserInfo.getString("token");
+                            String password_hash = jsonUserInfo.getString("password");
+                            mSettings.edit().clear().apply();
+                            SharedPreferences.Editor editor = mSettings.edit();
+                            editor.putInt("user_id", user_id);
+                            editor.putString("name", name1);
+                            editor.putString("email", email1);
+                            editor.putString("login", login1);
+                            editor.putString("group", group);
+                            editor.putBoolean("spam", spam1);
+                            editor.putInt("permission", permission);
+                            editor.putString("token", token);
+                            editor.putString("password", password_hash);
+                            editor.putBoolean(PREFS_FIRST, false);
+                            editor.apply();
+                            Toast.makeText(mContext, R.string.success_registration, Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(FirstActivity.this, SplashActivity.class));
+                            overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                             controlViews(true);
+                            Toast.makeText(mContext, R.string.failed_get_user_info, Toast.LENGTH_SHORT).show();
+                            showHide(mRTextView, registerRl, false);
                         }
                     } else {
-                        Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                        JSONObject errorJson = jsonResponse.getJSONObject("error");
+                        Toast.makeText(mContext, errorJson.getInt("code")+" "+errorJson.getString("text"), Toast.LENGTH_SHORT).show();
                         showHide(mRTextView, registerRl, false);
                         controlViews(true);
+                        Log.e(TAG, "RegisterFuncs: Error "+errorJson.getInt("code"), new Exception());
                     }
+
                 } catch (Exception e) {
                     Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -225,21 +223,21 @@ public class FirstActivity extends AppCompatActivity {
         if (mLLoginEt.validate(loginRegex, getString(R.string.login_must_be)) || password.length() >= 6) {
             Response.Listener<String> listener = response -> {
                 try {
+                    Log.d(TAG, "LoginFuncs response: "+response);
                     JSONObject jsonResponse = new JSONObject(response);
-                    boolean ok = jsonResponse.getBoolean("ok");
-                    if (ok) {
-                        boolean password_ok = jsonResponse.getBoolean("password_ok");
-                        if (password_ok) {
+                    if (jsonResponse.isNull("error")) {
+                        if (!jsonResponse.isNull("response")) {
                             try {
-                                JSONObject jsonUserInfo = jsonResponse.getJSONObject("user_info");
+                                JSONObject jsonObjectResponse= jsonResponse.getJSONObject("response");
+                                JSONObject jsonUserInfo = jsonObjectResponse.getJSONObject("user_data");
                                 int user_id = jsonUserInfo.getInt("id");
-                                String name = jsonUserInfo.getString("name");
+                                String name = jsonUserInfo.getString("names");
                                 String email = jsonUserInfo.getString("email");
                                 String login1 = jsonUserInfo.getString("login");
-                                String group = jsonUserInfo.getString("groups");
+                                String group = jsonUserInfo.getString("groupId");
                                 String password_hash = jsonUserInfo.getString("password");
-                                boolean spam = jsonUserInfo.getString("spam").equals("1");
-                                int permission = jsonUserInfo.getInt("permission");
+                                boolean spam = jsonUserInfo.getString("spam").equals("Yes");
+                                int permission = jsonUserInfo.isNull("permission") ? 0 : jsonUserInfo.getInt("permission");
                                 String token = jsonUserInfo.getString("token");
                                 mSettings.edit().clear().apply();
                                 SharedPreferences.Editor editor = mSettings.edit();
@@ -270,7 +268,8 @@ public class FirstActivity extends AppCompatActivity {
                             controlViews(true);
                         }
                     } else {
-                        Toast.makeText(mContext, R.string.wrong_login_email, Toast.LENGTH_SHORT).show();
+                        JSONObject jsonError = jsonResponse.getJSONObject("error");
+                        Toast.makeText(mContext, jsonError.getInt("code")+" "+jsonError.getString("text"), Toast.LENGTH_SHORT).show();
                         showHide(mLTextView, loginRl, false);
                         controlViews(true);
                     }
