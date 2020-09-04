@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -40,6 +40,10 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.NotificationUtils;
+import ru.devdem.reminder.R;
 
 public class DownloadActivity extends AppCompatActivity {
 

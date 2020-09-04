@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.group.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,8 +36,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import ru.devdem.reminder.ObjectsController.Group;
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController.Group;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
 
 public class GroupListFragment extends Fragment {
     private static NetworkController networkController;

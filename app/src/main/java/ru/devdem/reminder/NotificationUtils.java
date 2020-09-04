@@ -101,7 +101,7 @@ public class NotificationUtils extends ContextWrapper {
         }
     }
 
-    NotificationManager getManager() {
+    public NotificationManager getManager() {
         if (mManager == null) {
             mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }

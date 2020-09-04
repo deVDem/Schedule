@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.account;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,9 @@ import com.android.volley.Response;
 
 import org.json.JSONObject;
 
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
 
 public class AccountManager {
 
@@ -27,15 +29,16 @@ public class AccountManager {
 
     private void saveData() {
         SharedPreferences.Editor editor = mLocalData.edit();
-        mAccount.getId();
-        mAccount.getName();
-        mAccount.getLogin();
-        mAccount.getUrlImage();
-        mAccount.getEmail();
-        mAccount.isPro();
-        mAccount.getPermission();
-        mAccount.getToken();
-        mAccount.getGroupId();
+        editor.putInt("id", mAccount.getId());
+        editor.putString("names", mAccount.getName());
+        editor.putString("login", mAccount.getLogin());
+        editor.putInt("imageId", mAccount.getImageId());
+        editor.putString("email", mAccount.getEmail());
+        /* TODO:
+        editor.putString("", mAccount.isPro());
+        editor.putString("", mAccount.getPermission());*/
+        editor.putString("token", mAccount.getToken());
+        editor.putString("groupId", mAccount.getGroupId());
         editor.apply();
 
     }
@@ -65,7 +68,7 @@ public class AccountManager {
                             Toast.makeText(mContext, "Неудалось получить информацию о пользователе.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(mContext, "Wrong password.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Что-то пошло не так..", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     JSONObject jsonError = jsonResponse.getJSONObject("error");
@@ -87,21 +90,23 @@ public class AccountManager {
     private void loadAccount() {
         mAccount = new User();
         int id = mLocalData.getInt("id", 0);
-        String name = mLocalData.getString("name", "null");
+        String name = mLocalData.getString("names", "null");
         String login = mLocalData.getString("login", "null");
-        String urlImage = mLocalData.getString("urlImage", "null");
+        int imageId = mLocalData.getInt("imageId", 0);
         String email = mLocalData.getString("email", "null");
+        /* TODO:
         boolean isPro = mLocalData.getBoolean("pro", false);
-        int permission = mLocalData.getInt("permission", 0);
+        int permission = mLocalData.getInt("permission", 0);*/
         String token = mLocalData.getString("token", "null");
         String groupId = mLocalData.getString("group", "0");
         mAccount.setId(id);
         mAccount.setName(name);
         mAccount.setLogin(login);
-        mAccount.setUrlImage(urlImage);
+        mAccount.setImageId(imageId);
         mAccount.setEmail(email);
+        /*TODO:
         mAccount.setPro(isPro);
-        mAccount.setPermission(permission);
+        mAccount.setPermission(permission);*/
         mAccount.setToken(token);
         mAccount.setGroupId(groupId);
     }

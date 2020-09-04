@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +20,9 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import org.json.JSONObject;
 
 import java.util.Objects;
+
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.R;
 
 public class EditProfileActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.group.search;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.ui.HelloActivity;
+import ru.devdem.reminder.ui.SplashActivity;
+import ru.devdem.reminder.ui.group.GroupInfoActivity;
+import ru.devdem.reminder.ui.main.MainActivity;
 
 public class GroupListActivity extends AppCompatActivity {
     private static final String TAG = "GroupListActivity";

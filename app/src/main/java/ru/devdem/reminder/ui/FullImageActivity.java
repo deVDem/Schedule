@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Picasso;
+
+import ru.devdem.reminder.R;
 
 public class FullImageActivity extends AppCompatActivity {
 

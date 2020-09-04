@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,7 +45,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
 
 public class PurchaseActivity extends AppCompatActivity implements PurchasesUpdatedListener {
     AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
@@ -159,7 +163,7 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
         String email = user.getEmail();
         String[] permissions = getResources().getStringArray(R.array.permissions);
         String permission = permissions[user.getPermission()];
-        String urlImage = user.getUrlImage();
+        int urlImage = user.getImageId();
         View profileCard = View.inflate(mContext, R.layout.group_info_user_view_full, null);
         TextView textName = profileCard.findViewById(R.id.profileName);
         TextView textLogin = profileCard.findViewById(R.id.profileLogin);
@@ -175,7 +179,7 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
         imagePro.setVisibility(View.VISIBLE);
         Button goBtn = profileCard.findViewById(R.id.goProBtn);
         goBtn.setVisibility(View.GONE);
-        if (urlImage != null && urlImage.length() > 1)
+        if (urlImage != 0 )
             Picasso.get().load(urlImage).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

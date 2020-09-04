@@ -24,6 +24,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import ru.devdem.reminder.controllers.LessonsController;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.TimeController;
+import ru.devdem.reminder.ui.SplashActivity;
+
 public class NotificationService extends Service {
     private static String countString;
     private static String counterString;

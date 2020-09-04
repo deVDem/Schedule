@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,7 +35,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
 
 public class NewNotificationActivity extends AppCompatActivity {
 

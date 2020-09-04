@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,11 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONObject;
 
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.ui.group.search.GroupListActivity;
 
 public class CreateGroupActivity extends AppCompatActivity {
     private static final String TAG = "CreateGroupActivity";

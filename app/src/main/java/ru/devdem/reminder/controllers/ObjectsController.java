@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.controllers;
 
 import android.content.SharedPreferences;
 
@@ -7,17 +7,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
-class ObjectsController {
+public class ObjectsController {
 
 
-    static User parseUser(JSONObject jsonUser) {
+    public static User parseUser(JSONObject jsonUser) {
         User user = new User();
         try {
             if (!jsonUser.isNull("id")) user.setId(jsonUser.getInt("id"));
             if (!jsonUser.isNull("name")) user.setName(jsonUser.getString("name"));
             if (!jsonUser.isNull("email")) user.setEmail(jsonUser.getString("email"));
             if (!jsonUser.isNull("login")) user.setLogin(jsonUser.getString("login"));
-            if (!jsonUser.isNull("urlImage")) user.setUrlImage(jsonUser.getString("urlImage"));
+            if (!jsonUser.isNull("urlImage")) user.setImageId(jsonUser.getInt("imageId"));
             if (!jsonUser.isNull("pro")) user.setPro(jsonUser.getString("pro").equals("Yes"));
             if (!jsonUser.isNull("permission")) user.setPermission(jsonUser.getInt("permission"));
             if (!jsonUser.isNull("token")) user.setToken(jsonUser.getString("token"));
@@ -29,7 +29,7 @@ class ObjectsController {
         return user;
     }
 
-    static class Notification {
+    public static class Notification {
         private int mId;
         private String mTitle;
         private String mSubTitle;
@@ -38,75 +38,75 @@ class ObjectsController {
         private User mAuthor;
         private int mGroup;
 
-        Notification() {
+        public Notification() {
 
         }
 
-        User getAuthor() {
+        public User getAuthor() {
             return mAuthor;
         }
 
-        void setAuthor(User author) {
+        public void setAuthor(User author) {
             mAuthor = author;
         }
 
-        int getGroup() {
+        public int getGroup() {
             return mGroup;
         }
 
-        void setGroup(int group) {
+        public void setGroup(int group) {
             mGroup = group;
         }
 
-        int getId() {
+        public int getId() {
             return mId;
         }
 
-        void setId(int id) {
+        public void setId(int id) {
             mId = id;
         }
 
-        String getTitle() {
+        public String getTitle() {
             return mTitle;
         }
 
-        void setTitle(String title) {
+        public void setTitle(String title) {
             mTitle = title;
         }
 
-        String getSubTitle() {
+        public String getSubTitle() {
             return mSubTitle;
         }
 
-        void setSubTitle(String subTitle) {
+        public void setSubTitle(String subTitle) {
             mSubTitle = subTitle;
         }
 
-        String getUrlImage() {
+        public String getUrlImage() {
             return mUrlImage;
         }
 
-        void setUrlImage(String urlImage) {
+        public void setUrlImage(String urlImage) {
             mUrlImage = urlImage;
         }
 
-        Date getDate() {
+        public Date getDate() {
             return mDate;
         }
 
-        void setDate(Date date) {
+        public void setDate(Date date) {
             mDate = date;
         }
     }
 
-    static User getLocalUserInfo(SharedPreferences settings) {
+    public static User getLocalUserInfo(SharedPreferences settings) {
         User user = new User();
         user.setId(settings.getInt("user_id", 0));
         user.setName(settings.getString("name", "error"));
         user.setEmail(settings.getString("email", "error"));
         user.setLogin(settings.getString("login", "error"));
         user.setPro(settings.getBoolean("pro", false));
-        user.setUrlImage(settings.getString("urlImage", null));
+        user.setImageId(settings.getInt("imageId", 0));
         user.setPermission(settings.getInt("permission", 0));
         user.setToken(settings.getString("token", "error"));
         user.setGroupId(settings.getString("group", "error"));
@@ -117,7 +117,7 @@ class ObjectsController {
         private int mId;
         private String mName;
         private String mLogin;
-        private String mUrlImage;
+        private int mImageId;
         private String mEmail;
         private boolean mPro = false;
         private int mPermission;
@@ -133,47 +133,47 @@ class ObjectsController {
             mPassword = password;
         }
 
-        User() {
+        public User() {
 
         }
 
-        String getGroupId() {
+        public String getGroupId() {
             return mGroupId;
         }
 
-        void setGroupId(String groupId) {
+        public void setGroupId(String groupId) {
             mGroupId = groupId;
         }
 
-        String getToken() {
+        public String getToken() {
             return mToken;
         }
 
-        void setToken(String token) {
+        public void setToken(String token) {
             mToken = token;
         }
 
-        int getPermission() {
+        public int getPermission() {
             return mPermission;
         }
 
-        void setPermission(int permission) {
+        public void setPermission(int permission) {
             mPermission = permission;
         }
 
-        String getEmail() {
+        public String getEmail() {
             return mEmail;
         }
 
-        void setEmail(String email) {
+        public void setEmail(String email) {
             mEmail = email;
         }
 
-        boolean isPro() {
+        public boolean isPro() {
             return mPro;
         }
 
-        void setPro(boolean pro) {
+        public void setPro(boolean pro) {
             mPro = pro;
         }
 
@@ -201,12 +201,12 @@ class ObjectsController {
             this.mLogin = mLogin;
         }
 
-        String getUrlImage() {
-            return mUrlImage;
+        public int getImageId() {
+            return mImageId;
         }
 
-        void setUrlImage(String mUrlImage) {
-            this.mUrlImage = mUrlImage;
+        public void setImageId(int mImageId) {
+            this.mImageId = mImageId;
         }
     }
 
@@ -222,15 +222,15 @@ class ObjectsController {
         private Date mDateCreated;
         private ArrayList<User> mMembers = new ArrayList<>();
 
-        Group() {
+        public Group() {
 
         }
 
-        ArrayList<User> getMembers() {
+        public ArrayList<User> getMembers() {
             return mMembers;
         }
 
-        void setMembers(ArrayList<User> mMembers) {
+        public void setMembers(ArrayList<User> mMembers) {
             this.mMembers = mMembers;
         }
 
@@ -250,59 +250,59 @@ class ObjectsController {
             this.mName = mName;
         }
 
-        String getCity() {
+        public String getCity() {
             return mCity;
         }
 
-        void setCity(String mCity) {
+        public void setCity(String mCity) {
             this.mCity = mCity;
         }
 
-        String getBuilding() {
+        public String getBuilding() {
             return mBuilding;
         }
 
-        void setBuilding(String mBuilding) {
+        public void setBuilding(String mBuilding) {
             this.mBuilding = mBuilding;
         }
 
-        String getDescription() {
+        public String getDescription() {
             return mDescription;
         }
 
-        void setDescription(String mDescription) {
+        public void setDescription(String mDescription) {
             this.mDescription = mDescription;
         }
 
-        String getUrl() {
+        public String getUrl() {
             return mUrl;
         }
 
-        void setUrl(String mUrl) {
+        public void setUrl(String mUrl) {
             this.mUrl = mUrl;
         }
 
-        Boolean getConfirmed() {
+        public boolean getConfirmed() {
             return mConfirmed;
         }
 
-        void setConfirmed(Boolean mConfirmed) {
+        public void setConfirmed(boolean mConfirmed) {
             this.mConfirmed = mConfirmed;
         }
 
-        User getAuthor() {
+        public User getAuthor() {
             return mAuthor;
         }
 
-        void setAuthor(User author) {
+        public void setAuthor(User author) {
             this.mAuthor = author;
         }
 
-        Date getDateCreated() {
+        public Date getDateCreated() {
             return mDateCreated;
         }
 
-        void setDateCreated(Date mDateCreated) {
+        public void setDateCreated(Date mDateCreated) {
             this.mDateCreated = mDateCreated;
         }
 

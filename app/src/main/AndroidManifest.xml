@@ -41,7 +41,7 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".SplashActivity">
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,33 +57,33 @@
         </receiver>
 
         <activity
-            android:name=".FirstActivity"
+            android:name=".ui.FirstActivity"
             android:theme="@style/FirstTheme" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FullImageActivity"
+            android:name=".ui.FullImageActivity"
             android:theme="@style/FullImage" />
-        <activity android:name=".DownloadActivity" />
+        <activity android:name=".ui.DownloadActivity" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".ui.EditProfileActivity"
             android:theme="@style/EditProfile" />
         <activity
-            android:name=".NewNotificationActivity"
+            android:name=".ui.NewNotificationActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".HelloActivity" />
+        <activity android:name=".ui.HelloActivity" />
         <activity
-            android:name=".GroupListActivity"
+            android:name=".ui.group.search.GroupListActivity"
             android:theme="@style/SearchTheme" />
         <activity
-            android:name=".PurchaseActivity"
+            android:name=".ui.PurchaseActivity"
             android:theme="@style/StartApp" />
         <activity
-            android:name=".CreateGroupActivity"
+            android:name=".ui.CreateGroupActivity"
             android:theme="@style/StartApp" />
         <activity
-            android:name=".GroupInfoActivity"
+            android:name=".ui.group.GroupInfoActivity"
             android:theme="@style/SearchTheme" />
     </application>
 

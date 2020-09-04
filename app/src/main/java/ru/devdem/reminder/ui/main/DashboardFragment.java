@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -40,11 +40,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.controllers.LessonsController;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.controllers.TimeController;
 
 public class DashboardFragment extends Fragment {
 
@@ -69,7 +74,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_dashboard, null);
-        mContext = Objects.requireNonNull(getContext());
+        mContext = requireContext();
         activity = (MainActivity) getActivity();
         mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
         mUser = ObjectsController.getLocalUserInfo(mSettings);
@@ -90,7 +95,7 @@ public class DashboardFragment extends Fragment {
         return v;
     }
 
-    void update(boolean why) {
+    public void update(boolean why) {
         swipeRefreshLayout.setRefreshing(true);
         if (why) {
             Response.Listener<String> listener = response -> {
@@ -354,7 +359,7 @@ public class DashboardFragment extends Fragment {
         }
 
         private AdSize getAdSize() {
-            Display display = Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay();
+            Display display = requireActivity().getWindowManager().getDefaultDisplay();
             DisplayMetrics outMetrics = new DisplayMetrics();
             display.getMetrics(outMetrics);
             float widthPixels = outMetrics.widthPixels;

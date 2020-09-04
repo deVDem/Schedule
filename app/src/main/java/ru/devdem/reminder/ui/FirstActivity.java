@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -28,6 +28,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONObject;
+
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.R;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -132,7 +135,7 @@ public class FirstActivity extends AppCompatActivity {
         String email = mREmailEt.getText().toString();
         String password = mRPassEt.getText().toString();
         String confirmPassword = mRConPassEt.getText().toString();
-        String spam = mRCheckSpam.isChecked() ? "1" : "0";
+        String spam = mRCheckSpam.isChecked() ? "Yes" : "No";
         if (mRLoginEt.validate(loginRegex, getString(R.string.login_must_be)) && mRNameEt.validate(nameRegex, getString(R.string.type_first_and_last_name)) && mREmailEt.validate(emailRegex, getText(R.string.enter_the_correct_address)) && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
                 try {

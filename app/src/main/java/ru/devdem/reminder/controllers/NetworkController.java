@@ -1,9 +1,8 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.controllers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -18,7 +17,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-class NetworkController {
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.R;
+
+public class NetworkController {
     private static final String TAG = "NetworkController";
     private static NetworkController sNetworkController;
     String URL_ROOT;
@@ -36,7 +38,7 @@ class NetworkController {
         return sNetworkController;
     }
 
-    Response.ErrorListener getErrorListener(Context context) {
+    public Response.ErrorListener getErrorListener(Context context) {
         return error -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(R.string.errorNetwork)
@@ -58,7 +60,7 @@ class NetworkController {
         queue.add(sendRequest);
     }
 
-    void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String image) {
+    public void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String image) {
         Map<String, String> map = new HashMap<>();
         map.put("token", token);
         map.put("group", group);
@@ -68,7 +70,7 @@ class NetworkController {
         //goSend(context, listener, errorListener, URL_ADD_NOTIFICATION, map);
     }
 
-    void checkSubs(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String packageName, String subId, String token, String user_id) {
+    public void checkSubs(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String packageName, String subId, String token, String user_id) {
         Map<String, String> map = new HashMap<>();
         map.put("packageName", packageName);
         map.put("subscriptionId", subId);
@@ -77,7 +79,7 @@ class NetworkController {
         //goSend(context, listener, errorListener, URL_CHECK_SUB, map);
     }
 
-    void addGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String name, String city, String building, String description, String image) {
+    public void addGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String name, String city, String building, String description, String image) {
         Map<String, String> map = new HashMap<>();
         map.put("token", token);
         map.put("name", name);
@@ -89,7 +91,7 @@ class NetworkController {
     }
 
 
-    void editProfile(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String name, String email, String login, String token) {
+    public void editProfile(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String name, String email, String login, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("name", name);
         map.put("email", email);
@@ -98,7 +100,7 @@ class NetworkController {
         //goSend(context, listener, errorListener, URL_UPDATE_PROFILE, map);
     }
 
-    void Login(Context context, String login, String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public void Login(Context context, String login, String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
         map.put("action", "login");
         map.put("login", login);
@@ -106,7 +108,7 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    void Register(Context context, String login, String name, String email, String password, String spam, Response.Listener<String> listener) {
+    public void Register(Context context, String login, String name, String email, String password, String spam, Response.Listener<String> listener) {
         Map<String, String> map = new HashMap<>();
         /*login, email, password, names, spam*/
         map.put("action", "register");
@@ -118,7 +120,7 @@ class NetworkController {
         goSend(context, listener, getErrorListener(context), URL_ROOT, map);
     }
 
-    void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group, String token) {
+    public void getLessons(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("action", "getLessons");
         map.put("groupId", group);
@@ -128,7 +130,7 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    void joinToGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group_id, String token) {
+    public void joinToGroup(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String group_id, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("action", "joinGroup");
         map.put("groupId", group_id);
@@ -136,7 +138,7 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    void getGroups(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String[] params) {
+    public void getGroups(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String[] params) {
         // name, city, building, confirmed
         Map<String, String> map = new HashMap<>();
         map.put("action", "getGroups");
@@ -158,7 +160,7 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    void getGroup(Context context, String group, Response.ErrorListener errorListener) {
+    public void getGroup(Context context, String group, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
         map.put("action", "getGroups");
         Response.Listener<String> listener = response -> {
@@ -190,14 +192,14 @@ class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
         map.put("group", group);
         map.put("token", token);
         //goSend(context, listener, errorListener, URL_NOTIFICATIONS_GET, map);
     }
 
-    void getLastVerInt(Context context, Response.Listener<String> listener) {
+    public void getLastVerInt(Context context, Response.Listener<String> listener) {
         Map<String, String> map = new HashMap<>();
         map.put("type", BuildConfig.BUILD_TYPE);
         //goSend(context, listener, null, URL_GET_VER_INT, map);

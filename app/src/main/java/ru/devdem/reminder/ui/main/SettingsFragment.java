@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,6 +20,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
+
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.NotificationService;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.ui.PurchaseActivity;
+import ru.devdem.reminder.ui.SplashActivity;
 
 public class SettingsFragment extends Fragment {
 

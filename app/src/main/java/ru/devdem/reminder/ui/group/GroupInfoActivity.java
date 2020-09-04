@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.group;
 
 import android.app.Activity;
 import android.content.Context;
@@ -50,8 +50,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ru.devdem.reminder.ObjectsController.Group;
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.Group;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
 
 public class GroupInfoActivity extends AppCompatActivity {
     private static final String TAG = "GroupInfoActivity";
@@ -293,9 +296,10 @@ public class GroupInfoActivity extends AppCompatActivity {
             String login = "@" + author.getLogin();
             authorLogin.setText(login);
             authorName.setText(author.getName());
-            if (!author.getUrlImage().equals("null")) {
-                Picasso.get().load(author.getUrlImage()).into(target);
-            }
+            /*TODO: сделать получение фоток по id
+               if (author.getImageId()!=0) {
+                Picasso.get().load(author.getImageId()).into(target);
+            }*/
         } else {
             authorName.setText(R.string.system);
             Picasso.get().load("https://files.devdem.ru/apps/schedule/user_images/server.jpg").into(target);
@@ -362,7 +366,8 @@ public class GroupInfoActivity extends AppCompatActivity {
                 String login = "@" + user.getLogin();
                 holder.mTextLogin.setText(login);
                 holder.mTextName.setText(user.getName());
-                if (!user.getUrlImage().equals("null")) {
+                /* TODO: Сделать получение фотографий по id
+                if (!user.getImageId().equals("null")) {
                     Target target = new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -420,8 +425,8 @@ public class GroupInfoActivity extends AppCompatActivity {
                             Log.i(TAG, "onPrepareLoad: loading");
                         }
                     };
-                    Picasso.get().load(user.getUrlImage()).into(target);
-                }
+                    Picasso.get().load(user.getImageId()).into(target);
+                }*/
             }
             if (position == members.size()) holder.mSpace.setVisibility(View.VISIBLE);
         }

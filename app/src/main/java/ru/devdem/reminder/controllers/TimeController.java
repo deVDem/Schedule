@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.controllers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import ru.devdem.reminder.LessonsController.Lesson;
+import ru.devdem.reminder.controllers.LessonsController.Lesson;
 
-class TimeController {
+public class TimeController {
 
     @SuppressLint("StaticFieldLeak")
     private static TimeController sTimeController;
@@ -26,13 +26,13 @@ class TimeController {
         mLessonsController = LessonsController.get(context);
     }
 
-    static TimeController get(Context context) {
+    public static TimeController get(Context context) {
         if (sTimeController == null)
             sTimeController = new TimeController(context.getApplicationContext());
         return sTimeController;
     }
 
-    String getRemainText(Date date1, Date date2) {
+    public String getRemainText(Date date1, Date date2) {
         String hour;
         String min;
         String sec;
@@ -50,7 +50,7 @@ class TimeController {
         return hour + ":" + min + ":" + sec;
     }
 
-    int[] getNumberlesson() {
+    public int[] getNumberlesson() {
         ArrayList<Lesson> mLessons = mLessonsController.getLessons();
         Calendar now = Calendar.getInstance();
         int hour = now.get(Calendar.HOUR_OF_DAY);
@@ -150,7 +150,7 @@ class TimeController {
         return answer;
     }
 
-    void destroy() {
+    public void destroy() {
         sTimeController = null;
     }
 }

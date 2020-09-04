@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.group.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -24,7 +24,10 @@ import com.google.android.gms.ads.AdView;
 
 import java.util.Objects;
 
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
 
 public class GroupSearchFragment extends Fragment {
 
@@ -70,6 +73,7 @@ public class GroupSearchFragment extends Fragment {
             adView.loadAd(adRequest);
         }
         return view;
+        // TODO: сделать подсказку для свайпа
     }
 
     private AdSize getAdSize() {

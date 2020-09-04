@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -28,7 +28,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import ru.devdem.reminder.LessonsController.Lesson;
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.controllers.LessonsController;
+import ru.devdem.reminder.controllers.LessonsController.Lesson;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.controllers.TimeController;
 
 public class TimerFragment extends Fragment {
 

@@ -1,12 +1,10 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +27,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
@@ -42,8 +39,13 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-import ru.devdem.reminder.ObjectsController.Notification;
-import ru.devdem.reminder.ObjectsController.User;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
+import ru.devdem.reminder.controllers.ObjectsController.Notification;
+import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.ui.FullImageActivity;
+import ru.devdem.reminder.ui.NewNotificationActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -74,6 +76,8 @@ public class NotificationsFragment extends Fragment {
         createNotifications();
         setHasOptionsMenu(true);
         return view;
+        /*TODO : А еще было бы клево если б можно было в объявлении тег предмета поставить и
+           переходить к объявлениям только этого предмета по клику на название в расписании */
     }
 
     @Override
@@ -127,7 +131,7 @@ public class NotificationsFragment extends Fragment {
                     else {
                         author = new User();
                         author.setName(getString(R.string.system));
-                        author.setUrlImage("https://files.devdem.ru/apps/schedule/user_images/server.jpg");
+                        /*author.setImageId("https://files.devdem.ru/apps/schedule/user_images/server.jpg");*/
                         author.setLogin("system");
                     }
                     notification.setAuthor(author);
@@ -153,7 +157,7 @@ public class NotificationsFragment extends Fragment {
             notification.setGroup(-1);
             User author = new User();
             author.setName(getString(R.string.system));
-            author.setUrlImage("https://files.devdem.ru/apps/schedule/user_images/server.jpg");
+            /*author.setImageId("https://files.devdem.ru/apps/schedule/user_images/server.jpg");*/
             author.setLogin("system");
             notification.setAuthor(author);
             mNotifications.add(notification);
@@ -227,7 +231,7 @@ public class NotificationsFragment extends Fragment {
                     holder.mAuthorPro.setVisibility(author.isPro() ? View.VISIBLE : View.GONE);
                     String login = "@" + author.getLogin();
                     holder.mAuthorLogin.setText(login);
-                    if (author.getUrlImage().length() > 5) {
+                    /*if (author.getImageId().length() > 5) {
                         Target target = new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -252,8 +256,8 @@ public class NotificationsFragment extends Fragment {
 
                             }
                         };
-                        Picasso.get().load(author.getUrlImage()).into(target);
-                    }
+                        Picasso.get().load(author.getImageId()).into(target);
+                    }*/
                 }
                 holder.mTitleView.setText(notification.getTitle());
                 Date date = notification.getDate();
@@ -264,7 +268,7 @@ public class NotificationsFragment extends Fragment {
                     holder.mImageView.setVisibility(View.VISIBLE);
                     Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
                     holder.mImageView.setOnClickListener(v -> {
-                        Activity activity = Objects.requireNonNull(getActivity());
+                        Activity activity = requireActivity();
                         startActivity(FullImageActivity.newInstance(activity, urlImage));
                         activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                     });

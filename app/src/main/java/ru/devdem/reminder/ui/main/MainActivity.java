@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui.main;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.Html;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -37,6 +36,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import ru.devdem.reminder.BuildConfig;
+import ru.devdem.reminder.controllers.LessonsController;
+import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.NotificationService;
+import ru.devdem.reminder.NotificationUtils;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.controllers.TimeController;
+import ru.devdem.reminder.ui.DownloadActivity;
+import ru.devdem.reminder.ui.HelloActivity;
+import ru.devdem.reminder.ui.SplashActivity;
 
 public class MainActivity extends AppCompatActivity {
 

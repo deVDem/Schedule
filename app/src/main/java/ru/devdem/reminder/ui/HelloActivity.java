@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import ru.devdem.reminder.controllers.LessonsController;
+import ru.devdem.reminder.R;
+import ru.devdem.reminder.ui.group.search.GroupListActivity;
 
 public class HelloActivity extends AppCompatActivity {
     private boolean exit = false;

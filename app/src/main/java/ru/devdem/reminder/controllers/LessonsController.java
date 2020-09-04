@@ -1,4 +1,4 @@
-package ru.devdem.reminder;
+package ru.devdem.reminder.controllers;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
-class LessonsController {
+public class LessonsController {
 
 
     private static LessonsController sLessonsController;
@@ -28,7 +28,7 @@ class LessonsController {
         mContext = context.getApplicationContext();
     }
 
-    static LessonsController get(Context context) {
+    public static LessonsController get(Context context) {
         if (sLessonsController == null) sLessonsController = new LessonsController(context);
         return sLessonsController;
     }
@@ -49,7 +49,7 @@ class LessonsController {
 
     private static final String TAG = "LessonsController";
 
-    void parseLessons(String response) {
+    public void parseLessons(String response) {
         Log.d(TAG, "parseLessons: " + response);
         removeLessons();
         try {
@@ -80,7 +80,7 @@ class LessonsController {
         }
     }
 
-    void loadLessons() {
+    public void loadLessons() {
         parseLessons(mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).getString("lessons", null));
     }
 
@@ -88,16 +88,16 @@ class LessonsController {
         mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().putString("lessons", json).apply();
     }
 
-    void removeLessons() {
+    public void removeLessons() {
         mContext.getSharedPreferences(NAME_PREFS_JSONS, Context.MODE_PRIVATE).edit().clear().apply();
         mLessons.clear();
     }
 
-    ArrayList<Lesson> getLessons() {
+    public ArrayList<Lesson> getLessons() {
         return mLessons;
     }
 
-    void destroy() {
+    public void destroy() {
         sLessonsController = null;
     }
 
@@ -114,7 +114,7 @@ class LessonsController {
         private boolean mZamena;
         private String mDescription;
 
-        String getDescription() {
+        public String getDescription() {
             return mDescription;
         }
 
@@ -123,7 +123,7 @@ class LessonsController {
         }
 
 
-        boolean isZamena() {
+        public boolean isZamena() {
             return mZamena;
         }
 
@@ -131,7 +131,7 @@ class LessonsController {
             mZamena = zamena;
         }
 
-        String getCab() {
+        public String getCab() {
             return mCab;
         }
 
@@ -148,7 +148,7 @@ class LessonsController {
             mId = uuid;
         }
 
-        String getNumberText() {
+        public String getNumberText() {
             return mNumberText;
         }
 
@@ -160,7 +160,7 @@ class LessonsController {
             return mId;
         }
 
-        int getNumber() {
+        public int getNumber() {
             return mNumber;
         }
 
@@ -168,7 +168,7 @@ class LessonsController {
             mNumber = number;
         }
 
-        int getDay() {
+        public int getDay() {
             return mDay;
         }
 
@@ -184,7 +184,7 @@ class LessonsController {
             mName = name;
         }
 
-        Date getStart() {
+        public Date getStart() {
             return mStart;
         }
 
@@ -192,7 +192,7 @@ class LessonsController {
             mStart = start;
         }
 
-        Date getEnd() {
+        public Date getEnd() {
             return mEnd;
         }
 
