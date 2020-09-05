@@ -21,7 +21,6 @@ public class TimeController {
     private LessonsController mLessonsController;
 
     private TimeController(Context context) {
-        String NAME_PREFS = "settings";
         mContext = context;
         mLessonsController = LessonsController.get(context);
     }

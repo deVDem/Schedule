@@ -72,8 +72,8 @@
     <string name="tomorrow">tomorrow</string>
     <string name="lessons_over_today">Lessons are over for today!</string>
     <string name="messages">Messages</string>
-    <string name="schedule_of_group">Group schedule for</string>
-    <string name="notifications_of_group">Notifications for group</string>
+    <string name="schedule_of_group">Schedule for</string>
+    <string name="notifications_of_group">Notifications for</string>
     <string name="title">Title</string>
     <string name="message_text">Message text</string>
     <string name="insert_a_link_to_the_image_here">Insert a link to the image here</string>

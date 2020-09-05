@@ -34,14 +34,11 @@ import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.controllers.ObjectsController.User;
 import ru.devdem.reminder.R;
-import ru.devdem.reminder.ui.EditProfileActivity;
 import ru.devdem.reminder.ui.group.GroupInfoActivity;
 import ru.devdem.reminder.ui.PurchaseActivity;
 
@@ -58,8 +55,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.fragment_profile, null);
-        mContext = Objects.requireNonNull(getContext());
-        mMainActivity = (MainActivity) Objects.requireNonNull(getActivity());
+        mContext = requireContext();
+        mMainActivity = (MainActivity) requireActivity();
         networkController = NetworkController.get();
         permissions = getResources().getStringArray(R.array.permissions);
         mSettings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -115,7 +112,7 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             dialog.cancel();
         };
-        networkController.joinToGroup(mContext, listener, errorListener, "0", mSettings.getString("token", "null"));
+        networkController.joinToGroup(mContext, listener, errorListener, "-1", mSettings.getString("token", "null"));
     }
 
     @Override
@@ -126,8 +123,10 @@ public class ProfileFragment extends Fragment {
                 updateUI();
                 return true;
             case R.id.menu_settings:
-                startActivityForResult(new Intent(mContext, EditProfileActivity.class), 228);
-                requireActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                // TODO: сделать редактор профиля
+                //startActivityForResult(new Intent(mContext, EditProfileActivity.class), 228);
+                //requireActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                Toast.makeText(mContext, "Редактор профилей ещё не готов", Toast.LENGTH_LONG).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -149,10 +148,9 @@ public class ProfileFragment extends Fragment {
     private void updateUI() {
         mProfileFrame.removeAllViews();
         User user = ObjectsController.getLocalUserInfo(mSettings);
-        String name = user.getName();
+        String name = user.getNames();
         String login = "@" + user.getLogin();
         String email = user.getEmail();
-        String permission = permissions[user.getPermission()];
         int urlImage = user.getImageId();
         View profileCard = View.inflate(mContext, R.layout.group_info_user_view_full, null);
         TextView textName = profileCard.findViewById(R.id.profileName);
@@ -169,7 +167,6 @@ public class ProfileFragment extends Fragment {
         CardView cardView = profileCard.findViewById(R.id.card_view);
         textName.setText(name);
         textEmail.setText(email);
-        textPermission.setText(permission);
         textLogin.setText(login);
         imagePro.setVisibility(user.isPro() ? View.VISIBLE : View.GONE);
         goProBtn.setVisibility(user.isPro() ? View.GONE : View.VISIBLE);

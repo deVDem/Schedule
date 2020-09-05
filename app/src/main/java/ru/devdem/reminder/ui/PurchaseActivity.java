@@ -158,11 +158,10 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
     }
 
     private void updateUI(FrameLayout profileFrame, User user) {
-        String name = user.getName();
+        String name = user.getNames();
         String login = "@" + user.getLogin();
         String email = user.getEmail();
         String[] permissions = getResources().getStringArray(R.array.permissions);
-        String permission = permissions[user.getPermission()];
         int urlImage = user.getImageId();
         View profileCard = View.inflate(mContext, R.layout.group_info_user_view_full, null);
         TextView textName = profileCard.findViewById(R.id.profileName);
@@ -174,7 +173,6 @@ public class PurchaseActivity extends AppCompatActivity implements PurchasesUpda
         CardView cardView = profileCard.findViewById(R.id.card_view);
         textName.setText(name);
         textEmail.setText(email);
-        textPermission.setText(permission);
         textLogin.setText(login);
         imagePro.setVisibility(View.VISIBLE);
         Button goBtn = profileCard.findViewById(R.id.goProBtn);

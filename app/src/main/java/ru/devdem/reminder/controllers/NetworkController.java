@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -25,12 +27,13 @@ public class NetworkController {
     private static NetworkController sNetworkController;
     String URL_ROOT;
     private static RequestQueue queue;
+    String URL_GET_VER_INT = "https://api.devdem.ru/apps/schedule/version.php";
 
     private NetworkController() {
         if (BuildConfig.DEBUG)
             URL_ROOT = "https://api.devdem.ru/apps/schedule/debug/";
         else
-            URL_ROOT = "https://api.devdem.ru/apps/schedule/" + BuildConfig.VERSION_CODE+"/";
+            URL_ROOT = "https://api.devdem.ru/apps/schedule/" + BuildConfig.VERSION_CODE + "/";
     }
 
     public static NetworkController get() {
@@ -125,8 +128,8 @@ public class NetworkController {
         map.put("action", "getLessons");
         map.put("groupId", group);
         map.put("token", token);
-        Log.d(TAG, "getLessons: groupId:"+group);
-        Log.d(TAG, "getLessons: token:"+token);
+        Log.d(TAG, "getLessons: groupId:" + group);
+        Log.d(TAG, "getLessons: token:" + token);
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
@@ -160,30 +163,35 @@ public class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    public void getGroup(Context context, String group, Response.ErrorListener errorListener) {
+    public void getGroup(Context context, Response.ErrorListener errorListener, String group, String token) {
         Map<String, String> map = new HashMap<>();
         map.put("action", "getGroups");
+        map.put("groupId", group);
+        map.put("token", token);
         Response.Listener<String> listener = response -> {
+            Log.d(TAG, "getGroup: " + response);
             try {
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONObject jsonGroup = null;
-                for (int i = 0; i < jsonResponse.getInt("all"); i++) {
-                    if (jsonResponse.getJSONObject(String.valueOf(i)).getInt("id") == Integer.parseInt(group)) {
-                        jsonGroup = jsonResponse.getJSONObject(String.valueOf(i));
-                        break;
+                JSONObject jsonObject = new JSONObject(response);
+                if (jsonObject.isNull("error")) {
+                    if (!jsonObject.isNull("response")) {
+                        JSONObject jsonGroup = jsonObject.getJSONObject("response").getJSONArray("group_list").getJSONObject(0);
+                        if (jsonGroup != null) {
+                            context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
+                                    .putString("group_name", jsonGroup.getString("name"))
+                                    .putString("group_city", jsonGroup.getString("city"))
+                                    .putString("group_building", jsonGroup.getString("building"))
+                                    .putString("group_description", jsonGroup.getString("description"))
+                                    .putString("group_urlImage", jsonGroup.getString("imageId"))
+                                    .putString("group_confirmed", jsonGroup.getString("confirmed"))
+                                    .putString("group_author_id", jsonGroup.getString("ownerId"))
+                                    .putString("group_date_created", jsonGroup.getString("date_created"))
+                                    .apply();
+                        }
+                    } else {
+                        // ... code
                     }
-                }
-                if (jsonGroup != null) {
-                    context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
-                            .putString("group_name", jsonGroup.getString("name"))
-                            .putString("group_city", jsonGroup.getString("city"))
-                            .putString("group_building", jsonGroup.getString("building"))
-                            .putString("group_description", jsonGroup.getString("description"))
-                            .putString("group_urlImage", jsonGroup.getString("urlImage"))
-                            .putString("group_confirmed", jsonGroup.getString("confirmed"))
-                            .putString("group_author_id", jsonGroup.getString("author_id"))
-                            .putString("group_date_created", jsonGroup.getString("date_created"))
-                            .apply();
+                } else {
+                    // ... code
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -201,8 +209,7 @@ public class NetworkController {
 
     public void getLastVerInt(Context context, Response.Listener<String> listener) {
         Map<String, String> map = new HashMap<>();
-        map.put("type", BuildConfig.BUILD_TYPE);
-        //goSend(context, listener, null, URL_GET_VER_INT, map);
+        goSend(context, listener, null, URL_GET_VER_INT, map);
     }
 
     private static class SendRequest extends StringRequest {
@@ -211,7 +218,7 @@ public class NetworkController {
 
         SendRequest(Response.Listener<String> listener, Response.ErrorListener errorListener, String url, Map<String, String> params, int method) {
             super(method, url, listener, errorListener);
-            Log.d(TAG, "SendRequest: Method: "+(BuildConfig.DEBUG ? Method.GET : Method.POST));
+            Log.d(TAG, "SendRequest: Method: " + (BuildConfig.DEBUG ? Method.GET : Method.POST));
             mParams = params;
         }
 

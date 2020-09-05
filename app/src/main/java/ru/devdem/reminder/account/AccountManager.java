@@ -30,7 +30,7 @@ public class AccountManager {
     private void saveData() {
         SharedPreferences.Editor editor = mLocalData.edit();
         editor.putInt("id", mAccount.getId());
-        editor.putString("names", mAccount.getName());
+        editor.putString("names", mAccount.getNames());
         editor.putString("login", mAccount.getLogin());
         editor.putInt("imageId", mAccount.getImageId());
         editor.putString("email", mAccount.getEmail());
@@ -53,15 +53,13 @@ public class AccountManager {
                             JSONObject jsonObjectResponse = jsonResponse.getJSONObject("response");
                             JSONObject jsonUserInfo = jsonObjectResponse.getJSONObject("user_info");
                             mAccount.setId(jsonUserInfo.getInt("id"));
-                            mAccount.setName(jsonUserInfo.getString("names"));
+                            mAccount.setNames(jsonUserInfo.getString("names"));
                             mAccount.setEmail(jsonUserInfo.getString("email"));
                             mAccount.setLogin(jsonUserInfo.getString("login"));
                             mAccount.setGroupId(jsonUserInfo.getString("groupId"));
                             mAccount.setPro(jsonUserInfo.getString("pro").equals("Yes"));
                             //mAccount.setUrlImage(jsonUserInfo.getString("urlImage"));
-                            mAccount.setPermission(jsonUserInfo.getInt("permission"));
                             mAccount.setToken(jsonUserInfo.getString("token"));
-                            mAccount.setPassword(jsonUserInfo.getString("password"));
                             saveData();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -80,7 +78,7 @@ public class AccountManager {
             }
         };
         Response.ErrorListener errorListener = error -> Toast.makeText(mContext, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
-        mNetworkController.Login(mContext, mAccount.getLogin(), mAccount.getPassword(), listener, errorListener);
+        mNetworkController.Login(mContext, mAccount.getLogin(), mAccount.getToken(), listener, errorListener);
     }
 
     private User getAccount() {
@@ -100,7 +98,7 @@ public class AccountManager {
         String token = mLocalData.getString("token", "null");
         String groupId = mLocalData.getString("group", "0");
         mAccount.setId(id);
-        mAccount.setName(name);
+        mAccount.setNames(name);
         mAccount.setLogin(login);
         mAccount.setImageId(imageId);
         mAccount.setEmail(email);

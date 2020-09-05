@@ -85,7 +85,7 @@ public class NotificationsFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_notifications, menu);
         MenuItem item = menu.findItem(R.id.menu_edit);
-        item.setVisible(ObjectsController.getLocalUserInfo(mSettings).getPermission() > 1);
+        item.setVisible(true); //
     }
 
     @Override
@@ -130,7 +130,7 @@ public class NotificationsFragment extends Fragment {
                         author = ObjectsController.parseUser(jsonObject.getJSONObject("author"));
                     else {
                         author = new User();
-                        author.setName(getString(R.string.system));
+                        author.setNames(getString(R.string.system));
                         /*author.setImageId("https://files.devdem.ru/apps/schedule/user_images/server.jpg");*/
                         author.setLogin("system");
                     }
@@ -156,7 +156,7 @@ public class NotificationsFragment extends Fragment {
             notification.setSubTitle(getString(R.string.swipedowntoretry));
             notification.setGroup(-1);
             User author = new User();
-            author.setName(getString(R.string.system));
+            author.setNames(getString(R.string.system));
             /*author.setImageId("https://files.devdem.ru/apps/schedule/user_images/server.jpg");*/
             author.setLogin("system");
             notification.setAuthor(author);
@@ -227,7 +227,7 @@ public class NotificationsFragment extends Fragment {
                     cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server));
                 }
                 if (author != null) {
-                    holder.mAuthorName.setText(author.getName());
+                    holder.mAuthorName.setText(author.getNames());
                     holder.mAuthorPro.setVisibility(author.isPro() ? View.VISIBLE : View.GONE);
                     String login = "@" + author.getLogin();
                     holder.mAuthorLogin.setText(login);

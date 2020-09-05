@@ -14,12 +14,11 @@ public class ObjectsController {
         User user = new User();
         try {
             if (!jsonUser.isNull("id")) user.setId(jsonUser.getInt("id"));
-            if (!jsonUser.isNull("name")) user.setName(jsonUser.getString("name"));
+            if (!jsonUser.isNull("name")) user.setNames(jsonUser.getString("name"));
             if (!jsonUser.isNull("email")) user.setEmail(jsonUser.getString("email"));
             if (!jsonUser.isNull("login")) user.setLogin(jsonUser.getString("login"));
             if (!jsonUser.isNull("urlImage")) user.setImageId(jsonUser.getInt("imageId"));
             if (!jsonUser.isNull("pro")) user.setPro(jsonUser.getString("pro").equals("Yes"));
-            if (!jsonUser.isNull("permission")) user.setPermission(jsonUser.getInt("permission"));
             if (!jsonUser.isNull("token")) user.setToken(jsonUser.getString("token"));
             if (!jsonUser.isNull("groups")) user.setGroupId(jsonUser.getString("groups"));
         } catch (Exception e) {
@@ -102,12 +101,11 @@ public class ObjectsController {
     public static User getLocalUserInfo(SharedPreferences settings) {
         User user = new User();
         user.setId(settings.getInt("user_id", 0));
-        user.setName(settings.getString("name", "error"));
+        user.setNames(settings.getString("name", "error"));
         user.setEmail(settings.getString("email", "error"));
         user.setLogin(settings.getString("login", "error"));
         user.setPro(settings.getBoolean("pro", false));
         user.setImageId(settings.getInt("imageId", 0));
-        user.setPermission(settings.getInt("permission", 0));
         user.setToken(settings.getString("token", "error"));
         user.setGroupId(settings.getString("group", "error"));
         return user;
@@ -115,23 +113,13 @@ public class ObjectsController {
 
     public static class User {
         private int mId;
-        private String mName;
         private String mLogin;
+        private String mNames;
         private int mImageId;
         private String mEmail;
         private boolean mPro = false;
-        private int mPermission;
         private String mToken;
         private String mGroupId;
-        private String mPassword;
-
-        public String getPassword() {
-            return mPassword;
-        }
-
-        public void setPassword(String password) {
-            mPassword = password;
-        }
 
         public User() {
 
@@ -151,14 +139,6 @@ public class ObjectsController {
 
         public void setToken(String token) {
             mToken = token;
-        }
-
-        public int getPermission() {
-            return mPermission;
-        }
-
-        public void setPermission(int permission) {
-            mPermission = permission;
         }
 
         public String getEmail() {
@@ -185,12 +165,12 @@ public class ObjectsController {
             this.mId = mId;
         }
 
-        public String getName() {
-            return mName;
+        public String getNames() {
+            return mNames;
         }
 
-        public void setName(String mName) {
-            this.mName = mName;
+        public void setNames(String mName) {
+            this.mNames = mName;
         }
 
         public String getLogin() {

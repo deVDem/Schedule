@@ -194,7 +194,7 @@ public class DashboardFragment extends Fragment {
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LessonsViewer> {
         ArrayList<ArrayList<LessonsController.Lesson>> mLessons;
-        boolean[] prepared = new boolean[6];
+        boolean[] prepared = new boolean[7];
 
         RVAdapter(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
             this.mLessons = lessons;

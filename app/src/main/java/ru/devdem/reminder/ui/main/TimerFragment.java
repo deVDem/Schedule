@@ -86,7 +86,7 @@ public class TimerFragment extends Fragment {
     }
 
     private AdSize getAdSize() {
-        Display display = Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay();
+        Display display = requireActivity().getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);
         float widthPixels = outMetrics.widthPixels;

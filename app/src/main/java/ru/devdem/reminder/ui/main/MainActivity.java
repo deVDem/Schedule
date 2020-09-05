@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -32,6 +33,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mLessonsController.loadLessons();
         notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
-            if(mSettings.getBoolean("alpha_warn", true)) {
+            if (mSettings.getBoolean("alpha_warn", true)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Предупреждение");
                 builder.setMessage("Данная версия приложения находится в альфа-тестировании, " +
@@ -83,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("Окей", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();;
+                        dialogInterface.cancel();
+                        ;
                     }
                 });
                 builder.setCancelable(false);
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
                 mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
-                mNetworkController.getGroup(this, mSettings.getString("group", ""), null);
+                mNetworkController.getGroup(this, null,  mSettings.getString("group", ""), mSettings.getString("token", ""));
                 start();
             }
         } else finish();
@@ -177,7 +180,9 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(0);
                     break;
                 case R.id.main_dashboard:
+                    if(mSettings.getString("group_name", "loading").length() <= 5)
                     actionBar.setSubtitle(getResources().getString(R.string.schedule_of_group) + " " + mSettings.getString("group_name", "loading"));
+                    else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(1);
                     break;
                 case R.id.main_timer:
@@ -185,7 +190,9 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(2);
                     break;
                 case R.id.main_notifications:
-                    actionBar.setSubtitle(getResources().getString(R.string.notifications_of_group) + " " + mSettings.getString("group_name", "loading"));
+                    if(mSettings.getString("group_name", "loading").length() <= 5)
+                        actionBar.setSubtitle(getResources().getString(R.string.notifications_of_group) + " " + mSettings.getString("group_name", "loading"));
+                    else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(3);
                     break;
                 case R.id.main_settings:
@@ -276,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     JSONObject errorJson = jsonResponse.getJSONObject("error");
                     Toast.makeText(this, errorJson.getInt("code") + " " + errorJson.getString("text"), Toast.LENGTH_SHORT).show();
-                    if(errorJson.getInt("code")!=1) exit();
+                    if (errorJson.getInt("code") != 1) exit();
                 }
             } catch (Exception e) {
                 Toast.makeText(this, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
@@ -298,22 +305,40 @@ public class MainActivity extends AppCompatActivity {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                int lastVer = jsonObject.getInt("ver");
-                String url = jsonObject.getString("url");
-                if (lastVer > BuildConfig.VERSION_CODE) {
-                    Intent updateIntent = DownloadActivity.newIntent(this, url);
-                    updateIntent.setAction("ru.devdem.reminder.downloadupdate");
-                    PendingIntent updatePendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
-                    NotificationCompat.Builder nb = notificationUtils.getNewUpdateChannelNotification();
-                    Notification notification = nb.addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
-                    notification.contentIntent = updatePendingIntent;
-                    notificationUtils.getManager().notify(102, notification);
-                    snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
-                    snackbar.setAction(R.string.download, v -> {
-                        Intent updateIntent1 = DownloadActivity.newIntent(MainActivity.this, url);
-                        startActivity(updateIntent1);
-                    });
-                    snackbar.show();
+                if (!jsonObject.isNull(BuildConfig.BUILD_TYPE)){
+                    JSONObject verInfJson = jsonObject.getJSONObject(BuildConfig.BUILD_TYPE);
+                    int lastVer = verInfJson.getInt("ver");
+                    String url = verInfJson.getString("url");
+                    boolean market = verInfJson.getBoolean("market");
+                    if (lastVer > BuildConfig.VERSION_CODE && !market) {
+                        Intent updateIntent = DownloadActivity.newIntent(this, url);
+                        updateIntent.setAction("ru.devdem.reminder.downloadupdate");
+                        PendingIntent updatePendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
+                        NotificationCompat.Builder nb = notificationUtils.getNewUpdateChannelNotification();
+                        Notification notification = nb.addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
+                        notification.contentIntent = updatePendingIntent;
+                        notificationUtils.getManager().notify(102, notification);
+                        snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
+                        snackbar.setAction(R.string.download, v -> {
+                            Intent updateIntent1 = DownloadActivity.newIntent(MainActivity.this, url);
+                            startActivity(updateIntent1);
+                        });
+                        snackbar.show();
+                    } else if(lastVer > BuildConfig.VERSION_CODE && market) {
+                        Uri address = Uri.parse("http://developer.alexanderklimov.ru");
+                        Intent openLinkIntent = new Intent(Intent.ACTION_VIEW, address);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, openLinkIntent, 0);
+                        NotificationCompat.Builder nb = notificationUtils.getNewUpdateChannelNotification();
+                        Notification notification = nb.addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), pendingIntent)).build();
+                        notification.contentIntent = pendingIntent;
+                        notificationUtils.getManager().notify(102, notification);
+                        snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
+                        snackbar.setAction(R.string.download, v -> {
+                            startActivity(openLinkIntent);
+                            notificationUtils.getManager().cancel(102);
+                        });
+                        snackbar.show();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

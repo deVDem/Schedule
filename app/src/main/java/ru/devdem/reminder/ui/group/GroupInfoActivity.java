@@ -295,7 +295,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         if (author != null) {
             String login = "@" + author.getLogin();
             authorLogin.setText(login);
-            authorName.setText(author.getName());
+            authorName.setText(author.getNames());
             /*TODO: сделать получение фоток по id
                if (author.getImageId()!=0) {
                 Picasso.get().load(author.getImageId()).into(target);
@@ -365,7 +365,7 @@ public class GroupInfoActivity extends AppCompatActivity {
             } else {
                 String login = "@" + user.getLogin();
                 holder.mTextLogin.setText(login);
-                holder.mTextName.setText(user.getName());
+                holder.mTextName.setText(user.getNames());
                 /* TODO: Сделать получение фотографий по id
                 if (!user.getImageId().equals("null")) {
                     Target target = new Target() {
