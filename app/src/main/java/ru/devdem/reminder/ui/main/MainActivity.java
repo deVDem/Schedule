@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mLessonsController.loadLessons();
         notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
-            if (mSettings.getBoolean("alpha_warn", true)) {
+            if (mSettings.getInt("alpha_warn", 0)%5==0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Предупреждение");
                 builder.setMessage("Данная версия приложения находится в альфа-тестировании, " +
@@ -85,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("Окей", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        mSettings.edit().putInt("alpha_warn", 1).apply();
                         dialogInterface.cancel();
-                        ;
                     }
                 });
                 builder.setCancelable(false);
                 builder.show();
+            } else {
+                mSettings.edit().putInt("alpha_warn", mSettings.getInt("alpha_warn", 0)+1).apply();
             }
             if (mSettings.getString("group", "0").equals("0")) {
                 startActivity(new Intent(MainActivity.this, HelloActivity.class));
@@ -211,15 +213,12 @@ public class MainActivity extends AppCompatActivity {
                 if (!inWhiteList) {
                     AlertDialog dialog = new AlertDialog.Builder(this)
                             .setTitle("Ограничения на фоновую активность приложения")
-                            .setMessage("Запретите ограничения на фоновую активность приложения в настройках")
+                            .setMessage("Запретите ограничения на фоновую активность приложения в настройках вашей системы")
                             .setNegativeButton("Больше не справивать", (dialog1, which) -> {
                                 mSettings.edit().putBoolean("power", false).apply();
                             })
-                            .setPositiveButton("Запретить", (dialog1, which) -> {
+                            .setPositiveButton("ОК", (dialog1, which) -> {
                                 startActivity(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
-                            })
-                            .setNeutralButton("Нет", (dialog1, which) -> {
-                                dialog1.cancel();
                             })
                             .create();
                     dialog.show();
@@ -291,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         Response.ErrorListener errorListener = error -> Toast.makeText(this, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
-        mNetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("password", ""), listener, errorListener);
+        mNetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("token", ""), listener, errorListener);
     }
 
     private void exit() {

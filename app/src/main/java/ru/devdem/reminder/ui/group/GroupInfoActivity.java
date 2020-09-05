@@ -101,18 +101,17 @@ public class GroupInfoActivity extends AppCompatActivity {
                     group.setCity(groupJson.getString("city"));
                     group.setBuilding(groupJson.getString("building"));
                     group.setDescription(groupJson.getString("description"));
-                    group.setUrl(groupJson.getString("urlImage"));
+                    group.setUrl(groupJson.getString("imageId"));
                     group.setConfirmed(groupJson.getString("confirmed").equals("Yes"));
                     String date_created = groupJson.getString("date_created");
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     group.setDateCreated(!date_created.equals("null") ? format.parse(date_created) : new Date());
-                    JSONObject usersJson = groupJson.getJSONObject("users");
-                    int users_all = usersJson.getInt("users_all");
+                    JSONArray usersJson = responseJson.getJSONArray("users");
                     ArrayList<User> users = new ArrayList<>();
-                    for (int j = 0; j < users_all; j++) {
-                        JSONObject userJson = usersJson.getJSONObject(String.valueOf(j));
+                    for (int j = 0; j < usersJson.length(); j++) {
+                        JSONObject userJson = usersJson.getJSONObject(j);
                         User user = ObjectsController.parseUser(userJson);
-                        if (groupJson.getInt("author_id") == user.getId()) {
+                        if (groupJson.getInt("ownerId") == user.getId()) {
                             group.setAuthor(user);
                         }
                         users.add(user);
@@ -121,10 +120,9 @@ public class GroupInfoActivity extends AppCompatActivity {
                     mGroup = group;
                     start();
                 } else {
-                    Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, object.getJSONObject("error").getInt("code")+" "+object.getJSONObject("error").getString("text"), Toast.LENGTH_LONG).show();
                     setResult(RESULT_CANCELED, null);
                     finish();
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

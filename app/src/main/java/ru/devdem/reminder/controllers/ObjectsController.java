@@ -17,10 +17,10 @@ public class ObjectsController {
             if (!jsonUser.isNull("name")) user.setNames(jsonUser.getString("name"));
             if (!jsonUser.isNull("email")) user.setEmail(jsonUser.getString("email"));
             if (!jsonUser.isNull("login")) user.setLogin(jsonUser.getString("login"));
-            if (!jsonUser.isNull("urlImage")) user.setImageId(jsonUser.getInt("imageId"));
+            if (!jsonUser.isNull("imageId")) user.setImageId(jsonUser.getInt("imageId"));
             if (!jsonUser.isNull("pro")) user.setPro(jsonUser.getString("pro").equals("Yes"));
             if (!jsonUser.isNull("token")) user.setToken(jsonUser.getString("token"));
-            if (!jsonUser.isNull("groups")) user.setGroupId(jsonUser.getString("groups"));
+            if (!jsonUser.isNull("groupId")) user.setGroupId(jsonUser.getString("groups"));
         } catch (Exception e) {
             e.printStackTrace();
             user = null;

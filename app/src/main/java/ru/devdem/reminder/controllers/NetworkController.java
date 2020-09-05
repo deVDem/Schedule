@@ -156,7 +156,7 @@ public class NetworkController {
             if (params[3] != null)
                 map.put("confirmed", params[3]);
             if (params[4] != null)
-                map.put("id", params[4]);
+                map.put("groupId", params[4]);
             if (params[5] != null)
                 map.put("full", params[5]);
         }
