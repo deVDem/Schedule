@@ -14,13 +14,13 @@ public class ObjectsController {
         User user = new User();
         try {
             if (!jsonUser.isNull("id")) user.setId(jsonUser.getInt("id"));
-            if (!jsonUser.isNull("name")) user.setNames(jsonUser.getString("name"));
+            if (!jsonUser.isNull("names")) user.setNames(jsonUser.getString("names"));
             if (!jsonUser.isNull("email")) user.setEmail(jsonUser.getString("email"));
             if (!jsonUser.isNull("login")) user.setLogin(jsonUser.getString("login"));
             if (!jsonUser.isNull("imageId")) user.setImageId(jsonUser.getInt("imageId"));
             if (!jsonUser.isNull("pro")) user.setPro(jsonUser.getString("pro").equals("Yes"));
             if (!jsonUser.isNull("token")) user.setToken(jsonUser.getString("token"));
-            if (!jsonUser.isNull("groupId")) user.setGroupId(jsonUser.getString("groups"));
+            if (!jsonUser.isNull("groupId")) user.setGroupId(jsonUser.getString("groupId"));
         } catch (Exception e) {
             e.printStackTrace();
             user = null;

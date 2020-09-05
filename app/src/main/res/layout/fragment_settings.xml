@@ -38,7 +38,7 @@
             android:id="@+id/llnSettings"
             android:orientation="vertical">
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchTheme"
                 style="@style/MySwitch"
                 android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                 android:text="@string/use_theme_system"
                 android:textColor="@color/text_color" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchNightTheme"
                 style="@style/MySwitch"
                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                 android:text="@string/night_theme"
                 android:textColor="@color/text_color" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchNotification"
                 style="@style/MySwitch"
                 android:layout_width="match_parent"

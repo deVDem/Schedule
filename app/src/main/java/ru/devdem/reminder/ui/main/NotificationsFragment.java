@@ -16,6 +16,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,7 +86,7 @@ public class NotificationsFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_notifications, menu);
         MenuItem item = menu.findItem(R.id.menu_edit);
-        item.setVisible(true); //
+        item.setVisible(true);
     }
 
     @Override
@@ -95,7 +96,9 @@ public class NotificationsFragment extends Fragment {
                 if (!mSwipeRefreshLayout.isRefreshing()) createNotifications();
                 return true;
             case R.id.menu_edit:
-                startActivityForResult(new Intent(getActivity(), NewNotificationActivity.class), 154);
+                // TODO: починить отправлялку сообщений
+                //startActivityForResult(new Intent(getActivity(), NewNotificationActivity.class), 154);
+                Toast.makeText(requireContext(), "Временно не работает", Toast.LENGTH_LONG).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

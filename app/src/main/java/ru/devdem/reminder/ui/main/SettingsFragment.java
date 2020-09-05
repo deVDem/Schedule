@@ -13,11 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Objects;
 
@@ -38,17 +41,20 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_settings, null);
-        Context context = Objects.requireNonNull(getContext());
+        Context context = requireContext();
         String NAME_PREFS = "settings";
         mSettings = context.getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
-        Switch switchTheme = view.findViewById(R.id.switchTheme);
-        Switch switchNight = view.findViewById(R.id.switchNightTheme);
-        Switch switchNotification = view.findViewById(R.id.switchNotification);
+        SwitchMaterial switchTheme = view.findViewById(R.id.switchTheme);
+        SwitchMaterial switchNight = view.findViewById(R.id.switchNightTheme);
+        SwitchMaterial switchNotification = view.findViewById(R.id.switchNotification);
         Button btnDisableAd = view.findViewById(R.id.buttonDisableAd);
         btnDisableAd.setOnClickListener(v -> {
-            Activity activity = getActivity();
+
+            /*TODO: починить подписки
+            Activity activity = requireActivity();
             activity.startActivity(new Intent(context, PurchaseActivity.class));
-            activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+            activity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);*/
+            Toast.makeText(context, "Временно не работает", Toast.LENGTH_LONG).show();
         });
         if (ObjectsController.getLocalUserInfo(mSettings).isPro())
             btnDisableAd.setVisibility(View.GONE);

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,7 @@ import com.android.volley.Response;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,6 +43,8 @@ import ru.devdem.reminder.controllers.ObjectsController.User;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.ui.group.GroupInfoActivity;
 import ru.devdem.reminder.ui.PurchaseActivity;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 public class ProfileFragment extends Fragment {
@@ -88,21 +92,11 @@ public class ProfileFragment extends Fragment {
         AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.out_of_the_group).setMessage(R.string.wait).setCancelable(false).create();
         dialog.show();
         Response.Listener<String> listener = response -> {
+            Log.d(TAG, "exitGroup: "+response);
             try {
-                JSONObject jsonResponse = new JSONObject(response);
-                String status = jsonResponse.getString("status");
-                String error = jsonResponse.getString("error");
-                if (status.equals("error")) {
-                    if (error.equals("WRONG_TOKEN")) {
-                        mMainActivity.checkAccount();
-                        mContext.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
-                    }
-                    Toast.makeText(mContext, error, Toast.LENGTH_LONG).show();
-                } else if (status.equals("JOINED")) {
-                    mMainActivity.checkAccount();
-                    mContext.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
-                    dialog.cancel();
-                }
+                mMainActivity.checkAccount();
+                mContext.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
+                dialog.cancel();
             } catch (Exception e) {
                 e.printStackTrace();
                 dialog.cancel();

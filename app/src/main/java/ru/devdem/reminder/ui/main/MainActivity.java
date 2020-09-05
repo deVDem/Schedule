@@ -33,7 +33,6 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.main_dashboard:
                     if(mSettings.getString("group_name", "loading").length() <= 5)
-                    actionBar.setSubtitle(getResources().getString(R.string.schedule_of_group) + " " + mSettings.getString("group_name", "loading"));
+                    actionBar.setSubtitle(getResources().getString(R.string.schedule_for) + " " + mSettings.getString("group_name", "loading"));
                     else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(1);
                     break;
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.main_notifications:
                     if(mSettings.getString("group_name", "loading").length() <= 5)
-                        actionBar.setSubtitle(getResources().getString(R.string.notifications_of_group) + " " + mSettings.getString("group_name", "loading"));
+                        actionBar.setSubtitle(getResources().getString(R.string.messages_for) + " " + mSettings.getString("group_name", "loading"));
                     else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(3);
                     break;
