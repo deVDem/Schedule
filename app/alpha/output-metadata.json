@@ -11,8 +11,8 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 7,
-      "versionName": "0.0.3 fixed alpha",
+      "versionCode": 8,
+      "versionName": "0.0.4 alpha",
       "enabled": true,
       "outputFile": "app-alpha.apk"
     }

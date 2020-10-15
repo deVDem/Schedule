@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Response;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -52,7 +53,7 @@ public class FirstActivity extends AppCompatActivity {
     private MaterialEditText mREmailEt;
     private MaterialEditText mLPasswordEt;
     private MaterialEditText mRLoginEt;
-    private CheckBox mRCheckSpam;
+    private MaterialCheckBox mRCheckSpam;
     private TextView mRTextView;
     private Button mRegisterButton;
     private MaterialEditText mRNameEt;
