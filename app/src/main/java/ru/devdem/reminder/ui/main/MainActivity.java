@@ -9,8 +9,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -202,19 +200,6 @@ public class MainActivity extends AppCompatActivity {
         getVerInt();
         if (mSettings.getBoolean("notification", true)) {
             startService(new Intent(this, NotificationService.class));
-            if (mSettings.getBoolean("power", true)) {
-                PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-                boolean inWhiteList = powerManager.isIgnoringBatteryOptimizations(getPackageName());
-                if (!inWhiteList) {
-                    AlertDialog dialog = new AlertDialog.Builder(this)
-                            .setTitle("Ограничения на фоновую активность приложения")
-                            .setMessage("Запретите ограничения на фоновую активность приложения в настройках вашей системы")
-                            .setNegativeButton("Больше не справивать", (dialog1, which) -> mSettings.edit().putBoolean("power", false).apply())
-                            .setPositiveButton("ОК", (dialog1, which) -> startActivity(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)))
-                            .create();
-                    dialog.show();
-                }
-            }
         }
         checkAccount();
     }
