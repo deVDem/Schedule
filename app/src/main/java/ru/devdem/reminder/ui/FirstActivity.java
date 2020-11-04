@@ -13,7 +13,6 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +29,10 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONObject;
 
-import ru.devdem.reminder.controllers.NetworkController;
+import java.util.Objects;
+
 import ru.devdem.reminder.R;
+import ru.devdem.reminder.controllers.NetworkController;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -131,11 +132,11 @@ public class FirstActivity extends AppCompatActivity {
 
     private void RegisterFuncs() {
         controlViews(false);
-        String login = mRLoginEt.getText().toString();
-        String name = mRNameEt.getText().toString();
-        String email = mREmailEt.getText().toString();
-        String password = mRPassEt.getText().toString();
-        String confirmPassword = mRConPassEt.getText().toString();
+        String login = Objects.requireNonNull(mRLoginEt.getText()).toString();
+        String name = Objects.requireNonNull(mRNameEt.getText()).toString();
+        String email = Objects.requireNonNull(mREmailEt.getText()).toString();
+        String password = Objects.requireNonNull(mRPassEt.getText()).toString();
+        String confirmPassword = Objects.requireNonNull(mRConPassEt.getText()).toString();
         String spam = mRCheckSpam.isChecked() ? "Yes" : "No";
         if (mRLoginEt.validate(loginRegex, getString(R.string.login_must_be)) && mRNameEt.validate(nameRegex, getString(R.string.type_first_and_last_name)) && mREmailEt.validate(emailRegex, getText(R.string.enter_the_correct_address)) && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
@@ -222,8 +223,8 @@ public class FirstActivity extends AppCompatActivity {
 
     private void LoginFuncs() {
         controlViews(false);
-        String login = mLLoginEt.getText().toString();
-        String password = mLPasswordEt.getText().toString();
+        String login = Objects.requireNonNull(mLLoginEt.getText()).toString();
+        String password = Objects.requireNonNull(mLPasswordEt.getText()).toString();
         if (mLLoginEt.validate(loginRegex, getString(R.string.login_must_be)) || password.length() >= 6) {
             Response.Listener<String> listener = response -> {
                 try {

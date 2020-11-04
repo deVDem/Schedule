@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
@@ -85,7 +86,7 @@ public class NewNotificationActivity extends AppCompatActivity {
                 .create();
         mAddPhotoButton.setOnClickListener(v -> mDialogChoose.show());
         mDoneButton.setOnClickListener(v -> {
-            if (mEditMessage.getText().toString().length() >= 6 && mEditHeader.getText().toString().length() >= 6) {
+            if (Objects.requireNonNull(mEditMessage.getText()).toString().length() >= 6 && Objects.requireNonNull(mEditHeader.getText()).toString().length() >= 6) {
                 mLoadingLayout.setVisibility(View.VISIBLE);
                 send();
             } else
@@ -164,7 +165,7 @@ public class NewNotificationActivity extends AppCompatActivity {
             mEditMessage.setEnabled(true);
             showHide(mLoadingLayout, mDoneButton, new int[]{mEditHeader.getWidth() * 2, mEditHeader.getHeight() * 2}, false);
         };
-        mNetworkController.addNotification(this, listener, errorListener, user.getToken(), user.getGroupId(), mEditHeader.getText().toString(), mEditMessage.getText().toString(), image);
+        mNetworkController.addNotification(this, listener, errorListener, user.getToken(), user.getGroupId(), Objects.requireNonNull(mEditHeader.getText()).toString(), mEditMessage.getText().toString(), image);
     }
 
     void deleteImg() {
@@ -199,11 +200,14 @@ public class NewNotificationActivity extends AppCompatActivity {
         if (requestCode == REQUEST_ID && resultCode == RESULT_OK && data != null) {
             Uri path = data.getData();
             try {
-                InputStream imageStream = getContentResolver().openInputStream(path);
+                InputStream imageStream = null;
+                if (path != null) {
+                    imageStream = getContentResolver().openInputStream(path);
                 mBitmap = BitmapFactory.decodeStream(imageStream);
                 mImageView.setImageBitmap(mBitmap);
                 mImageLayout.setVisibility(View.VISIBLE);
                 mAddPhotoButton.hide();
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, getString(R.string.unknown_error), Toast.LENGTH_SHORT).show();

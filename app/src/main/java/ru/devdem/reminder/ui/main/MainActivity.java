@@ -3,7 +3,6 @@ package ru.devdem.reminder.ui.main;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -39,11 +38,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import ru.devdem.reminder.BuildConfig;
-import ru.devdem.reminder.controllers.LessonsController;
-import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.NotificationService;
 import ru.devdem.reminder.NotificationUtils;
 import ru.devdem.reminder.R;
+import ru.devdem.reminder.controllers.LessonsController;
+import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.TimeController;
 import ru.devdem.reminder.ui.DownloadActivity;
 import ru.devdem.reminder.ui.HelloActivity;
@@ -81,19 +80,16 @@ public class MainActivity extends AppCompatActivity {
                 builder.setMessage("Данная версия приложения находится в альфа-тестировании, " +
                         "поэтому не все функции могут быть доступны, а так же в каких-то моментах " +
                         "приложение может вылетать(не замечал, но может). В общем, дайте время плс :)");
-                builder.setPositiveButton("Окей", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mSettings.edit().putInt("alpha_warn", 1).apply();
-                        dialogInterface.cancel();
-                    }
+                builder.setPositiveButton("Окей", (dialogInterface, i) -> {
+                    mSettings.edit().putInt("alpha_warn", 1).apply();
+                    dialogInterface.cancel();
                 });
                 builder.setCancelable(false);
                 builder.show();
             } else {
                 mSettings.edit().putInt("alpha_warn", mSettings.getInt("alpha_warn", 0)+1).apply();
             }
-            if (mSettings.getString("group", "0").equals("0")) {
+            if (Objects.equals(mSettings.getString("group", "0"), "0")) {
                 startActivity(new Intent(MainActivity.this, HelloActivity.class));
                 finish();
             } else {
@@ -167,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
                 new int[]{android.R.attr.state_enabled}
         };
         int[] colors = new int[]{
-                getResources().getColor(R.color.colorAccent),
-                getResources().getColor(R.color.text_color)
+                getResources().getColor(R.color.colorAccent, getTheme()),
+                getResources().getColor(R.color.text_color, getTheme())
         };
         mBottomNavigationView.setItemIconTintList(new ColorStateList(states, colors));
         AppCompatActivity appCompatActivity = this;
@@ -181,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(0);
                     break;
                 case R.id.main_dashboard:
-                    if(mSettings.getString("group_name", "loading").length() <= 5)
+                    if(Objects.requireNonNull(mSettings.getString("group_name", "loading")).length() <= 5)
                     actionBar.setSubtitle(getResources().getString(R.string.schedule_for) + " " + mSettings.getString("group_name", "loading"));
                     else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(1);
@@ -191,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(2);
                     break;
                 case R.id.main_notifications:
-                    if(mSettings.getString("group_name", "loading").length() <= 5)
+                    if(Objects.requireNonNull(mSettings.getString("group_name", "loading")).length() <= 5)
                         actionBar.setSubtitle(getResources().getString(R.string.messages_for) + " " + mSettings.getString("group_name", "loading"));
                     else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
                     mViewPager.setCurrentItem(3);
@@ -213,12 +209,8 @@ public class MainActivity extends AppCompatActivity {
                     AlertDialog dialog = new AlertDialog.Builder(this)
                             .setTitle("Ограничения на фоновую активность приложения")
                             .setMessage("Запретите ограничения на фоновую активность приложения в настройках вашей системы")
-                            .setNegativeButton("Больше не справивать", (dialog1, which) -> {
-                                mSettings.edit().putBoolean("power", false).apply();
-                            })
-                            .setPositiveButton("ОК", (dialog1, which) -> {
-                                startActivity(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
-                            })
+                            .setNegativeButton("Больше не справивать", (dialog1, which) -> mSettings.edit().putBoolean("power", false).apply())
+                            .setPositiveButton("ОК", (dialog1, which) -> startActivity(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)))
                             .create();
                     dialog.show();
                 }
@@ -264,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                             editor.putInt("permission", permission);
                             editor.putString("token", token);
                             editor.apply();
-                            if (mSettings.getString("group", "-1").equals("-1")) {
+                            if (Objects.equals(mSettings.getString("group", "-1"), "-1")) {
                                 startActivity(new Intent(MainActivity.this, HelloActivity.class));
                                 overridePendingTransition(R.anim.transition_in_back, R.anim.transition_out_back);
                                 finish();

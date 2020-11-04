@@ -79,7 +79,7 @@ public class GroupListFragment extends Fragment {
         mRecyclerView.setLayoutManager(llm);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.group_list);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white, requireContext().getTheme()));
         if (savedInstanceState == null || !savedInstanceState.getBoolean("prepared")) {
             updateGroups(null);
         }
@@ -189,7 +189,7 @@ public class GroupListFragment extends Fragment {
             String description = group.getDescription();
             Date groupCreated = group.getDateCreated();
             if (groupCreated != null) {
-                int year = Calendar.getInstance().YEAR;
+                int year = Calendar.YEAR;
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(groupCreated);
                 int yearGroup = Calendar.YEAR;

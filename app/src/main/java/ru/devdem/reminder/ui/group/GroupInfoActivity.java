@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -137,6 +138,7 @@ public class GroupInfoActivity extends AppCompatActivity {
     }
 
     private void start() {
+        Context context = this;
         CollapsingToolbarLayout toolbarLayout = v.findViewById(R.id.collapseToolbar);
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow);
@@ -189,7 +191,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                                 window.setStatusBarColor(color);
-                                imageView.setForeground(getDrawable(R.drawable.bg_gradient));
+                                imageView.setForeground(ContextCompat.getDrawable(context, R.drawable.bg_gradient));
                                 int[][] states = new int[][]{
                                         new int[]{android.R.attr.state_enabled},
                                 };

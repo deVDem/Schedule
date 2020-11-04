@@ -136,7 +136,7 @@ public class GroupListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 1 && resultCode == RESULT_OK && data.getBooleanExtra("configured", false) && data.getIntExtra("group_id", 0) != 0) {
+        if (data != null && requestCode == 1 && resultCode == RESULT_OK && data.getBooleanExtra("configured", false) && data.getIntExtra("group_id", 0) != 0) {
             joinToGroup(data.getIntExtra("group_id", 0));
         }
         Log.d(TAG, "onActivityResult: " + requestCode + resultCode);

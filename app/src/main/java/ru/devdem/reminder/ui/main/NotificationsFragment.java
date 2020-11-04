@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,13 +40,12 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.controllers.ObjectsController.Notification;
 import ru.devdem.reminder.controllers.ObjectsController.User;
-import ru.devdem.reminder.R;
 import ru.devdem.reminder.ui.FullImageActivity;
-import ru.devdem.reminder.ui.NewNotificationActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -228,7 +226,7 @@ public class NotificationsFragment extends Fragment {
                 holder.mSubTitleView.setText(notification.getSubTitle());
                 CardView cardView = (CardView) holder.itemView;
                 if (notification.getGroup() == -1) {
-                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server));
+                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server, Objects.requireNonNull(getContext()).getTheme()));
                 }
                 if (author != null) {
                     holder.mAuthorName.setText(author.getNames());

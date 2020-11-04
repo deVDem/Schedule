@@ -81,7 +81,7 @@ public class NotificationService extends Service {
                                             object.getJSONObject(String.valueOf(i)).getString("Subtitle"));
                             String dateString = object.getJSONObject(String.valueOf(i)).getString("date");
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                            builder.setWhen(!dateString.equals("null") ? format.parse(dateString).getTime() : new Date().getTime());
+                            builder.setWhen(!dateString.equals("null") ? Objects.requireNonNull(format.parse(dateString)).getTime() : new Date().getTime());
                             Notification notification = builder.build();
                             if (canGo) {
                                 mNotificationUtils.getManager().notify(104 + i, notification);

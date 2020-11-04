@@ -16,12 +16,9 @@ public class TimeController {
 
     @SuppressLint("StaticFieldLeak")
     private static TimeController sTimeController;
-    @SuppressWarnings("FieldCanBeLocal")
-    private Context mContext;
     private LessonsController mLessonsController;
 
     private TimeController(Context context) {
-        mContext = context;
         mLessonsController = LessonsController.get(context);
     }
 

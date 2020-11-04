@@ -96,9 +96,9 @@ public class SettingsFragment extends Fragment {
             if (can)
                 mSettings.edit().putBoolean("notification", isChecked).apply();
             if (mSettings.getBoolean("notification", true)) {
-                Objects.requireNonNull(getActivity()).startService(new Intent(getContext(), NotificationService.class));
+                requireActivity().startService(new Intent(getContext(), NotificationService.class));
             } else {
-                Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
+                requireActivity().stopService(new Intent(getContext(), NotificationService.class));
             }
         });
         Button mLogOffButton = view.findViewById(R.id.buttonLogOff);
@@ -107,7 +107,7 @@ public class SettingsFragment extends Fragment {
             mSettings.edit().clear().apply();
             mSettings.edit().putBoolean("notification", false).apply();
             context.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
-            Objects.requireNonNull(getActivity()).stopService(new Intent(getContext(), NotificationService.class));
+            requireActivity().stopService(new Intent(getContext(), NotificationService.class));
             restart();
         });
         TextView versionInfo = view.findViewById(R.id.versionInfo);
@@ -117,7 +117,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void restart() {
-        Activity activity = Objects.requireNonNull(getActivity());
+        Activity activity = requireActivity();
         activity.stopService(new Intent(getContext(), NotificationService.class));
         activity.finish();
         activity.startActivity(new Intent(activity, SplashActivity.class));

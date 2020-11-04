@@ -310,8 +310,8 @@ public class DashboardFragment extends Fragment {
                                 new int[]{-android.R.attr.state_enabled}
                         };
                         int[] colors = new int[]{
-                                getResources().getColor(R.color.colorAccent),
-                                getResources().getColor(R.color.card_color),
+                                getResources().getColor(R.color.colorAccent, mContext.getTheme()),
+                                getResources().getColor(R.color.card_color, mContext.getTheme()),
                         };
                         TextView numberLesson = view.findViewById(R.id.numberLesson);
                         TextView nameLesson = view.findViewById(R.id.textLesson);
@@ -324,15 +324,15 @@ public class DashboardFragment extends Fragment {
                                 if (lesson.getNumber() == params[1]) {
                                     relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));
                                     relativeLayout.setEnabled(true);
-                                    numberLesson.setTextColor(getResources().getColor(R.color.white));
-                                    nameLesson.setTextColor(getResources().getColor(R.color.white));
-                                    dateText.setTextColor(getResources().getColor(R.color.white));
-                                    cabText.setTextColor(getResources().getColor(R.color.white));
-                                    descText.setTextColor(getResources().getColor(R.color.white));
+                                    numberLesson.setTextColor(getResources().getColor(R.color.white, mContext.getTheme()));
+                                    nameLesson.setTextColor(getResources().getColor(R.color.white, mContext.getTheme()));
+                                    dateText.setTextColor(getResources().getColor(R.color.white, mContext.getTheme()));
+                                    cabText.setTextColor(getResources().getColor(R.color.white, mContext.getTheme()));
+                                    descText.setTextColor(getResources().getColor(R.color.white, mContext.getTheme()));
                                 } else if (lesson.isZamena()) {
                                     colors = new int[]{
-                                            getResources().getColor(R.color.card_color_replace),
-                                            getResources().getColor(R.color.card_color),
+                                            getResources().getColor(R.color.card_color_replace, mContext.getTheme()),
+                                            getResources().getColor(R.color.card_color, mContext.getTheme()),
                                     };
                                     numberText = numberText + " " + getResources().getString(R.string.replacement);
                                     relativeLayout.setBackgroundTintList(new ColorStateList(states, colors));

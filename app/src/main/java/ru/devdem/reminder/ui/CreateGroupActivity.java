@@ -21,6 +21,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.controllers.ObjectsController.User;
@@ -42,10 +44,10 @@ public class CreateGroupActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (mEtName.getText().toString().length() >= 2 && mEtName.getText().toString().length() <= 255 &&
-                    mEtCity.getText().toString().length() >= 2 && mEtCity.getText().toString().length() <= 32 &&
-                    mEtBuilding.getText().toString().length() >= 4 && mEtBuilding.getText().toString().length() <= 255 &&
-                    mEtDescription.getText().toString().length() <= 255) {
+            if (Objects.requireNonNull(mEtName.getText()).toString().length() >= 2 && mEtName.getText().toString().length() <= 255 &&
+                    Objects.requireNonNull(mEtCity.getText()).toString().length() >= 2 && mEtCity.getText().toString().length() <= 32 &&
+                    Objects.requireNonNull(mEtBuilding.getText()).toString().length() >= 4 && mEtBuilding.getText().toString().length() <= 255 &&
+                    Objects.requireNonNull(mEtDescription.getText()).toString().length() <= 255) {
                 mActionButton.setEnabled(true);
                 mActionButton.show();
             } else {
@@ -71,7 +73,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.drawable.ic_arrow);
-        toolbar.getNavigationIcon().setTint(getColor(R.color.text_bold_color));
+        Objects.requireNonNull(toolbar.getNavigationIcon()).setTint(getColor(R.color.text_bold_color));
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v1 -> onBackPressed());
         mEtName = v.findViewById(R.id.etGroupName);
@@ -146,7 +148,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             Toast.makeText(this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
         };
 
-        mNetworkController.addGroup(this, listener, errorListener, user.getToken(), mEtName.getText().toString(), mEtCity.getText().toString(), mEtBuilding.getText().toString(), mEtDescription.getText().toString(), null);
+        mNetworkController.addGroup(this, listener, errorListener, user.getToken(), Objects.requireNonNull(mEtName.getText()).toString(), mEtCity.getText().toString(), mEtBuilding.getText().toString(), mEtDescription.getText().toString(), null);
     }
 
     @Override

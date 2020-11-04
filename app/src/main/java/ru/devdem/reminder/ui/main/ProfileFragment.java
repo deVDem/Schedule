@@ -33,16 +33,15 @@ import com.android.volley.Response;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.controllers.ObjectsController.User;
-import ru.devdem.reminder.R;
-import ru.devdem.reminder.ui.group.GroupInfoActivity;
 import ru.devdem.reminder.ui.PurchaseActivity;
+import ru.devdem.reminder.ui.group.GroupInfoActivity;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -69,7 +68,7 @@ public class ProfileFragment extends Fragment {
         updateUI();
         Button mDetailButton = v.findViewById(R.id.buttonDetailGroup);
         mDetailButton.setOnClickListener(view -> {
-            mMainActivity.startActivity(GroupInfoActivity.getAIntent(mContext, Integer.parseInt(mSettings.getString("group", "0")), false));
+            mMainActivity.startActivity(GroupInfoActivity.getAIntent(mContext, Integer.parseInt(Objects.requireNonNull(mSettings.getString("group", "0"))), false));
             mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         });
         Button mLeaveButton = v.findViewById(R.id.buttonLeaveGroup);
