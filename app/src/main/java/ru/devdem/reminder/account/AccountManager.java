@@ -9,8 +9,8 @@ import com.android.volley.Response;
 import org.json.JSONObject;
 
 import ru.devdem.reminder.controllers.NetworkController;
-import ru.devdem.reminder.controllers.ObjectsController.User;
 import ru.devdem.reminder.R;
+import ru.devdem.reminder.object.User;
 
 public class AccountManager {
 

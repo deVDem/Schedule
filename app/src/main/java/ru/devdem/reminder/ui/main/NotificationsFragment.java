@@ -43,8 +43,8 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
-import ru.devdem.reminder.controllers.ObjectsController.Notification;
-import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.object.Notification;
+import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.ui.FullImageActivity;
 
 import static android.app.Activity.RESULT_OK;

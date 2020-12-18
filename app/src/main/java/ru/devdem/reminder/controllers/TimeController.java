@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import ru.devdem.reminder.controllers.LessonsController.Lesson;
+import ru.devdem.reminder.object.Lesson;
 
 public class TimeController {
 

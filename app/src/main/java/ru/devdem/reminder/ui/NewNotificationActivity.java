@@ -38,7 +38,7 @@ import java.util.Objects;
 
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
-import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.R;
 
 public class NewNotificationActivity extends AppCompatActivity {

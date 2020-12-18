@@ -59,7 +59,7 @@
                 app:met_helperText="@string/group_building_helper"
                 app:met_maxCharacters="255" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/swOnlyConfirmed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

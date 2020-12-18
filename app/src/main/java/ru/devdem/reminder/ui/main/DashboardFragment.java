@@ -24,12 +24,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
+import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.androidanimations.library.fading_entrances.FadeInDownAnimator;
+import com.daimajia.androidanimations.library.fading_exits.FadeOutUpAnimator;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -41,13 +45,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.xml.transform.sax.TemplatesHandler;
+
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.controllers.LessonsController;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
-import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.object.Lesson;
+import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.TimeController;
 
@@ -63,7 +70,7 @@ public class DashboardFragment extends Fragment {
     private Context mContext;
     private boolean sort_by_week = false;
     private static final String TAG = "DashboardFragment";
-    private String[] adIds = {"ca-app-pub-7389415060915567/7850481695",
+    private final String[] adIds = {"ca-app-pub-7389415060915567/7850481695",
             "ca-app-pub-7389415060915567/1285073344",
             "ca-app-pub-7389415060915567/3301148008"};
     private MainActivity activity;
@@ -96,25 +103,48 @@ public class DashboardFragment extends Fragment {
     }
 
     public void update(boolean why) {
-        swipeRefreshLayout.setRefreshing(true);
         if (why) {
+            swipeRefreshLayout.setRefreshing(true);
+            YoYo.YoYoString anim = FastFadeInOutAnim(mRecyclerView, View.GONE);
+
             Response.Listener<String> listener = response -> {
                 try {
-                    if (new JSONObject(response).getString("error").equals("NO_TOKEN")) {
+                    JSONObject json = new JSONObject(response);
+                    if (!json.isNull("error") && json.getString("error").equals("NO_TOKEN")) {
                         activity.checkAccount();
                     }
+                    Thread thread = new Thread(() -> {
+                        {
+                            Thread threadparse = mLessonsController.parseLessonsAsync(response);
+                            threadparse.start();
+                            while (threadparse.isAlive()) {
+                                Log.d(TAG, "update: sleep, is alive = "+threadparse.isAlive());
+                                try {
+                                    Thread.sleep(250);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            activity.runOnUiThread(() -> {
+                                if (anim != null) anim.stop();
+                                Log.d(TAG, "update: anim.isRunning="+anim.isRunning());
+                                updateUI();
+                            });
+                        }
+                    });
+                    thread.start();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                mLessonsController.parseLessons(response);
-                updateUI();
             };
             Response.ErrorListener errorListener = error -> {
                 Toast.makeText(mContext, R.string.errorNetwork, Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
             };
             mNetworkController.getLessons(mContext, listener, errorListener, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
-        } else updateUI();
+        } else {
+            updateUI();
+        }
     }
 
     private void updateUI() {
@@ -127,20 +157,36 @@ public class DashboardFragment extends Fragment {
             AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
             animationAdapter.setDuration(1000);
             animationAdapter.setFirstOnly(false);
-            mRecyclerView.setAdapter(animationAdapter);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            if (mLessonsController.getLessons().size() > 0) {
+                mRecyclerView.setAdapter(animationAdapter);
+            }
+            mRecyclerView.setVisibility(View.VISIBLE);
             swipeRefreshLayout.setRefreshing(false);
-            mNoLessonsText.setVisibility(mLessonsController.getLessons().size() < 1 ? View.VISIBLE : View.GONE);
+            FastFadeInOutAnim(mNoLessonsText, mLessonsController.getLessons().size() < 1 ? View.VISIBLE : View.GONE);
         } else {
-            mNoLessonsText.setVisibility(View.VISIBLE);
             mNoLessonsText.setText(R.string.unknown_error);
+            FastFadeInOutAnim(mNoLessonsText, View.VISIBLE);
         }
     }
 
-    private ArrayList<ArrayList<LessonsController.Lesson>> prepareArrayFromArray(ArrayList<LessonsController.Lesson> lessons) {
-        ArrayList<ArrayList<LessonsController.Lesson>> mArrayFromArray = new ArrayList<>();
+    private YoYo.YoYoString FastFadeInOutAnim(View object, int newVisibility) {
+        if (object.getVisibility() != newVisibility) {
+            return YoYo.with(newVisibility == View.VISIBLE ? new FadeInDownAnimator() : new FadeOutUpAnimator())
+                    .interpolate(new AccelerateDecelerateInterpolator())
+                    .onStart((c) -> object.setVisibility(View.VISIBLE))
+                    .duration(350)
+                    .onEnd((c) -> object.setVisibility(newVisibility))
+                    .playOn(object);
+        }
+        return null;
+    }
+
+    private ArrayList<ArrayList<Lesson>> prepareArrayFromArray(ArrayList<Lesson> lessons) {
+        ArrayList<ArrayList<Lesson>> mArrayFromArray = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
-            ArrayList<LessonsController.Lesson> lessonForOneDay = new ArrayList<>();
+            ArrayList<Lesson> lessonForOneDay = new ArrayList<>();
             for (int j = 0; j < lessons.size(); j++) {
                 if (lessons.get(j).getDay() == i) {
                     lessonForOneDay.add(lessons.get(j));
@@ -172,11 +218,11 @@ public class DashboardFragment extends Fragment {
         if (item.getItemId() == R.id.menu_sort) {
             AnimatedVectorDrawable drawable;
             if (!sort_by_week) {
-                drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_dashboard_in);
+                drawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(mContext, R.drawable.ic_menu_dashboard_in);
                 item.setIcon(drawable);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.current_day));
             } else {
-                drawable = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ic_menu_dashboard);
+                drawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(mContext, R.drawable.ic_menu_dashboard_in);
                 item.setIcon(drawable);
                 item.setTitle(getResources().getString(R.string.sort_by) + " " + getResources().getString(R.string.week));
             }
@@ -193,10 +239,10 @@ public class DashboardFragment extends Fragment {
     }
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LessonsViewer> {
-        ArrayList<ArrayList<LessonsController.Lesson>> mLessons;
+        ArrayList<ArrayList<Lesson>> mLessons;
         boolean[] prepared = new boolean[7];
 
-        RVAdapter(ArrayList<ArrayList<LessonsController.Lesson>> lessons) {
+        RVAdapter(ArrayList<ArrayList<Lesson>> lessons) {
             this.mLessons = lessons;
         }
 
@@ -222,7 +268,7 @@ public class DashboardFragment extends Fragment {
             boolean tomorrow = false;
             if (!prepared[position]) {
                 prepared[position] = true;
-                ArrayList<LessonsController.Lesson> lessons = mLessons.get(position);
+                ArrayList<Lesson> lessons = mLessons.get(position);
                 if (position % 3 == 0 && !mUser.isPro()) {
                     AdView adView = new AdView(mContext);
                     if (!BuildConfig.DEBUG)
@@ -299,7 +345,7 @@ public class DashboardFragment extends Fragment {
                         holder.mDayOfWeekText.setText(dayOfWeekText);
                     }
                     for (int i = 0; i < lessons.size(); i++) {
-                        LessonsController.Lesson lesson = lessons.get(i);
+                        Lesson lesson = lessons.get(i);
                         String startString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getStart());
                         String endString = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(lesson.getEnd());
                         String timeString = startString + "-" + endString;
@@ -371,7 +417,7 @@ public class DashboardFragment extends Fragment {
         private int countItems() {
             int i = 0;
             for (; i < mLessons.size(); i++) {
-                ArrayList<LessonsController.Lesson> lessons = mLessons.get(i);
+                ArrayList<Lesson> lessons = mLessons.get(i);
                 if (lessons.size() == 0) break;
             }
             return i;

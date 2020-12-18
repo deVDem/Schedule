@@ -37,8 +37,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 import ru.devdem.reminder.controllers.NetworkController;
-import ru.devdem.reminder.controllers.ObjectsController.Group;
-import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.object.Group;
+import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.R;
 
 public class GroupListFragment extends Fragment {

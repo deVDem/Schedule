@@ -30,7 +30,7 @@ import java.util.Objects;
 
 import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.controllers.LessonsController;
-import ru.devdem.reminder.controllers.LessonsController.Lesson;
+import ru.devdem.reminder.object.Lesson;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.TimeController;
@@ -154,8 +154,8 @@ public class TimerFragment extends Fragment {
                         mActivity.runOnUiThread(() -> {
                             try {
                                 lessonNextText.setVisibility(View.VISIBLE);
-                                LessonsController.Lesson mLesson = mLessons.get(params[1]);
-                                LessonsController.Lesson mLessonNext = mLessons.get(params[2]);
+                                Lesson mLesson = mLessons.get(params[1]);
+                                Lesson mLessonNext = mLessons.get(params[2]);
                                 if (params[3] == 3) {
                                     countText.setVisibility(View.INVISIBLE);
                                     counterText.setText(R.string.end_week);

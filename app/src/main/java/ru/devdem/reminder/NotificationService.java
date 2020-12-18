@@ -27,6 +27,7 @@ import java.util.Objects;
 import ru.devdem.reminder.controllers.LessonsController;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.TimeController;
+import ru.devdem.reminder.object.Lesson;
 import ru.devdem.reminder.ui.SplashActivity;
 
 public class NotificationService extends Service {
@@ -143,9 +144,9 @@ public class NotificationService extends Service {
                         // 2 - номер след.урока
                         // 3 - состояние: ( 0 - до уроков всех, 1 - урок, 2 - перемена, 3 - конец всех уроков)
                         int[] params = mTimeController.getNumberlesson();
-                        ArrayList<LessonsController.Lesson> mLessons = mLessonsController.getLessons();
-                        LessonsController.Lesson lesson = mLessons.get(params[1]);
-                        LessonsController.Lesson lessonNext = mLessons.get(params[2]);
+                        ArrayList<Lesson> mLessons = mLessonsController.getLessons();
+                        Lesson lesson = mLessons.get(params[1]);
+                        Lesson lessonNext = mLessons.get(params[2]);
                         boolean notificationNeed = true;
                         switch (params[0]) {
                             case 0:

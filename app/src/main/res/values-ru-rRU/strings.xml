@@ -143,6 +143,7 @@
     <string name="no">Нет</string>
     <string name="yes">Да</string>
     <string name="no_lessons">Нет уроков</string>
+    <string name="no_lessons_dashboard">Нет уроков\nПотяните вниз для обновления</string>
     <string name="group_creation">Создание группы</string>
     <string name="group_create_desc">Общайтесь и делитесь информацией с одноклассниками, одногруппниками и коллегами</string>
     <string name="description">Описание</string>
@@ -165,4 +166,6 @@
     <string name="you_canceled_your_purchase">Вы отменили покупку</string>
     <string name="you_have_already_purchased">Вы уже купили подписку. Ожидайте обработки</string>
     <string name="error_payment">Произошла ошибка при оплате. Попробуйте ещё раз</string>
+    <string name="reg_not_complete">Регистрация ещё не завершена</string>
+    <string name="splash_motd">На взлёт!</string>
 </resources>

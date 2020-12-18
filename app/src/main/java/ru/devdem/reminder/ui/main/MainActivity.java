@@ -87,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 mSettings.edit().putInt("alpha_warn", mSettings.getInt("alpha_warn", 0)+1).apply();
             }
-            if (Objects.equals(mSettings.getString("group", "0"), "0")) {
-                startActivity(new Intent(MainActivity.this, HelloActivity.class));
-                finish();
+            if (Objects.equals(mSettings.getString("group", "-1"), "-1")) {
+                checkAccount();
+                start();
             } else {
                 Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
                 mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));

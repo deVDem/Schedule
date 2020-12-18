@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ru.devdem.reminder.controllers.LessonsController;
@@ -20,32 +21,28 @@ public class HelloActivity extends AppCompatActivity {
     private boolean exit = false;
     private CountDownTimer mExitTimer;
     private SharedPreferences mSettings;
+    AlertDialog dialog;
 
 
     @Override
     public void onBackPressed() {
-        if (exit) {
-            super.onBackPressed();
-            if (mExitTimer != null) mExitTimer.cancel();
-        } else {
-            Toast.makeText(this, "Click the back button again to exit", Toast.LENGTH_LONG).show();
-            exit = true;
-            mExitTimer = new CountDownTimer(1500, 1500) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    exit = false;
-                }
-            }.start();
+        if(dialog!=null && !dialog.isShowing()) {
+            dialog.show();
         }
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        dialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.sure_exit)
+                .setTitle(R.string.reg_not_complete)
+                .setNegativeButton(R.string.yes, ((dialog1, which) -> {
+                    super.onBackPressed();
+                }))
+                .setPositiveButton(R.string.no, (((dialog1, which) -> {
+                    dialog1.cancel();
+                })))
+                .create();
         mSettings = getSharedPreferences("settings", MODE_PRIVATE);
         LessonsController lessonController = LessonsController.get(this);
         lessonController.removeLessons();

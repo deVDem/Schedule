@@ -25,7 +25,7 @@ import com.google.android.gms.ads.AdView;
 import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.ObjectsController;
-import ru.devdem.reminder.controllers.ObjectsController.User;
+import ru.devdem.reminder.object.User;
 
 public class GroupSearchFragment extends Fragment {
 

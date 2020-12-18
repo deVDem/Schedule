@@ -30,7 +30,9 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import org.json.JSONObject;
 
 import java.util.Objects;
+import java.util.Random;
 
+import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
 
@@ -132,12 +134,35 @@ public class FirstActivity extends AppCompatActivity {
 
     private void RegisterFuncs() {
         controlViews(false);
-        String login = Objects.requireNonNull(mRLoginEt.getText()).toString();
-        String name = Objects.requireNonNull(mRNameEt.getText()).toString();
-        String email = Objects.requireNonNull(mREmailEt.getText()).toString();
-        String password = Objects.requireNonNull(mRPassEt.getText()).toString();
-        String confirmPassword = Objects.requireNonNull(mRConPassEt.getText()).toString();
-        String spam = mRCheckSpam.isChecked() ? "Yes" : "No";
+        String login;
+        String name;
+        String email;
+        String password;
+        String confirmPassword;
+        String spam;
+        if(!BuildConfig.DEBUG) {
+            login = Objects.requireNonNull(mRLoginEt.getText()).toString();
+            name = Objects.requireNonNull(mRNameEt.getText()).toString();
+            email = Objects.requireNonNull(mREmailEt.getText()).toString();
+            password = Objects.requireNonNull(mRPassEt.getText()).toString();
+            confirmPassword = Objects.requireNonNull(mRConPassEt.getText()).toString();
+            spam = mRCheckSpam.isChecked() ? "Yes" : "No";
+        } else {
+            login = "debug"+new Random().nextInt(1000);
+            name = "Debug"+" "+"Debugovich";
+            email = "debug"+new Random().nextInt(1000)+"@devdem.ru";
+            password = "testpassfordebug";
+            confirmPassword = password;
+            spam = new Random().nextBoolean() ? "Yes" : "No";
+            mRLoginEt.setText(login);
+            mRNameEt.setText(name);
+            mREmailEt.setText(email);
+            mRPassEt.setText(password);
+            mRConPassEt.setText(confirmPassword);
+            mRCheckSpam.setChecked(spam.equals("Yes"));
+            mLLoginEt.setText(login);
+            mLPasswordEt.setText(password);
+        }
         if (mRLoginEt.validate(loginRegex, getString(R.string.login_must_be)) && mRNameEt.validate(nameRegex, getString(R.string.type_first_and_last_name)) && mREmailEt.validate(emailRegex, getText(R.string.enter_the_correct_address)) && password.length() > 5 && password.equals(confirmPassword)) {
             Response.Listener<String> listener = response -> {
                 try {
@@ -223,8 +248,17 @@ public class FirstActivity extends AppCompatActivity {
 
     private void LoginFuncs() {
         controlViews(false);
-        String login = Objects.requireNonNull(mLLoginEt.getText()).toString();
-        String password = Objects.requireNonNull(mLPasswordEt.getText()).toString();
+        String login;
+        String password;
+        if(!BuildConfig.DEBUG) {
+            login = Objects.requireNonNull(mLLoginEt.getText()).toString();
+            password = Objects.requireNonNull(mLPasswordEt.getText()).toString();
+        } else {
+            login = "debugAcc";
+            password = "testpassfordebug";
+            mLLoginEt.setText(login);
+            mLPasswordEt.setText(password);
+        }
         if (mLLoginEt.validate(loginRegex, getString(R.string.login_must_be)) || password.length() >= 6) {
             Response.Listener<String> listener = response -> {
                 try {

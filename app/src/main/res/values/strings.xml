@@ -142,6 +142,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="no_lessons">No lessons</string>
+    <string name="no_lessons_dashboard">No lessons\nPull down to update</string>
     <string name="group_creation">Group creation</string>
     <string name="group_create_desc">Communicate and share information with your classmates, classmates, and colleagues</string>
     <string name="description">Description</string>
@@ -164,4 +165,6 @@
     <string name="you_canceled_your_purchase">You canceled your purchase</string>
     <string name="you_have_already_purchased">You have already purchased a subscription. Wait for processing</string>
     <string name="error_payment">An error occurred during the payment process. Try again</string>
+    <string name="reg_not_complete">Registration is not complete</string>
+    <string name="splash_motd">Take off!</string>
 </resources>
