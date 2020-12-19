@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialEditText mLETLogin;
     private MaterialEditText mLETPass;
     private Button mLLoginBtn;
-    private TextView mLRegBtn;
 
     private RelativeLayout mRelativeRegister;
     private MaterialEditText mRETLogin;
@@ -59,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialEditText mRETEmail;
     private MaterialEditText mRETPass;
     private Button mRRegBtn;
+    private TextView mRTVHaveAcc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,18 +72,14 @@ public class LoginActivity extends AppCompatActivity {
                 .create();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first_new);
+        setContentView(R.layout.activity_login);
         mRelativeLogin = findViewById(R.id.loginRl);
         mLETLogin = findViewById(R.id.loginETLogin);
         mLETPass = findViewById(R.id.loginETPassword);
         mLLoginBtn = findViewById(R.id.loginBtn);
-        mLRegBtn = findViewById(R.id.loginTVNotReg);
+        mRTVHaveAcc = findViewById(R.id.registerTVHaveAcc);
 
         mLLoginBtn.setOnClickListener((l) -> LoginFuncs());
-        mLRegBtn.setOnClickListener((l) -> {
-            hideKeyboard();
-            ChangeRelativeLayoutView(mRelativeRegister, mRelativeLogin, false);
-        });
 
         mRelativeRegister = findViewById(R.id.registerRl);
         mRETLogin = findViewById(R.id.registerEtLogin);
@@ -92,12 +88,16 @@ public class LoginActivity extends AppCompatActivity {
         mRETPass = findViewById(R.id.registerEtPassword);
         mRRegBtn = findViewById(R.id.registerBtn);
         mRRegBtn.setOnClickListener((l) -> RegisterFuncs());
+        mRTVHaveAcc.setOnClickListener((l) -> {
+            hideKeyboard();
+            ChangeRelativeLayoutView(mRelativeLogin, mRelativeRegister, false);
+        });
     }
 
     @Override
     public void onBackPressed() {
-        if (mRelativeRegister.getVisibility() == View.VISIBLE) {
-            ChangeRelativeLayoutView(mRelativeLogin, mRelativeRegister, true);
+        if (mRelativeLogin.getVisibility() == View.VISIBLE) {
+            ChangeRelativeLayoutView(mRelativeRegister, mRelativeLogin, true);
         } else {
             super.onBackPressed();
         }
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         mLETPass.setEnabled(enable);
         mLLoginBtn.setEnabled(enable);
         mRRegBtn.setEnabled(enable);
-        mLRegBtn.setEnabled(enable);
+        mRTVHaveAcc.setEnabled(enable);
     }
 
     public void hideKeyboard() {
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
             mLETPass.setText(password);
         }
         if (mLETLogin.validate(loginRegex, getString(R.string.login_must_be))
-                && password.length() >= 6 && (!BuildConfig.DEBUG && !password.equals("testpassfordebug"))) {
+                && password.length() >= 6 && (BuildConfig.DEBUG || !password.equals("testpassfordebug"))) {
             Response.Listener<String> listener = response -> {
                 try {
                     Log.d(TAG, "LoginFuncs response: " + response);

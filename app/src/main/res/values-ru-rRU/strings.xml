@@ -9,7 +9,7 @@
     <string name="password">Пароль</string>
     <string name="welcome_to_app">Добро пожаловать в приложение</string>
     <string name="register_to_app">Пройдите регистрацию</string>
-    <string name="not_registered">У меня нет аккаунта</string>
+    <string name="already_registered">У меня уже есть аккаунт</string>
     <string name="first_and_last_name">Имя и Фамилия</string>
     <string name="login_et">Логин</string>
     <string name="real_data_please">Пожалуйста, введите настоящие данные</string>

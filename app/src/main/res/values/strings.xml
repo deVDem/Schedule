@@ -8,7 +8,7 @@
     <string name="password">Password</string>
     <string name="helperPass">Password must be at least 6 characters</string>
     <string name="helperLogin">Login must be at least 4 characters</string>
-    <string name="not_registered">I don\'t have an account</string>
+    <string name="already_registered">I already have an account</string>
     <string name="login_et">Login</string>
     <string name="first_and_last_name">First and Last Name</string>
     <string name="real_data_please">Please enter your real data</string>

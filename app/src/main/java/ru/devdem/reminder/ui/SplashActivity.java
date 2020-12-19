@@ -52,13 +52,9 @@ public class SplashActivity extends AppCompatActivity {
         ImageView circle = findViewById(R.id.circle);
         View textView = findViewById(R.id.textViewAppName);
         Animation anim_text = AnimationUtils.loadAnimation(this, R.anim.text);
-        textView.setAnimation(anim_text);
         Animation anim_arrow = AnimationUtils.loadAnimation(this, R.anim.arrow);
-        arrow.setAnimation(anim_arrow);
         Animation anim_button = AnimationUtils.loadAnimation(this, R.anim.button);
-        button.setAnimation(anim_button);
         Animation anim_count = AnimationUtils.loadAnimation(this, R.anim.count);
-        count.setAnimation(anim_count);
         anim_count.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -76,6 +72,10 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
         Animation anim_circle = AnimationUtils.loadAnimation(this, R.anim.circle);
+        textView.setAnimation(anim_text);
+        arrow.setAnimation(anim_arrow);
+        button.setAnimation(anim_button);
+        count.setAnimation(anim_count);
         circle.setAnimation(anim_circle);
     }
 
