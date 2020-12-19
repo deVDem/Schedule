@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Расписание</string>
-    <string name="hello">Привет!</string>
     <string name="next">Далее</string>
     <string name="helperLogin">Логин должен содержать минимум 4 символова</string>
     <string name="helperPass">Пароль должен содержать минимум 6 символов</string>
@@ -11,14 +10,11 @@
     <string name="welcome_to_app">Добро пожаловать в приложение</string>
     <string name="register_to_app">Пройдите регистрацию</string>
     <string name="not_registered">У меня нет аккаунта</string>
-    <string name="confirm_password">Повторите пароль</string>
     <string name="first_and_last_name">Имя и Фамилия</string>
-    <string name="i_agree_to_send_email_messages_with_news_and_technical_notifications">Я согласен на рассылку Email-сообщениями новостями и техническими уведомлениями</string>
     <string name="login_et">Логин</string>
     <string name="real_data_please">Пожалуйста, введите настоящие данные</string>
     <string name="register">Зарегистрироваться</string>
     <string name="registration">Регистрация</string>
-    <string name="choose">Выберите вашу группу</string>
     <string name="errorNetwork">Произошла ошибка при подключении к серверу.</string>
     <string name="detail">Подробнее </string>
     <string name="retry">Повторить</string>
@@ -26,7 +22,6 @@
     <string name="left_before_lesson">Осталось до урока</string>
     <string name="next_lesson">Следующий урок</string>
     <string name="timer">Таймер</string>
-    <string name="notifications">Уведомления</string>
     <string name="settings">Настройки</string>
     <string name="dashboard">Расписание</string>
     <string name="swipedowntoretry">Проведите пальцем вниз, чтобы повторить попытку</string>
@@ -40,8 +35,6 @@
         <item>Суббота</item>
         <item>Воскресенье</item>
     </string-array>
-    <string name="close">Закрыть</string>
-    <string name="fullImage">Полное изображение</string>
     <string name="night_theme">Ночная тема</string>
     <string name="notification">Уведомление</string>
     <string name="logoff">Выйти из аккаунта</string>
@@ -51,14 +44,6 @@
     <string name="left_before_the_break">Осталось до перерыва</string>
     <string name="end_week">Неделя закончилась</string>
     <string name="good_rest">Хорошего вам отдыха!</string>
-    <string name="change_password">Сменить пароль</string>
-    <string name="change_email">Сменить Email</string>
-    <string name="change_login">Сменить логин</string>
-    <string name="disable_the_mailing_list">Отключить рассылку</string>
-    <string name="enable_the_mailing_list">Включить рассылку</string>
-    <string name="newpassword">Новый пароль</string>
-    <string name="newlogin">Введите ваш новый логин</string>
-    <string name="newEmail">Введите новый Email</string>
     <string name="a_new_version_of_the_app_is_available">Доступна новая версия приложения</string>
     <string name="download">Скачать</string>
     <string name="error">Ошибка</string>
@@ -66,13 +51,10 @@
     <string name="downloadTitle">Загрузка обновления</string>
     <string name="click_to_download">Нажмите чтобы скачать и установить</string>
     <string name="preparing_to_download">Подготовка к загрузке…</string>
-    <string name="what_s_new">Что нового?</string>
     <string name="service_stopped">Сервис остановлен</string>
     <string name="click_to_restart">Нажмите, чтобы перезапустить</string>
-    <string name="left_before">Осталось до </string>
     <string name="replacement">(замена)</string>
     <string name="today">(сегодня)</string>
-    <string name="edit_profile">Редактировать профиль</string>
     <string name="editing_a_profile">Редактирование профиля</string>
     <string name="enter_the_correct_address">Введите корректный адрес</string>
     <string name="type_first_and_last_name">Введите имя и фамилию</string>
@@ -87,7 +69,6 @@
     <string name="messages_for">Сообщения для</string>
     <string name="title">Заголовок</string>
     <string name="message_text">Сообщение</string>
-    <string name="insert_a_link_to_the_image_here">Вставьте сюда ссылку на картинку</string>
     <string-array name="permissions">
         <item>Пользователь</item> <!-- Лошок-->
         <item>Редактор</item> <!-- Создатель группы, может свою редактировать,посылать сообщения своим, чужие смотреть не может-->
@@ -121,10 +102,8 @@
     <string name="no_description">Описание отсутствует</string>
     <string name="success_registration">Успешная регистрация</string>
     <string name="failed_get_user_info">Не удалось получить информацию о пользователе</string>
-    <string name="user_already_registered">Такой пользователь уже зарегистрирован</string>
     <string name="unknown_error">Произошла неизвестная ошибка</string>
     <string name="wrong_password">Неверный пароль</string>
-    <string name="wrong_login_email">Неверный логин или электронная почта</string>
     <string name="enter_username_and_pass">Введите ваш логин и пароль</string>
     <string name="enter_data_correct">Укажите все данные верно</string>
     <string name="management">Управление</string>
