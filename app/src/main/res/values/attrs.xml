@@ -4,8 +4,8 @@
         
         <attr name="fillColor" format="color"/>
         <attr name="textHolded" format="string"/>
-        <attr name="strength" format="integer"/>
-        <attr name="force" format="integer"/>
+        <attr name="strength" format="float"/>
+        <attr name="force" format="float"/>
         <attr name="hint" format="string"/>
         <attr name="textHoldedColor" format="color"/>
 

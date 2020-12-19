@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -21,8 +20,8 @@ import ru.devdem.reminder.R;
 
 public class HoldButton extends AppCompatButton {
 
-    public int Strength;
-    public int Force;
+    public float Strength;
+    public float Force;
 
     private boolean touch;
     private boolean holded = false;
@@ -43,7 +42,7 @@ public class HoldButton extends AppCompatButton {
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_DOWN: {
                 touch = true;
-                if (Strength >= 100 && !holded) {
+                if (Strength >= 1000f && !holded) {
                     if (listener != null) listener.onClick(this);
                     if (textHolded != null) {
                         setText(textHolded);
@@ -54,7 +53,7 @@ public class HoldButton extends AppCompatButton {
             }
             default: {
                 touch = false;
-                if (!holded && textHint != null && Strength <= 30)
+                if (!holded && textHint != null && Strength <= 300f)
                     Toast.makeText(mContext, textHint, Toast.LENGTH_SHORT)
                             .show();
             }
@@ -67,7 +66,7 @@ public class HoldButton extends AppCompatButton {
     RectF rect = new RectF();
     RectF rectClip = new RectF();
 
-    private float lastFill;
+    private float lastFill = 0f;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -80,13 +79,14 @@ public class HoldButton extends AppCompatButton {
         paintText.setTextSize(getTextSize());
         paintText.setTextScaleX(getTextScaleX());
         paintText.setTextAlign(Paint.Align.CENTER);
+        paintText.setTypeface(getTypeface());
         paint.setColor(colorFill);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
-        float fill = (Strength / 100f);
+        float newFill = lastFill - (lastFill - Strength / 650f) * 0.016f * 3f;
         rect.set(0, 0, width,
                 height);
-        rectClip.set(width * lastFill + ((fill - lastFill) * 16f), 0, width,
+        rectClip.set(width * newFill, 0, width,
                 height);
         float radius = Math.min(width, height) * 0.4f;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -96,15 +96,15 @@ public class HoldButton extends AppCompatButton {
                 canvas.drawText(textHolded.toUpperCase(getTextLocale()), width / 2f, height / 2f, paintText);
             }
         }
-        lastFill = fill;
+        lastFill = newFill;
     }
 
     private void init() {
-        if (holdThread == null && Strength < 100) {
+        if (holdThread == null && Strength < 1000f) {
             holdThread = new Thread(null, () -> {
-                while (Strength < 100 && !holded) {
+                while (Strength <= 1000f && !holded) {
                     invalidate();
-                    if (!touch && Strength > 0) Strength -= Force / 2;
+                    if (!touch && Strength > 0) Strength -= Force * 1.5f;
                     if (touch || Strength < 0)
                         Strength += Force;
                     try {
@@ -113,7 +113,7 @@ public class HoldButton extends AppCompatButton {
                         e.printStackTrace();
                     }
                 }
-                Strength = 100;
+                Strength = 1000f;
             });
             holdThread.start();
         }
@@ -137,8 +137,8 @@ public class HoldButton extends AppCompatButton {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.HoldButton);
         textHint = typedArray.getString(R.styleable.HoldButton_hint);
         textHolded = typedArray.getString(R.styleable.HoldButton_textHolded);
-        Strength = typedArray.getInt(R.styleable.HoldButton_strength, 0);
-        Force = typedArray.getInt(R.styleable.HoldButton_force, 2);
+        Strength = typedArray.getFloat(R.styleable.HoldButton_strength, 0f);
+        Force = typedArray.getFloat(R.styleable.HoldButton_force, 20f);
         colorHoldText = typedArray.getColor(R.styleable.HoldButton_textHoldedColor, Color.parseColor("#ffffff"));
         String colorFillString = typedArray.getString(R.styleable.HoldButton_fillColor);
         if (colorFillString != null) colorFill = Color.parseColor(colorFillString);
@@ -146,6 +146,4 @@ public class HoldButton extends AppCompatButton {
         typedArray.recycle();
         init();
     }
-
-
 }
