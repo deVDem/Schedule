@@ -40,7 +40,7 @@
         <item name="android:navigationBarColor">@color/card_color</item>
     </style>
 
-    <style name="FirstTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#000</item>
         <item name="colorPrimaryDark">#000</item>

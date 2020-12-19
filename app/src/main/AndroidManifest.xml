@@ -58,9 +58,9 @@
 
         <activity
             android:name=".ui.FirstActivity"
-            android:theme="@style/FirstTheme" />
-        <activity android:name=".ui.FirstNewActivity"
-            android:theme="@style/FirstTheme"/>
+            android:theme="@style/LoginTheme" />
+        <activity android:name=".ui.LoginActivity"
+            android:theme="@style/LoginTheme"/>
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme" />

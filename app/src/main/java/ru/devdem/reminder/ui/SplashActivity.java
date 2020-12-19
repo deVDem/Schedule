@@ -81,7 +81,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void start() {
         if (mSettings.getBoolean(PREFS_FIRST, true)) {
-            startActivity(new Intent(SplashActivity.this, FirstNewActivity.class));
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
         }
