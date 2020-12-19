@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,14 +21,12 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.Objects;
-
 import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.NotificationService;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.R;
-import ru.devdem.reminder.ui.PurchaseActivity;
 import ru.devdem.reminder.ui.SplashActivity;
+import ru.devdem.reminder.ui.view.HoldButton;
 
 public class SettingsFragment extends Fragment {
 
@@ -101,8 +98,8 @@ public class SettingsFragment extends Fragment {
                 requireActivity().stopService(new Intent(getContext(), NotificationService.class));
             }
         });
-        Button mLogOffButton = view.findViewById(R.id.buttonLogOff);
-        mLogOffButton.setOnClickListener(v -> {
+        HoldButton mLogOffButton = view.findViewById(R.id.buttonLogOff);
+        mLogOffButton.setHoldDownListener(v -> {
             can = false;
             mSettings.edit().clear().apply();
             mSettings.edit().putBoolean("notification", false).apply();

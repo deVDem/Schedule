@@ -148,4 +148,5 @@
     <string name="reg_not_complete">Registration is not complete</string>
     <string name="splash_motd">Take off!</string>
     <string name="retry_this_action">Try this action again</string>
+    <string name="hold_button">Hold the button</string>
 </resources>

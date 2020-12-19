@@ -17,4 +17,5 @@
     <color name="line_color">#6B808080</color>
     <color name="holo_red_light">#ffff4444</color>
     <color name="line">#22ffffff</color>
+    <color name="holdBtnColor">#80B3891E</color>
 </resources>

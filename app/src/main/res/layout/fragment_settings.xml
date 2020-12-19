@@ -75,7 +75,7 @@
                 android:text="@string/notification"
                 android:textColor="@color/text_color" />
 
-            <Button
+            <ru.devdem.reminder.ui.view.HoldButton
                 android:id="@+id/buttonLogOff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +83,11 @@
                 android:background="@drawable/shape_corn"
                 android:backgroundTint="@color/card_color_lessons"
                 android:text="@string/logoff"
-                android:textColor="@color/holo_red_light" />
+                android:textColor="@color/holo_red_light"
+                tools:strength="45"
+                app:hint="@string/hold_button"
+                app:fillColor="@color/holdBtnColor"
+                app:textHoldedColor="@color/white"/>
 
             <TextView
                 android:id="@+id/versionInfo"
