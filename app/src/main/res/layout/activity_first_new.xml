@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/window_background"
+    android:theme="@style/FirstTheme">
+
+    <RelativeLayout
+        android:id="@+id/loginRl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/login"
+            android:textColor="@color/text_bold_color"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/welcomeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/textView10"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="25dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/welcome_to_app"
+            android:textColor="@color/text_color" />
+
+        <ScrollView
+            android:id="@+id/scrLg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/loginBtn"
+            android:layout_below="@id/welcomeTextView"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/loginETLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/login_or_email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="@color/colorAccent"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperLogin"
+                    app:met_minCharacters="4"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    tools:text="HelloWorldLogin" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/loginETPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/password"
+                    android:imeOptions="actionGo"
+                    android:inputType="textPassword"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="@color/colorAccent"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperPass"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    tools:text="HelloWorldPassword" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/loginTVNotReg"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/box_shape"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/login"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/loginTVNotReg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:text="@string/not_registered"
+            android:textColor="@color/text_color" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/registerRl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        tools:visibility="visible">
+
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/registration"
+            android:textColor="@color/text_bold_color"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/registerTextView"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/textView11"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="25dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/register_to_app"
+            android:textColor="@color/text_color" />
+
+        <ScrollView
+            android:id="@+id/scr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/registerTextView"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/login_et"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="@color/colorAccent"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperLogin"
+                    app:met_minCharacters="4"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    tools:text="HelloWorldLogin" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/first_and_last_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/real_data_please"
+                    app:met_maxCharacters="255"
+                    app:met_primaryColor="@color/colorPrimaryDark" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="Email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="#ddaa00"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/real_data_please"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    tools:ignore="HardcodedText" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/registerEtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/password"
+                    android:imeOptions="actionGo"
+                    android:inputType="textPassword"
+                    app:met_baseColor="@color/text_color"
+                    app:met_errorColor="@color/colorAccent"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="@string/helperPass"
+                    app:met_minCharacters="6"
+                    app:met_primaryColor="@color/colorPrimaryDark"
+                    tools:text="HelloWorldPassword" />
+
+                <Button
+                    android:id="@+id/registerBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/box_shape"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="@string/register"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>

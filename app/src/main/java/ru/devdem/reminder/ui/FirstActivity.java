@@ -41,9 +41,9 @@ public class FirstActivity extends AppCompatActivity {
     private RelativeLayout helloRl;
     private RelativeLayout loginRl;
     private RelativeLayout registerRl;
-    private static String nameRegex = "(^[A-Z]{1}[a-z]{1,30} [A-Z]{1}[a-z]{1,30}$)|(^[А-Я]{1}[а-я]{1,30} [А-Я]{1}[а-я]{1,30}$)";
-    private static String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-    private static String loginRegex = "[A-Za-z0-9_]{4,255}";
+    private static final String nameRegex = "(^[A-Z]{1}[a-z]{1,30} [A-Z]{1}[a-z]{1,30}$)|(^[А-Я]{1}[а-я]{1,30} [А-Я]{1}[а-я]{1,30}$)";
+    private static final String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    private static final String loginRegex = "[A-Za-z0-9_]{4,255}";
     private TextView mLTextView;
     private Button mLoginButton;
     private TextView mLoginTVNotReg;
@@ -63,8 +63,9 @@ public class FirstActivity extends AppCompatActivity {
     private MaterialEditText mRPassEt;
     private MaterialEditText mRConPassEt;
 
-    private int ANIM_DURATION = 700;
-    private String PREFS_FIRST = "first";
+    private static final int ANIM_DURATION = 700;
+    private static final String PREFS_FIRST = "first";
+    private static final String NAME_PREFS = "settings";
     private static final String TAG = "FirstActivity";
 
     @Override
@@ -82,7 +83,6 @@ public class FirstActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        String NAME_PREFS = "settings";
         mSettings = getSharedPreferences(NAME_PREFS, Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);

@@ -3,13 +3,14 @@
     <string name="app_name">Расписание</string>
     <string name="hello">Привет!</string>
     <string name="next">Далее</string>
-    <string name="helperLogin">Логин должен содержать минимум 6 символов</string>
+    <string name="helperLogin">Логин должен содержать минимум 4 символова</string>
     <string name="helperPass">Пароль должен содержать минимум 6 символов</string>
     <string name="login">Вход</string>
     <string name="login_or_email">Логин или Email</string>
     <string name="password">Пароль</string>
-    <string name="welcome_to_app">Добро пожаловать в приложение!</string>
-    <string name="not_registered">Не зарегистрированы?</string>
+    <string name="welcome_to_app">Добро пожаловать в приложение</string>
+    <string name="register_to_app">Пройдите регистрацию</string>
+    <string name="not_registered">У меня нет аккаунта</string>
     <string name="confirm_password">Повторите пароль</string>
     <string name="first_and_last_name">Имя и Фамилия</string>
     <string name="i_agree_to_send_email_messages_with_news_and_technical_notifications">Я согласен на рассылку Email-сообщениями новостями и техническими уведомлениями</string>

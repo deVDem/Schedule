@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.ui.main.MainActivity;
 
@@ -26,22 +28,24 @@ public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences mSettings;
 
-    @SuppressLint("SourceLockedOrientationActivity")
+    @SuppressLint({"SourceLockedOrientationActivity", "SetTextI18n"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mSettings = getSharedPreferences(FILE_PREFS_NAME, MODE_PRIVATE);
         super.onCreate(savedInstanceState);
-        if (!mSettings.getBoolean(PREFS_FIRST, true)) {
-            if (mSettings.getBoolean(PREFS_SYSTEM_THEME, true)) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            } else {
-                if (mSettings.getBoolean(PREFS_NIGHT, false))
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        } else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        if (mSettings.getBoolean(PREFS_SYSTEM_THEME, true)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        } else {
+            if (mSettings.getBoolean(PREFS_NIGHT, false))
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash);
+        if (BuildConfig.DEBUG) {
+            TextView mSplashText = findViewById(R.id.splashMotd);
+            mSplashText.setText("Debug " + BuildConfig.VERSION_CODE);
+        }
         ImageView arrow = findViewById(R.id.arrow);
         ImageView button = findViewById(R.id.button);
         ImageView count = findViewById(R.id.count);
@@ -77,7 +81,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void start() {
         if (mSettings.getBoolean(PREFS_FIRST, true)) {
-            startActivity(new Intent(SplashActivity.this, FirstActivity.class));
+            startActivity(new Intent(SplashActivity.this, FirstNewActivity.class));
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
         }

@@ -3,12 +3,13 @@
     <string name="hello">Hello!</string>
     <string name="next">Next</string>
     <string name="login">Login</string>
-    <string name="welcome_to_app">Welcome to App!</string>
+    <string name="welcome_to_app">Welcome to App</string>
+    <string name="register_to_app">Complete the registration process</string>
     <string name="login_or_email">Login or Email</string>
     <string name="password">Password</string>
     <string name="helperPass">Password must be at least 6 characters</string>
-    <string name="helperLogin">Login must be at least 6 characters</string>
-    <string name="not_registered">Not registered?</string>
+    <string name="helperLogin">Login must be at least 4 characters</string>
+    <string name="not_registered">I don\'t have an account</string>
     <string name="login_et">Login</string>
     <string name="first_and_last_name">First and Last Name</string>
     <string name="confirm_password">Confirm Password</string>
