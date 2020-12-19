@@ -19,17 +19,20 @@ import ru.devdem.reminder.ui.main.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final String FILE_PREFS_NAME = "settings";
+    private static final String PREFS_NIGHT = "night";
+    private static final String PREFS_FIRST = "first";
+    private static final String PREFS_SYSTEM_THEME = "system_theme";
+
     private SharedPreferences mSettings;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        String NAME_PREFS = "settings";
-        mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
-        String PREFS_NIGHT = "night";
+        mSettings = getSharedPreferences(FILE_PREFS_NAME, MODE_PRIVATE);
         super.onCreate(savedInstanceState);
-        if (!mSettings.getBoolean("first", true)) {
-            if (mSettings.getBoolean("system_theme", true)) {
+        if (!mSettings.getBoolean(PREFS_FIRST, true)) {
+            if (mSettings.getBoolean(PREFS_SYSTEM_THEME, true)) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             } else {
                 if (mSettings.getBoolean(PREFS_NIGHT, false))
@@ -73,15 +76,12 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void start() {
-        String PREFS_FIRST = "first";
         if (mSettings.getBoolean(PREFS_FIRST, true)) {
             startActivity(new Intent(SplashActivity.this, FirstActivity.class));
-            overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-            finish();
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-            finish();
         }
+        overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+        finish();
     }
 }
