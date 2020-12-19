@@ -148,4 +148,5 @@
     <string name="error_payment">Произошла ошибка при оплате. Попробуйте ещё раз</string>
     <string name="reg_not_complete">Регистрация ещё не завершена</string>
     <string name="splash_motd">На взлёт!</string>
+    <string name="retry_this_action">Попробуйте ещё раз это действие</string>
 </resources>

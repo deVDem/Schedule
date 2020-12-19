@@ -106,28 +106,28 @@ public class DashboardFragment extends Fragment {
         if (why) {
             swipeRefreshLayout.setRefreshing(true);
             YoYo.YoYoString anim = FastFadeInOutAnim(mRecyclerView, View.GONE);
-
             Response.Listener<String> listener = response -> {
                 try {
                     JSONObject json = new JSONObject(response);
-                    if (!json.isNull("error") && json.getString("error").equals("NO_TOKEN")) {
-                        activity.checkAccount();
+                    if (!json.isNull("error")) {
+                        JSONObject error = json.getJSONObject("error");
+                        if (error.getInt("code") == 0x11)
+                            activity.checkAccount();
+                        else if (error.getInt("code") == 0x12) {
+                            Toast.makeText(mContext, R.string.retry_this_action,
+                                    Toast.LENGTH_SHORT).show();
+                            activity.checkAccount();
+                        } else if (error.getInt("code") != 0x10)
+                            Toast.makeText(mContext, error.getInt("code") + " " + error.getString("text"), Toast.LENGTH_SHORT).show();
                     }
                     Thread thread = new Thread(() -> {
                         {
                             Thread threadparse = mLessonsController.parseLessonsAsync(response);
                             threadparse.start();
                             while (threadparse.isAlive()) {
-                                Log.d(TAG, "update: sleep, is alive = "+threadparse.isAlive());
-                                try {
-                                    Thread.sleep(250);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                             }
                             activity.runOnUiThread(() -> {
                                 if (anim != null) anim.stop();
-                                Log.d(TAG, "update: anim.isRunning="+anim.isRunning());
                                 updateUI();
                             });
                         }
@@ -157,11 +157,10 @@ public class DashboardFragment extends Fragment {
             AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(scaleInAnimationAdapter);
             animationAdapter.setDuration(1000);
             animationAdapter.setFirstOnly(false);
-            mRecyclerView.setVisibility(View.VISIBLE);
+            mRecyclerView.setAdapter(animationAdapter);
             if (mLessonsController.getLessons().size() > 0) {
-                mRecyclerView.setAdapter(animationAdapter);
-            }
-            mRecyclerView.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+            } else mRecyclerView.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
             FastFadeInOutAnim(mNoLessonsText, mLessonsController.getLessons().size() < 1 ? View.VISIBLE : View.GONE);
         } else {
