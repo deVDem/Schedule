@@ -36,15 +36,21 @@ public class HoldButton extends AppCompatButton {
     private final float marginFillTop;
     private final float marginFillBottom;
 
-    private Thread holdThread;
     private OnClickListener listener;
     private final Context mContext;
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
         switch (action) {
-
+            case MotionEvent.ACTION_UP:
+                performClick();
+                break;
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_DOWN: {
                 touch = true;
@@ -112,26 +118,10 @@ public class HoldButton extends AppCompatButton {
             canvas.drawRoundRect(rectClip, radius, radius, paint);
         }
         lastFill = newFill;
-    }
-
-    private void init() {
-        if (holdThread == null && Strength < 1000f) {
-            holdThread = new Thread(null, () -> {
-                while (Strength <= 1000f && !holded) {
-                    invalidate();
-                    if (!touch && Strength > 0) Strength -= Force * 1.5f;
-                    if (touch || Strength < 0)
-                        Strength += Force;
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                Strength = 1000f;
-            });
-            holdThread.start();
-        }
+        if (!touch && Strength > 0) Strength -= Force * 1.5f;
+        if (touch || Strength < 0)
+            Strength += Force;
+        invalidate();
     }
 
     public void setHoldDownListener(View.OnClickListener listener) {
@@ -165,6 +155,5 @@ public class HoldButton extends AppCompatButton {
         marginFillTop = typedArray.getFloat(R.styleable.HoldButton_marginFillTop, 0f);
         marginFillBottom = typedArray.getFloat(R.styleable.HoldButton_marginFillBottom, 0f);
         typedArray.recycle();
-        init();
     }
 }
