@@ -202,7 +202,7 @@ public class GroupListFragment extends Fragment {
                 description += "\nДата создания: " + dateString;
             }
             holder.mDescription.setText(description);
-            holder.mGoButton.setHoldDownListener(v -> activity.joinToGroup(group.getId()));
+            holder.mGoButton.setOnClickListener(v -> activity.joinToGroup(group.getId()));
             holder.mDetailedButton.setOnClickListener(v -> activity.detailedGroup(group.getId()));
             holder.imageConfirm.setVisibility(group.getConfirmed() ? View.VISIBLE : View.GONE);
             if (position == mGroups.size() - 1) holder.mSpace.setVisibility(View.VISIBLE);
@@ -221,7 +221,7 @@ public class GroupListFragment extends Fragment {
             TextView mBuilding;
             TextView mDescription;
             TextView mCity;
-            HoldButton mGoButton;
+            Button mGoButton;
             Button mDetailedButton;
             Space mSpace;
 

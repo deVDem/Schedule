@@ -153,6 +153,7 @@ public class GroupListActivity extends AppCompatActivity {
                 if (jsonObject.isNull("error") && !jsonObject.isNull("response")) { // TODO: разделить условия для стабильности
                     JSONObject jsonResponse = jsonObject.getJSONObject("response");
                     if(jsonResponse.getBoolean("success")) {
+                        mSettings.edit().putString("group", String.valueOf(id)).apply();
                         startActivity(new Intent(this, MainActivity.class));
                         overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                         finish();
