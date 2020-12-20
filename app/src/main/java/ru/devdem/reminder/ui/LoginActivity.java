@@ -31,12 +31,22 @@ import java.util.Random;
 import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.ui.main.MainActivity;
 import ru.devdem.reminder.ui.view.HoldButton;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String nameRegex = "(^[A-Z]{1}[a-z]{1,30} [A-Z]{1}[a-z]{1,30}$)|(^[А-Я]{1}[а-я]{1,30} [А-Я]{1}[а-я]{1,30}$)";
-    private static final String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    private static final String nameRegex =
+            "(^[A-Z]{1}[a-z]{1,30} [A-Z]{1}[a-z]{1,30}$)|(^[А-Я]{1}[а-я]{1,30}" + " " +
+                    "[А-Я]{1}[а-я]{1,30}$)";
+    private static final String emailRegex =
+            "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:" +
+                    "[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[" +
+                    "\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9]" +
+                    ")?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?" +
+                    "[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]" +
+                    ":(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09" +
+                    "\\x0b\\x0c\\x0e-\\x7f])+)\\])";
     private static final String loginRegex = "[A-Za-z0-9_]{4,255}";
 
     private static final int ANIM_DURATION = 350;
@@ -80,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         mLLoginBtn = findViewById(R.id.loginBtn);
         mRTVHaveAcc = findViewById(R.id.registerTVHaveAcc);
 
-        mLLoginBtn.setOnClickListener((l) -> LoginFuncs());
+        mLLoginBtn.setOnClickListener((l) -> Login());
 
         mRelativeRegister = findViewById(R.id.registerRl);
         mRETLogin = findViewById(R.id.registerEtLogin);
@@ -88,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         mRETEmail = findViewById(R.id.registerEtEmail);
         mRETPass = findViewById(R.id.registerEtPassword);
         mRRegBtn = findViewById(R.id.registerBtn);
-        mRRegBtn.setHoldDownListener((l) -> RegisterFuncs());
+        mRRegBtn.setHoldDownListener((l) -> Register());
         mRTVHaveAcc.setOnClickListener((l) -> {
             hideKeyboard();
             ChangeRelativeLayoutView(mRelativeLogin, mRelativeRegister, false);
@@ -105,15 +115,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void ChangeRelativeLayoutView(RelativeLayout in, RelativeLayout out, boolean reverse) {
-        YoYo.with(reverse ? Techniques.FadeOutRight : Techniques.FadeOutLeft).duration(ANIM_DURATION)
-                .interpolate(new AccelerateDecelerateInterpolator()).onEnd(animator -> {
-            out.setVisibility(View.INVISIBLE);
-            in.setVisibility(View.VISIBLE);
-            YoYo.with(reverse ? Techniques.FadeInLeft : Techniques.FadeInRight).duration(ANIM_DURATION)
-                    .interpolate(new AccelerateDecelerateInterpolator()).playOn(in);
-        }).playOn(out);
+        YoYo.with(reverse ? Techniques.FadeOutRight : Techniques.FadeOutLeft)
+                .duration(ANIM_DURATION)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .onEnd(animator -> {
+                    out.setVisibility(View.INVISIBLE);
+                    in.setVisibility(View.VISIBLE);
+                    YoYo.with(reverse ? Techniques.FadeInLeft : Techniques.FadeInRight)
+                            .duration(ANIM_DURATION)
+                            .interpolate(new AccelerateDecelerateInterpolator())
+                            .playOn(in);
+                }).playOn(out);
     }
 
+
+    /**
+     * Enable or disable views for lock from user
+     */
     private void controlViews(boolean enable) {
         mRelativeLogin.setEnabled(enable);
         mRETName.setEnabled(enable);
@@ -130,18 +148,20 @@ public class LoginActivity extends AppCompatActivity {
     public void hideKeyboard() {
         View view = findViewById(android.R.id.content);
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
     private AlertDialog loadingDialog;
+
     private void showHideLoadingDialog(boolean show) {
-        if(show) loadingDialog.show();
+        if (show) loadingDialog.show();
         else loadingDialog.dismiss();
     }
 
-    private void LoginFuncs() {
+    private void Login() {
         controlViews(false);
         String login;
         String password;
@@ -154,16 +174,20 @@ public class LoginActivity extends AppCompatActivity {
             mLETPass.setText(password);
         }
         if (mLETLogin.validate(loginRegex, getString(R.string.login_must_be))
-                && password.length() >= 6 && (BuildConfig.DEBUG || !password.equals("testpassfordebug"))) {
+                && password.length() >= 6 &&
+                (BuildConfig.DEBUG || !(login.equals("debugAcc") &&
+                        password.equals("testpassfordebug")))) {
             Response.Listener<String> listener = response -> {
                 try {
-                    Log.d(TAG, "LoginFuncs response: " + response);
+                    Log.d(TAG, "Login response: " + response);
                     JSONObject jsonResponse = new JSONObject(response);
                     if (jsonResponse.isNull("error")) {
                         if (!jsonResponse.isNull("response")) {
                             try {
-                                JSONObject jsonObjectResponse = jsonResponse.getJSONObject("response");
-                                JSONObject jsonUserInfo = jsonObjectResponse.getJSONObject("user_data");
+                                JSONObject jsonObjectResponse =
+                                        jsonResponse.getJSONObject("response");
+                                JSONObject jsonUserInfo =
+                                        jsonObjectResponse.getJSONObject("user_data");
                                 int user_id = jsonUserInfo.getInt("id");
                                 String name = jsonUserInfo.getString("names");
                                 String email = jsonUserInfo.getString("email");
@@ -171,7 +195,9 @@ public class LoginActivity extends AppCompatActivity {
                                 String group = jsonUserInfo.getString("groupId");
                                 String password_hash = jsonUserInfo.getString("password");
                                 boolean spam = jsonUserInfo.getString("spam").equals("Yes");
-                                int permission = jsonUserInfo.isNull("permission") ? 0 : jsonUserInfo.getInt("permission");
+                                int permission =
+                                        jsonUserInfo.isNull("permission") ? 0 : jsonUserInfo
+                                                .getInt("permission");
                                 String token = jsonUserInfo.getString("token");
                                 mSettings.edit().clear().apply();
                                 SharedPreferences.Editor editor = mSettings.edit();
@@ -186,13 +212,17 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString("password", password_hash);
                                 editor.putBoolean(PREFS_FIRST, false);
                                 editor.apply();
-                                Toast.makeText(mContext, R.string.success_login, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, SplashActivity.class));
-                                overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+                                Toast.makeText(mContext, R.string.success_login, Toast.LENGTH_SHORT)
+                                        .show();
+                                startActivity(new Intent(LoginActivity.this,
+                                        MainActivity.class));
+                                overridePendingTransition(R.anim.transition_out,
+                                        R.anim.transition_in);
                                 finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(mContext, R.string.failed_get_user_info, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.failed_get_user_info,
+                                        Toast.LENGTH_SHORT).show();
                                 showHideLoadingDialog(false);
                                 controlViews(true);
                             }
@@ -203,7 +233,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     } else {
                         JSONObject jsonError = jsonResponse.getJSONObject("error");
-                        Toast.makeText(mContext, jsonError.getInt("code") + " " + jsonError.getString("text"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, jsonError.getInt("code") + " " +
+                                jsonError.getString("text"), Toast.LENGTH_SHORT).show();
                         showHideLoadingDialog(false);
                         controlViews(true);
                     }
@@ -215,30 +246,32 @@ public class LoginActivity extends AppCompatActivity {
                 }
             };
             controlViews(true);
-            showHideLoadingDialog( true);
+            showHideLoadingDialog(true);
             mNetworkController.Login(mContext, login, password, listener, mNetworkController.getErrorListener(mContext));
         } else {
-            Snackbar.make(mRelativeLogin, R.string.enter_username_and_pass, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mRelativeLogin, R.string.enter_username_and_pass, Snackbar.LENGTH_LONG)
+                    .show();
             controlViews(true);
         }
     }
-    private void RegisterFuncs() {
+
+    private void Register() {
         controlViews(false);
         String login;
         String name;
         String email;
         String password;
         String spam;
-        if(!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             login = Objects.requireNonNull(mRETLogin.getText()).toString();
             name = Objects.requireNonNull(mRETName.getText()).toString();
             email = Objects.requireNonNull(mRETEmail.getText()).toString();
             password = Objects.requireNonNull(mRETPass.getText()).toString();
             spam = "Yes";
         } else {
-            login = "debug"+new Random().nextInt(1000);
-            name = "Debug"+" "+"Debugovich";
-            email = "debug"+new Random().nextInt(1000)+"@devdem.ru";
+            login = "debug" + new Random().nextInt(1000);
+            name = "Debug" + " " + "Debugovich";
+            email = "debug" + new Random().nextInt(1000) + "@devdem.ru";
             password = "testpassfordebug";
             spam = new Random().nextBoolean() ? "Yes" : "No";
             mRETLogin.setText(login);
@@ -281,22 +314,27 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("password", password_hash);
                             editor.putBoolean(PREFS_FIRST, false);
                             editor.apply();
-                            Toast.makeText(mContext, R.string.success_registration, Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+                            Toast.makeText(mContext, R.string.success_registration, Toast.LENGTH_SHORT)
+                                    .show();
+                            startActivity(new Intent(LoginActivity.this,
+                                    MainActivity.class));
                             overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
                             finish();
                         } catch (Exception e) {
                             e.printStackTrace();
                             controlViews(true);
-                            Toast.makeText(mContext, R.string.failed_get_user_info, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.failed_get_user_info,
+                                    Toast.LENGTH_SHORT).show();
                             showHideLoadingDialog(false);
                         }
                     } else {
                         JSONObject errorJson = jsonResponse.getJSONObject("error");
-                        Toast.makeText(mContext, errorJson.getInt("code")+" "+errorJson.getString("text"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, errorJson.getInt("code") + " " +
+                                errorJson.getString("text"), Toast.LENGTH_SHORT).show();
                         showHideLoadingDialog(false);
                         controlViews(true);
-                        Log.e(TAG, "RegisterFuncs: Error "+errorJson.getInt("code"), new Exception());
+                        Log.e(TAG, "RegisterFuncs: Error " + errorJson.getInt("code"),
+                                new Exception());
                     }
 
                 } catch (Exception e) {
@@ -309,7 +347,8 @@ public class LoginActivity extends AppCompatActivity {
             showHideLoadingDialog(true);
             mNetworkController.Register(mContext, login, name, email, password, spam, listener);
         } else {
-            Snackbar.make(mRelativeRegister, R.string.enter_data_correct, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mRelativeRegister, R.string.enter_data_correct, Snackbar.LENGTH_LONG)
+                    .show();
             controlViews(true);
         }
     }

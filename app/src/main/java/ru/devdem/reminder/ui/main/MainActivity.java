@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
@@ -72,34 +71,18 @@ public class MainActivity extends AppCompatActivity {
         mLessonsController.loadLessons();
         notificationUtils = new NotificationUtils(this);
         if (!mSettings.getBoolean("first", true)) {
-            if (mSettings.getInt("alpha_warn", 0)%5==0) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Предупреждение");
-                builder.setMessage("Данная версия приложения находится в альфа-тестировании, " +
-                        "поэтому не все функции могут быть доступны, а так же в каких-то моментах " +
-                        "приложение может вылетать(не замечал, но может). В общем, дайте время плс :)");
-                builder.setPositiveButton("Окей", (dialogInterface, i) -> {
-                    mSettings.edit().putInt("alpha_warn", 1).apply();
-                    dialogInterface.cancel();
-                });
-                builder.setCancelable(false);
-                builder.show();
-            } else {
-                mSettings.edit().putInt("alpha_warn", mSettings.getInt("alpha_warn", 0)+1).apply();
-            }
             if (Objects.equals(mSettings.getString("group", "-1"), "-1")) {
                 checkAccount();
-                start();
             } else {
                 Response.Listener<String> listener = response -> mLessonsController.parseLessons(response);
                 mNetworkController.getLessons(this, listener, null, mSettings.getString("group", "0"), mSettings.getString("token", "null"));
-                mNetworkController.getGroup(this, null,  mSettings.getString("group", ""), mSettings.getString("token", ""));
-                start();
+                mNetworkController.getGroup(this, null, mSettings.getString("group", ""), mSettings.getString("token", ""));
             }
+            StartThisActivity();
         } else finish();
     }
 
-    private void start() {
+    private void StartThisActivity() {
         mView = View.inflate(this, R.layout.activity_main, null);
         setContentView(mView);
         MobileAds.initialize(this, initializationStatus -> {
@@ -169,35 +152,30 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = Objects.requireNonNull(appCompatActivity.getSupportActionBar());
         actionBar.setSubtitle(getResources().getString(R.string.timer));
         mBottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.main_profile:
-                    actionBar.setSubtitle(getResources().getString(R.string.profile));
-                    mViewPager.setCurrentItem(0);
-                    break;
-                case R.id.main_dashboard:
-                    if(Objects.requireNonNull(mSettings.getString("group_name", "loading")).length() <= 5)
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.main_profile) {
+                actionBar.setSubtitle(getResources().getString(R.string.profile));
+                mViewPager.setCurrentItem(0);
+            } else if (itemId == R.id.main_dashboard) {
+                if (Objects.requireNonNull(mSettings.getString("group_name", "loading")).length() <= 5)
                     actionBar.setSubtitle(getResources().getString(R.string.schedule_for) + " " + mSettings.getString("group_name", "loading"));
-                    else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
-                    mViewPager.setCurrentItem(1);
-                    break;
-                case R.id.main_timer:
-                    actionBar.setSubtitle(getResources().getString(R.string.timer));
-                    mViewPager.setCurrentItem(2);
-                    break;
-                case R.id.main_notifications:
-                    if(Objects.requireNonNull(mSettings.getString("group_name", "loading")).length() <= 5)
-                        actionBar.setSubtitle(getResources().getString(R.string.messages_for) + " " + mSettings.getString("group_name", "loading"));
-                    else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
-                    mViewPager.setCurrentItem(3);
-                    break;
-                case R.id.main_settings:
-                    actionBar.setSubtitle(getResources().getString(R.string.settings));
-                    mViewPager.setCurrentItem(4);
-                    break;
+                else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
+                mViewPager.setCurrentItem(1);
+            } else if (itemId == R.id.main_timer) {
+                actionBar.setSubtitle(getResources().getString(R.string.timer));
+                mViewPager.setCurrentItem(2);
+            } else if (itemId == R.id.main_notifications) {
+                if (Objects.requireNonNull(mSettings.getString("group_name", "loading")).length() <= 5)
+                    actionBar.setSubtitle(getResources().getString(R.string.messages_for) + " " + mSettings.getString("group_name", "loading"));
+                else actionBar.setSubtitle(mSettings.getString("group_name", "loading"));
+                mViewPager.setCurrentItem(3);
+            } else if (itemId == R.id.main_settings) {
+                actionBar.setSubtitle(getResources().getString(R.string.settings));
+                mViewPager.setCurrentItem(4);
             }
             return true;
         });
-        getVerInt();
+        //getVerInt(); // TODO: сделать проверку версии приложения
         if (mSettings.getBoolean("notification", true)) {
             startService(new Intent(this, NotificationService.class));
         }
@@ -280,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                if (!jsonObject.isNull(BuildConfig.BUILD_TYPE)){
+                if (!jsonObject.isNull(BuildConfig.BUILD_TYPE)) {
                     JSONObject verInfJson = jsonObject.getJSONObject(BuildConfig.BUILD_TYPE);
                     int lastVer = verInfJson.getInt("ver");
                     String url = verInfJson.getString("url");
@@ -299,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(updateIntent1);
                         });
                         snackbar.show();
-                    } else if(lastVer > BuildConfig.VERSION_CODE && market) {
+                    } else if (lastVer > BuildConfig.VERSION_CODE && market) {
                         Uri address = Uri.parse("http://developer.alexanderklimov.ru");
                         Intent openLinkIntent = new Intent(Intent.ACTION_VIEW, address);
                         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, openLinkIntent, 0);

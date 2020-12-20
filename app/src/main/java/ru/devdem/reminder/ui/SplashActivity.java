@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         if (BuildConfig.DEBUG) {
             TextView mSplashText = findViewById(R.id.splashMotd);
-            mSplashText.setText("Debug " + BuildConfig.VERSION_CODE);
+            mSplashText.setText("debug version" + BuildConfig.VERSION_CODE);
         }
         ImageView arrow = findViewById(R.id.arrow);
         ImageView button = findViewById(R.id.button);
@@ -63,7 +63,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                start();
+                StartApp();
             }
 
             @Override
@@ -79,7 +79,7 @@ public class SplashActivity extends AppCompatActivity {
         circle.setAnimation(anim_circle);
     }
 
-    private void start() {
+    private void StartApp() {
         if (mSettings.getBoolean(PREFS_FIRST, true)) {
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
         } else {

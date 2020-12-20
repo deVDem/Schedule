@@ -194,7 +194,7 @@ public class NotificationService extends Service {
                     }
                 } else {
                     try {
-                        /*NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(getApplicationContext().getString(R.string.no_lessons), getApplicationContext().getString(R.string.service_stopped));
+                        NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(getApplicationContext().getString(R.string.no_lessons), getApplicationContext().getString(R.string.service_stopped));
                         Notification notification = builder.build();
                         Intent reloadIntent = new Intent(getApplicationContext(), SplashActivity.class);
                         reloadIntent.setAction("ru.devdem.reminder.openApp");
@@ -203,7 +203,7 @@ public class NotificationService extends Service {
                         if (canGo) {
                             mNotificationUtils.getManager().notify(103, notification);
                             startForeground(103, notification);
-                        }*/
+                        }
                         count++;
                         if (count >= 30) checkNewNotifications();
                         Thread.sleep(500);
