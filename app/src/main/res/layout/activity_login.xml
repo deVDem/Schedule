@@ -215,7 +215,7 @@
                     app:met_primaryColor="@color/colorPrimaryDark"
                     tools:text="HelloWorldPassword" />
 
-                <Button
+                <ru.devdem.reminder.ui.view.HoldButton
                     android:id="@+id/registerBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -223,9 +223,12 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/box_shape"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="@color/dark"
                     android:text="@string/register"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:strength="0"
+                    app:fillColor="@color/holdBtnColor"
+                    app:hint="@string/hold_button"/>
 
                 <TextView
                     android:id="@+id/registerTVHaveAcc"

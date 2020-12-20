@@ -31,6 +31,7 @@ import java.util.Random;
 import ru.devdem.reminder.BuildConfig;
 import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.ui.view.HoldButton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -57,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialEditText mRETName;
     private MaterialEditText mRETEmail;
     private MaterialEditText mRETPass;
-    private Button mRRegBtn;
+    private HoldButton mRRegBtn;
     private TextView mRTVHaveAcc;
 
     @Override
@@ -87,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
         mRETEmail = findViewById(R.id.registerEtEmail);
         mRETPass = findViewById(R.id.registerEtPassword);
         mRRegBtn = findViewById(R.id.registerBtn);
-        mRRegBtn.setOnClickListener((l) -> RegisterFuncs());
+        mRRegBtn.setHoldDownListener((l) -> RegisterFuncs());
         mRTVHaveAcc.setOnClickListener((l) -> {
             hideKeyboard();
             ChangeRelativeLayoutView(mRelativeLogin, mRelativeRegister, false);
