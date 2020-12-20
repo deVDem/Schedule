@@ -40,6 +40,7 @@ import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.object.Group;
 import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.R;
+import ru.devdem.reminder.ui.view.HoldButton;
 
 public class GroupListFragment extends Fragment {
     private static NetworkController networkController;
@@ -201,7 +202,7 @@ public class GroupListFragment extends Fragment {
                 description += "\nДата создания: " + dateString;
             }
             holder.mDescription.setText(description);
-            holder.mGoButton.setOnClickListener(v -> activity.joinToGroup(group.getId()));
+            holder.mGoButton.setHoldDownListener(v -> activity.joinToGroup(group.getId()));
             holder.mDetailedButton.setOnClickListener(v -> activity.detailedGroup(group.getId()));
             holder.imageConfirm.setVisibility(group.getConfirmed() ? View.VISIBLE : View.GONE);
             if (position == mGroups.size() - 1) holder.mSpace.setVisibility(View.VISIBLE);
@@ -220,7 +221,7 @@ public class GroupListFragment extends Fragment {
             TextView mBuilding;
             TextView mDescription;
             TextView mCity;
-            Button mGoButton;
+            HoldButton mGoButton;
             Button mDetailedButton;
             Space mSpace;
 

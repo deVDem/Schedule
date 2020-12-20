@@ -106,7 +106,7 @@
                 android:text="@string/detail"
                 android:textColor="@color/text_bold_color" />
 
-            <Button
+            <ru.devdem.reminder.ui.view.HoldButton
                 android:id="@+id/btnJoinToGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,7 +114,12 @@
                 android:layout_alignParentEnd="true"
                 android:backgroundTint="@color/colorAccent"
                 android:text="@string/join"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:fillColor="@color/holdBtnColor"
+                app:marginFill="15"
+                app:marginFillStart="-5"
+                app:marginFillEnd="-5"
+                app:hint="@string/hold_button" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

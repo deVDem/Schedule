@@ -175,6 +175,7 @@ public class GroupListActivity extends AppCompatActivity {
         Response.ErrorListener errorListener = error -> {
             mLoadingLayout.setVisibility(View.GONE);
             Toast.makeText(this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            Log.e(TAG, "joinToGroup error: ", error);
         };
         mNetworkController.joinToGroup(this, listener, errorListener, String.valueOf(id), mSettings.getString("token", null));
     }

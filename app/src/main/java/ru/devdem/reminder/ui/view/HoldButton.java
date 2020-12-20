@@ -30,6 +30,11 @@ public class HoldButton extends AppCompatButton {
     private final String textHolded;
     private final String textHint;
     private final float radius;
+    private final float marginFill;
+    private final float marginFillStart;
+    private final float marginFillEnd;
+    private final float marginFillTop;
+    private final float marginFillBottom;
 
     private Thread holdThread;
     private OnClickListener listener;
@@ -85,19 +90,25 @@ public class HoldButton extends AppCompatButton {
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         float newFill = lastFill - (lastFill - Strength / 650f) * 0.016f * 3f;
-        rect.set(0, 0, width,
-                height);
+        rect.set(marginFill+marginFillStart, marginFill+marginFillTop,
+                width-marginFill-marginFillEnd,
+                height-marginFill- marginFillBottom);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            rectClip.set(width * newFill, 0, width, height);
+            rectClip.set(width * newFill+marginFill+marginFillStart,
+                    marginFill+marginFillTop,
+                    width-marginFill-marginFillEnd,
+                    height-marginFill-marginFillBottom);
             canvas.clipOutRect(rectClip);
             canvas.drawRoundRect(rect, radius, radius, paint);
             if (textHolded != null) {
-                canvas.drawText(textHolded.toUpperCase(getTextLocale()), width / 2f, height / 2f,
-                        paintText);
+                canvas.drawText(textHolded.toUpperCase(getTextLocale()), width / 2f,
+                        height / 2f, paintText);
             }
         } else {
-            rectClip.set(0, 0, width * newFill, height);
+            rectClip.set(marginFill+marginFillStart, marginFill+marginFillTop,
+                    width * newFill-marginFill-marginFillEnd,
+                    height-marginFill-marginFillBottom);
             canvas.drawRoundRect(rectClip, radius, radius, paint);
         }
         lastFill = newFill;
@@ -148,6 +159,11 @@ public class HoldButton extends AppCompatButton {
         if (colorFillString != null) colorFill = Color.parseColor(colorFillString);
         else colorFill = Color.parseColor("#ff0000");
         radius = typedArray.getFloat(R.styleable.HoldButton_radius, Math.min(getWidth(), getHeight()) * 0.2f);
+        marginFill = typedArray.getFloat(R.styleable.HoldButton_marginFill, 0f);
+        marginFillStart = typedArray.getFloat(R.styleable.HoldButton_marginFillStart, 0f);
+        marginFillEnd = typedArray.getFloat(R.styleable.HoldButton_marginFillEnd, 0f);
+        marginFillTop = typedArray.getFloat(R.styleable.HoldButton_marginFillTop, 0f);
+        marginFillBottom = typedArray.getFloat(R.styleable.HoldButton_marginFillBottom, 0f);
         typedArray.recycle();
         init();
     }

@@ -9,6 +9,11 @@
         <attr name="hint" format="string"/>
         <attr name="textHoldedColor" format="color"/>
         <attr name="radius" format="float"/>
+        <attr name="marginFill" format="float" />
+        <attr name="marginFillStart" format="float" />
+        <attr name="marginFillEnd" format="float" />
+        <attr name="marginFillTop" format="float" />
+        <attr name="marginFillBottom" format="float" />
 
     </declare-styleable>
 </resources>
