@@ -29,6 +29,7 @@ public class HoldButton extends AppCompatButton {
     private final int colorHoldText;
     private final String textHolded;
     private final String textHint;
+    private final float radius;
 
     private Thread holdThread;
     private OnClickListener listener;
@@ -86,15 +87,18 @@ public class HoldButton extends AppCompatButton {
         float newFill = lastFill - (lastFill - Strength / 650f) * 0.016f * 3f;
         rect.set(0, 0, width,
                 height);
-        rectClip.set(width * newFill, 0, width,
-                height);
-        float radius = Math.min(width, height) * 0.4f;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+            rectClip.set(width * newFill, 0, width, height);
             canvas.clipOutRect(rectClip);
             canvas.drawRoundRect(rect, radius, radius, paint);
             if (textHolded != null) {
-                canvas.drawText(textHolded.toUpperCase(getTextLocale()), width / 2f, height / 2f, paintText);
+                canvas.drawText(textHolded.toUpperCase(getTextLocale()), width / 2f, height / 2f,
+                        paintText);
             }
+        } else {
+            rectClip.set(0, 0, width * newFill, height);
+            canvas.drawRoundRect(rectClip, radius, radius, paint);
         }
         lastFill = newFill;
     }
@@ -143,6 +147,7 @@ public class HoldButton extends AppCompatButton {
         String colorFillString = typedArray.getString(R.styleable.HoldButton_fillColor);
         if (colorFillString != null) colorFill = Color.parseColor(colorFillString);
         else colorFill = Color.parseColor("#ff0000");
+        radius = typedArray.getFloat(R.styleable.HoldButton_radius, Math.min(getWidth(), getHeight()) * 0.2f);
         typedArray.recycle();
         init();
     }

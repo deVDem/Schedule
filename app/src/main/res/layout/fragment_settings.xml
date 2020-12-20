@@ -33,9 +33,9 @@
         android:padding="10dp">
 
         <LinearLayout
+            android:id="@+id/llnSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/llnSettings"
             android:orientation="vertical">
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -84,10 +84,9 @@
                 android:backgroundTint="@color/card_color_lessons"
                 android:text="@string/logoff"
                 android:textColor="@color/holo_red_light"
-                tools:strength="45"
-                app:hint="@string/hold_button"
                 app:fillColor="@color/holdBtnColor"
-                app:textHoldedColor="@color/white"/>
+                app:hint="@string/hold_button"
+                app:radius="60" />
 
             <TextView
                 android:id="@+id/versionInfo"

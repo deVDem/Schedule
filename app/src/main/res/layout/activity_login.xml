@@ -93,10 +93,10 @@
             android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/box_shape"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/login"
@@ -226,17 +226,18 @@
                     android:backgroundTint="@color/dark"
                     android:text="@string/register"
                     android:textColor="@color/white"
-                    app:strength="0"
                     app:fillColor="@color/holdBtnColor"
-                    app:hint="@string/hold_button"/>
+                    app:hint="@string/hold_button"
+                    app:radius="20"
+                    app:strength="0" />
 
                 <TextView
                     android:id="@+id/registerTVHaveAcc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
                     android:layout_gravity="center"
                     android:layout_margin="20dp"
+                    android:layout_marginBottom="20dp"
                     android:text="@string/already_registered"
                     android:textColor="@color/text_color" />
             </LinearLayout>

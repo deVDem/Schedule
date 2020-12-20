@@ -8,6 +8,7 @@
         <attr name="force" format="float"/>
         <attr name="hint" format="string"/>
         <attr name="textHoldedColor" format="color"/>
+        <attr name="radius" format="float"/>
 
     </declare-styleable>
 </resources>
