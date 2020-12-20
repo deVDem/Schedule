@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.android.volley.Response;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -26,8 +27,10 @@ import java.util.Objects;
 
 import ru.devdem.reminder.controllers.LessonsController;
 import ru.devdem.reminder.controllers.NetworkController;
+import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.controllers.TimeController;
 import ru.devdem.reminder.object.Lesson;
+import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.ui.SplashActivity;
 
 public class NotificationService extends Service {
@@ -52,8 +55,8 @@ public class NotificationService extends Service {
         networkController = NetworkController.get();
         mSettings = getSharedPreferences("settings", MODE_PRIVATE);
         checkNewNotifications();
-        if(sThread==null) createThread();
-        else if(!sThread.isAlive()) sThread.start();
+        if (sThread == null) createThread();
+        else if (!sThread.isAlive()) sThread.start();
     }
 
     @Override
@@ -71,17 +74,21 @@ public class NotificationService extends Service {
         Response.Listener<String> listener = response -> {
             try {
                 JSONObject object = new JSONObject(response);
-                int all = object.getInt("all");
-                if (mSettings.getInt("notifications_all_service", 0) != all && !mSettings.getBoolean("first_notifications", true)) {
+                JSONObject responseObject = object.getJSONObject("response");
+                JSONArray notifications = responseObject.getJSONArray("notifications");
+                int lastId = 0;
+                JSONObject jsonNotification = notifications.getJSONObject(0);
+                lastId = jsonNotification.getInt("id");
+                if (mSettings.getInt("notifications_all_service", 0) != lastId && !mSettings.getBoolean("first_notifications", true)) {
                     Log.d(TAG, "checkNewNotifications: new notifications!");
-                    if (all > mSettings.getInt("notifications_all_service", 0)) {
-                        int need = all - mSettings.getInt("notifications_all_service", 0);
+                    if (lastId > mSettings.getInt("notifications_all_service", 0)) {
+                        int need = lastId - mSettings.getInt("notifications_all_service", 0);
                         for (int i = 0; i < need && i <= 5; i++) {
                             NotificationCompat.Builder builder =
                                     mNotificationUtils.getNewNotificationNotification(
-                                            object.getJSONObject(String.valueOf(i)).getString("Title"),
-                                            object.getJSONObject(String.valueOf(i)).getString("Subtitle"));
-                            String dateString = object.getJSONObject(String.valueOf(i)).getString("date");
+                                            notifications.getJSONObject(i).getString("title"),
+                                            notifications.getJSONObject(i).getString("subtitle"));
+                            String dateString = notifications.getJSONObject(i).getString("date_created");
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                             builder.setWhen(!dateString.equals("null") ? Objects.requireNonNull(format.parse(dateString)).getTime() : new Date().getTime());
                             Notification notification = builder.build();
@@ -89,10 +96,10 @@ public class NotificationService extends Service {
                                 mNotificationUtils.getManager().notify(104 + i, notification);
                             }
                         }
-                        mSettings.edit().putInt("notifications_all_service", all).apply();
-                    } else mSettings.edit().putInt("notifications_all_service", all).apply();
+                        mSettings.edit().putInt("notifications_all_service", lastId).apply();
+                    } else mSettings.edit().putInt("notifications_all_service", lastId).apply();
                 } else if (mSettings.getBoolean("first_notifications", true)) {
-                    mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", all).apply();
+                    mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", lastId).apply();
                 } else Log.d(TAG, "checkNewNotifications: no new notifications");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -101,7 +108,6 @@ public class NotificationService extends Service {
         networkController.getNotifications(getApplicationContext(), mSettings.getString("group", "0"), mSettings.getString("token", "null"), listener, null);
     }
 
-    private static boolean lastNotificationNeed;
 
     private void createThread() {
         sThread = new Thread(null, () -> {
@@ -188,8 +194,9 @@ public class NotificationService extends Service {
                             stopForeground(true);
                         }
                         count++;
-                        if ((count >= 4 && notificationNeed) || (count>=2 && !notificationNeed)) checkNewNotifications();
-                        if(notificationNeed) Thread.sleep(15000);
+                        if ((count >= 4 && notificationNeed) || (count >= 2 && !notificationNeed))
+                            checkNewNotifications();
+                        if (notificationNeed) Thread.sleep(15000);
                         else Thread.sleep(60000);
                     } catch (Exception e) {
                         e.printStackTrace();

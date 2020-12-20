@@ -45,8 +45,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import javax.xml.transform.sax.TemplatesHandler;
-
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import ru.devdem.reminder.BuildConfig;
@@ -336,7 +334,7 @@ public class DashboardFragment extends Fragment {
                     }
                     holder.mDayOfWeekText.setText(days[position]);
                     if (dayOfWeek == position && !tomorrow) {
-                        String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today);
+                        String dayOfWeekText = days[position] + " " + getResources().getString(R.string.today_with_brackets);
                         holder.mDayOfWeekText.setText(dayOfWeekText);
                     }
                     if (dayOfWeek + 1 == position && tomorrow) {

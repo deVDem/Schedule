@@ -200,9 +200,10 @@ public class NetworkController {
 
     public void getNotifications(Context context, String group, String token, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         Map<String, String> map = new HashMap<>();
-        map.put("group", group);
+        map.put("action", "getNotifications");
+        map.put("groupId", group);
         map.put("token", token);
-        //goSend(context, listener, errorListener, URL_NOTIFICATIONS_GET, map);
+        goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
     public void getLastVerInt(Context context, Response.Listener<String> listener) {

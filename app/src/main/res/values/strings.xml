@@ -44,7 +44,8 @@
     <string name="swipedowntoretry">Swipe down to retry</string>
     <string name="reload">Reload</string>
     <string name="replacement">(replacement)</string>
-    <string name="today">(today)</string>
+    <string name="today">today</string>
+    <string name="today_with_brackets">(today)</string>
     <string name="editing_a_profile">Editing a profile</string>
     <string name="enter_the_correct_address">Enter the correct address</string>
     <string name="type_first_and_last_name">Type First and Last name</string>

@@ -29,10 +29,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.android.volley.Response;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -51,12 +53,13 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class NotificationsFragment extends Fragment {
+    private static final String TAG = "NotificationsFragment";
     private SharedPreferences mSettings;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RVAdapter mRVAdapter;
     private NetworkController mNetworkController;
-    private boolean needReload = false;
+    private final boolean needReload = false;
 
     @SuppressLint("InflateParams")
     @Nullable
@@ -114,33 +117,36 @@ public class NotificationsFragment extends Fragment {
         Response.Listener<String> listener = response -> {
             ArrayList<Notification> mNotifications = new ArrayList<>();
             try {
-                JSONObject object = new JSONObject(response);
-                int all = object.getInt("all");
-                for (int i = 0; i < all; i++) {
-                    JSONObject jsonObject = object.getJSONObject(String.valueOf(i));
-                    int group = jsonObject.getInt("group");
+                JSONObject jsonObject = new JSONObject(response);
+                JSONObject responseObject = jsonObject.getJSONObject("response");
+                JSONArray notifications = responseObject.getJSONArray("notifications");
+                int lastId = 0;
+                for (int i = 0; i < notifications.length(); i++) {
+                    JSONObject jsonNotification = notifications.getJSONObject(i);
+                    int group = jsonNotification.getInt("groupId");
                     Notification notification = new Notification();
-                    notification.setId(jsonObject.getInt("id"));
-                    notification.setTitle(jsonObject.getString("Title"));
-                    notification.setSubTitle(jsonObject.getString("Subtitle"));
-                    notification.setUrlImage(jsonObject.getString("URLImage"));
+                    notification.setId(jsonNotification.getInt("id"));
+                    notification.setTitle(jsonNotification.getString("title"));
+                    notification.setSubTitle(jsonNotification.getString("subtitle"));
+                    //notification.setUrlImage(jsonNotification.getString("imageId"));
                     notification.setGroup(group);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    notification.setDate(format.parse(jsonObject.getString("date")));
+                    notification.setDate(format.parse(jsonNotification.getString("date_created")));
                     User author;
-                    if (!jsonObject.isNull("author"))
-                        author = ObjectsController.parseUser(jsonObject.getJSONObject("author"));
+                    if (!jsonNotification.isNull("author"))
+                        author = ObjectsController.parseUser(jsonNotification.getJSONObject("author"));
                     else {
                         author = new User();
                         author.setNames(getString(R.string.system));
                         /*author.setImageId("https://files.devdem.ru/apps/schedule/user_images/server.jpg");*/
                         author.setLogin("system");
                     }
+                    lastId=notification.getId();
                     notification.setAuthor(author);
                     mNotifications.add(notification);
                 }
                 if (needReload)
-                    mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", all).apply();
+                    mSettings.edit().putBoolean("first_notifications", false).putInt("notifications_all_service", lastId).apply();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -226,7 +232,7 @@ public class NotificationsFragment extends Fragment {
                 holder.mSubTitleView.setText(notification.getSubTitle());
                 CardView cardView = (CardView) holder.itemView;
                 if (notification.getGroup() == -1) {
-                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server, Objects.requireNonNull(getContext()).getTheme()));
+                    cardView.setCardBackgroundColor(getResources().getColor(R.color.notification_color_server, requireContext().getTheme()));
                 }
                 if (author != null) {
                     holder.mAuthorName.setText(author.getNames());
@@ -263,10 +269,20 @@ public class NotificationsFragment extends Fragment {
                 }
                 holder.mTitleView.setText(notification.getTitle());
                 Date date = notification.getDate();
-                String dateString = new SimpleDateFormat("d MMMM H:mm", Locale.getDefault()).format(date);
+                Calendar calendar = Calendar.getInstance();
+                Calendar now = Calendar.getInstance();
+                calendar.setTime(date);
+                String pattern;
+                if(now.get(Calendar.YEAR) != calendar.get(Calendar.YEAR))
+                    pattern="yyyy d MMMM";
+                else if(now.get(Calendar.DAY_OF_MONTH) != calendar.get(Calendar.DAY_OF_MONTH))
+                    pattern="d MMMM H:mm";
+                else pattern=getString(R.string.today)+" H:mm";
+
+                String dateString = new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
                 holder.mDateView.setText(dateString);
                 String urlImage = notification.getUrlImage();
-                if (urlImage.length() > 0) {
+                if (urlImage != null && urlImage.length() > 0) {
                     holder.mImageView.setVisibility(View.VISIBLE);
                     Picasso.get().load(urlImage).placeholder(R.drawable.cat).error(R.drawable.cat_error).into(holder.mImageView);
                     holder.mImageView.setOnClickListener(v -> {
