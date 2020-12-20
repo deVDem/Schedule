@@ -1,42 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/box_shape"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/scrview"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:text="@string/settings"
-        android:textColor="@color/text_bold_color"
-        android:textSize="32sp"
-        android:textStyle="bold" />
-
-    <ScrollView
-        android:id="@+id/scrview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/scrview"
+    android:layout_centerInParent="true"
+    android:padding="10dp">
 
         <LinearLayout
             android:id="@+id/llnSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/box_shape"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:text="@string/settings"
+                android:textColor="@color/text_bold_color"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchTheme"
@@ -101,10 +96,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
                 android:background="@drawable/shape_corn"
                 android:backgroundTint="@color/card_color_lessons"
                 android:text="@string/tired_of_advertising"
                 android:textColor="@color/card_color_this_day" />
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+</ScrollView>

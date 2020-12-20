@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String NAME_PREFS = "settings";
         mSettings = getSharedPreferences(NAME_PREFS, MODE_PRIVATE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mNetworkController = NetworkController.get();
         mLessonsController = LessonsController.get(this);
         mLessonsController.loadLessons();
