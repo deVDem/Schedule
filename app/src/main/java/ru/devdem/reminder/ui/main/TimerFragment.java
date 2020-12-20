@@ -143,11 +143,11 @@ public class TimerFragment extends Fragment {
                         switch (params[0]) {
                             case 0:
                                 countString = mContext.getString(R.string.left_before_the_break);
-                                counterString = mTimeController.getRemainText(mLessons.get(params[1]).getEnd(), Objects.requireNonNull(date));
+                                counterString = mTimeController.getRemainTextFull(mLessons.get(params[1]).getEnd(), Objects.requireNonNull(date));
                                 break;
                             case 1:
                                 countString = mContext.getString(R.string.left_before_lesson);
-                                counterString = mTimeController.getRemainText(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
+                                counterString = mTimeController.getRemainTextFull(mLessons.get(params[2]).getStart(), Objects.requireNonNull(date));
                                 break;
                         }
                         int finalDay = day;

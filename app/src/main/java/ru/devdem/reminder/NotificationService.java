@@ -52,7 +52,8 @@ public class NotificationService extends Service {
         networkController = NetworkController.get();
         mSettings = getSharedPreferences("settings", MODE_PRIVATE);
         checkNewNotifications();
-        createThread();
+        if(sThread==null) createThread();
+        else if(!sThread.isAlive()) sThread.start();
     }
 
     @Override
@@ -99,6 +100,8 @@ public class NotificationService extends Service {
         };
         networkController.getNotifications(getApplicationContext(), mSettings.getString("group", "0"), mSettings.getString("token", "null"), listener, null);
     }
+
+    private static boolean lastNotificationNeed;
 
     private void createThread() {
         sThread = new Thread(null, () -> {
@@ -150,27 +153,25 @@ public class NotificationService extends Service {
                         boolean notificationNeed = true;
                         switch (params[0]) {
                             case 0:
-                                countString = getApplicationContext().getString(R.string.left_before_the_break) + ": " + mTimeController.getRemainText(lesson.getEnd(), Objects.requireNonNull(date));
+                                countString = getApplicationContext().getString(R.string.left_before_the_break) + " " + mTimeController.getRemainTextShort(lesson.getEnd(), Objects.requireNonNull(date), getApplicationContext());
                                 if (mLessons.get(params[2]).getDay() == day)
                                     counterString = getApplicationContext().getString(R.string.next) + ": " + lessonNext.getName();
                                 else {
                                     counterString = getApplicationContext().getString(R.string.lessons_over_today);
                                 }
+                                notificationNeed = true;
                                 break;
                             case 1:
                                 if (lessonNext.getDay() == day && lesson.getDay() == day) {
                                     countString = getApplicationContext().getString(R.string.next) + ": " + lessonNext.getName();
-                                    counterString = getApplicationContext().getString(R.string.through) + " " + mTimeController.getRemainText(lessonNext.getStart(), Objects.requireNonNull(date));
+                                    counterString = getApplicationContext().getString(R.string.through) + " " + mTimeController.getRemainTextShort(lessonNext.getStart(), Objects.requireNonNull(date), getApplicationContext());
+                                    notificationNeed = true;
                                 } else {
-                                    countString = getApplicationContext().getString(R.string.lessons_over_today);
-                                    counterString = getString(R.string.good_rest);
                                     notificationNeed = false;
                                 }
                                 break;
                         }
                         if (params[3] == 3) {
-                            countString = getString(R.string.end_week);
-                            counterString = getString(R.string.good_rest);
                             notificationNeed = false;
                         }
                         NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(counterString, countString);
@@ -184,17 +185,19 @@ public class NotificationService extends Service {
                             startForeground(103, notification);
                         } else {
                             mNotificationUtils.getManager().cancel(103);
+                            stopForeground(true);
                         }
                         count++;
-                        if (count >= 30) checkNewNotifications();
-                        Thread.sleep(500);
+                        if ((count >= 4 && notificationNeed) || (count>=2 && !notificationNeed)) checkNewNotifications();
+                        if(notificationNeed) Thread.sleep(15000);
+                        else Thread.sleep(60000);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e(TAG, "createThread: ", e);
                     }
                 } else {
                     try {
-                        NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(getApplicationContext().getString(R.string.no_lessons), getApplicationContext().getString(R.string.service_stopped));
+                        /*NotificationCompat.Builder builder = mNotificationUtils.getTimerNotification(getApplicationContext().getString(R.string.no_lessons), getApplicationContext().getString(R.string.service_stopped));
                         Notification notification = builder.build();
                         Intent reloadIntent = new Intent(getApplicationContext(), SplashActivity.class);
                         reloadIntent.setAction("ru.devdem.reminder.openApp");
@@ -204,6 +207,7 @@ public class NotificationService extends Service {
                             mNotificationUtils.getManager().notify(103, notification);
                             startForeground(103, notification);
                         }
+                         */
                         count++;
                         if (count >= 30) checkNewNotifications();
                         Thread.sleep(500);
@@ -214,6 +218,7 @@ public class NotificationService extends Service {
             }
             stopSelf();
         }, "Timer Notification Background");
+        sThread.start();
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import ru.devdem.reminder.R;
 import ru.devdem.reminder.object.Lesson;
 
 public class TimeController {
@@ -28,7 +29,7 @@ public class TimeController {
         return sTimeController;
     }
 
-    public String getRemainText(Date date1, Date date2) {
+    public String getRemainTextFull(Date date1, Date date2) {
         String hour;
         String min;
         String sec;
@@ -45,6 +46,20 @@ public class TimeController {
         if (seconds < 10) sec = "0" + sec;
         return hour + ":" + min + ":" + sec;
     }
+
+    public String getRemainTextShort(Date date1, Date date2, Context context) {
+        long milliseconds = date1.getTime() - date2.getTime();
+        int hours = (int) (milliseconds / (60 * 60 * 1000));
+        milliseconds -= (60 * 60 * 1000) * hours;
+        int minutes = (int) (milliseconds / (60 * 1000));
+        if (hours >= 1)
+            return hours + " " + context.getString(R.string.short_hour) + " " + minutes + " " +
+                    context.getString(R.string.short_minutes);
+        if (minutes >= 1)
+            return minutes +" "+context.getString(R.string.short_minutes);
+        else return context.getString(R.string.short_less_minute);
+    }
+
 
     public int[] getNumberlesson() {
         ArrayList<Lesson> mLessons = mLessonsController.getLessons();

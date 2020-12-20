@@ -150,4 +150,7 @@
     <string name="splash_motd">На взлёт!</string>
     <string name="retry_this_action">Попробуйте ещё раз это действие</string>
     <string name="hold_button">Удерживайте кнопку</string>
+    <string name="short_hour">ч.</string>
+    <string name="short_minutes">мин.</string>
+    <string name="short_less_minute">меньше минуты</string>
 </resources>

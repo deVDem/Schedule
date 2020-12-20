@@ -149,4 +149,7 @@
     <string name="splash_motd">Take off!</string>
     <string name="retry_this_action">Try this action again</string>
     <string name="hold_button">Hold the button</string>
+    <string name="short_hour"> h. </string>
+    <string name="short_minutes"> min.</string>
+    <string name="short_less_minute">less than a minute</string>
 </resources>
