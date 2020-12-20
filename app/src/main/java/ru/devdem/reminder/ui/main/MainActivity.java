@@ -231,12 +231,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast.makeText(this, "Wrong password.", Toast.LENGTH_SHORT).show();
-                        exit();
+                        SignOut();
                     }
                 } else {
                     JSONObject errorJson = jsonResponse.getJSONObject("error");
                     Toast.makeText(this, errorJson.getInt("code") + " " + errorJson.getString("text"), Toast.LENGTH_SHORT).show();
-                    if (errorJson.getInt("code") != 1) exit();
+                    if (errorJson.getInt("code") != 1) SignOut();
                 }
             } catch (Exception e) {
                 Toast.makeText(this, "Произошла неизвестная ошибка", Toast.LENGTH_SHORT).show();
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         mNetworkController.Login(this, mSettings.getString("login", ""), mSettings.getString("token", ""), listener, errorListener);
     }
 
-    private void exit() {
+    private void SignOut() {
         mSettings.edit().clear().apply();
         startActivity(new Intent(this, SplashActivity.class));
         overridePendingTransition(R.anim.transition_in, R.anim.transition_out);

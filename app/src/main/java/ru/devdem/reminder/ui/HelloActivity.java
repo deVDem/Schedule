@@ -58,9 +58,10 @@ public class HelloActivity extends AppCompatActivity {
         });
         Button btnCreateGroup = view.findViewById(R.id.btncreategroup);
         btnCreateGroup.setOnClickListener(v1->{
-            startActivity(new Intent(this, CreateGroupActivity.class));
+            Toast.makeText(this, "Временно не работает", Toast.LENGTH_LONG).show();
+            /*startActivity(new Intent(this, CreateGroupActivity.class));
             overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
-            finish();
+            finish();*/
         });
     }
 

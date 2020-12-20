@@ -40,8 +40,8 @@ import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.object.User;
-import ru.devdem.reminder.ui.PurchaseActivity;
 import ru.devdem.reminder.ui.group.GroupInfoActivity;
+import ru.devdem.reminder.ui.view.HoldButton;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -71,19 +71,8 @@ public class ProfileFragment extends Fragment {
             mMainActivity.startActivity(GroupInfoActivity.getAIntent(mContext, Integer.parseInt(Objects.requireNonNull(mSettings.getString("group", "0"))), false));
             mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
         });
-        Button mLeaveButton = v.findViewById(R.id.buttonLeaveGroup);
-        mLeaveButton.setOnClickListener(v1 -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            AlertDialog dialog = builder
-                    .setTitle(R.string.sure_exit)
-                    .setNegativeButton(R.string.no, ((dialog1, which) -> dialog1.cancel()))
-                    .setPositiveButton(R.string.yes, ((dialog1, which) -> {
-                        exitGroup();
-                        dialog1.cancel();
-                    }))
-                    .create();
-            dialog.show();
-        });
+        HoldButton mLeaveButton = v.findViewById(R.id.buttonLeaveGroup);
+        mLeaveButton.setHoldDownListener(v1 -> exitGroup());
         return v;
     }
 
@@ -154,8 +143,9 @@ public class ProfileFragment extends Fragment {
         CircleImageView imageProfile = profileCard.findViewById(R.id.profileImage);
         Button goProBtn = profileCard.findViewById(R.id.goProBtn);
         goProBtn.setOnClickListener(v -> {
-            startActivity(new Intent(mMainActivity, PurchaseActivity.class));
-            mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);
+            /*startActivity(new Intent(mMainActivity, PurchaseActivity.class));
+            mMainActivity.overridePendingTransition(R.anim.transition_out, R.anim.transition_in);*/
+            Toast.makeText(mContext, "Временно не работает", Toast.LENGTH_LONG).show();
         });
         CardView cardView = profileCard.findViewById(R.id.card_view);
         textName.setText(name);

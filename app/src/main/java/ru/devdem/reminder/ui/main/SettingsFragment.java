@@ -79,14 +79,14 @@ public class SettingsFragment extends Fragment {
                 switchNight.setAlpha(isChecked ? 0.5f : 1f);
                 switchNight.setChecked(mSettings.getBoolean("night", false));
                 AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM : switchNight.isChecked() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-                restart();
+                RestartApp();
             }
         }));
         switchNight.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (can) {
                 mSettings.edit().putBoolean("night", isChecked).apply();
                 AppCompatDelegate.setDefaultNightMode(switchTheme.isChecked() ? AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM : isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-                restart();
+                RestartApp();
             }
         });
         switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -105,7 +105,7 @@ public class SettingsFragment extends Fragment {
             mSettings.edit().putBoolean("notification", false).apply();
             context.getSharedPreferences("jsondata", Context.MODE_PRIVATE).edit().clear().apply();
             requireActivity().stopService(new Intent(getContext(), NotificationService.class));
-            restart();
+            RestartApp();
         });
         TextView versionInfo = view.findViewById(R.id.versionInfo);
         String verInf = BuildConfig.BUILD_TYPE + " | v: " + BuildConfig.VERSION_CODE + " name: " + BuildConfig.VERSION_NAME;
@@ -113,7 +113,7 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    private void restart() {
+    private void RestartApp() {
         Activity activity = requireActivity();
         activity.stopService(new Intent(getContext(), NotificationService.class));
         activity.finish();
