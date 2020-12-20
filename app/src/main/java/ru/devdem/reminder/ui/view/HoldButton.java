@@ -88,7 +88,7 @@ public class HoldButton extends AppCompatButton {
         rect.set(0, 0, width,
                 height);
 
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             rectClip.set(width * newFill, 0, width, height);
             canvas.clipOutRect(rectClip);
             canvas.drawRoundRect(rect, radius, radius, paint);
