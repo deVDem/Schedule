@@ -24,7 +24,6 @@ public class HoldButton extends AppCompatButton {
     public float Force;
 
     private boolean touch;
-    private boolean holded = false;
     private final int colorFill;
     private final int colorHoldText;
     private final String textHolded;
@@ -49,25 +48,23 @@ public class HoldButton extends AppCompatButton {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_UP:
+                touch = false;
+                if (textHint != null && Strength <= 300f)
+                    Toast.makeText(mContext, textHint, Toast.LENGTH_SHORT)
+                            .show();
+                Strength=0;
                 performClick();
                 break;
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_DOWN: {
                 touch = true;
-                if (Strength >= 1000f && !holded) {
+                if (Strength >= 1000f) {
                     if (listener != null) listener.onClick(this);
                     if (textHolded != null) {
                         setText(textHolded);
                     }
-                    holded = true;
                 }
                 break;
-            }
-            default: {
-                touch = false;
-                if (!holded && textHint != null && Strength <= 300f)
-                    Toast.makeText(mContext, textHint, Toast.LENGTH_SHORT)
-                            .show();
             }
         }
         return super.onTouchEvent(event);
@@ -118,7 +115,6 @@ public class HoldButton extends AppCompatButton {
             canvas.drawRoundRect(rectClip, radius, radius, paint);
         }
         lastFill = newFill;
-        if (!touch && Strength > 0) Strength -= Force * 1.5f;
         if (touch || Strength < 0)
             Strength += Force;
         invalidate();
@@ -156,4 +152,5 @@ public class HoldButton extends AppCompatButton {
         marginFillBottom = typedArray.getFloat(R.styleable.HoldButton_marginFillBottom, 0f);
         typedArray.recycle();
     }
+
 }
