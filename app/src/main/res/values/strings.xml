@@ -12,6 +12,7 @@
     <string name="login_et">Login</string>
     <string name="first_and_last_name">First and Last Name</string>
     <string name="real_data_please">Please enter your real data</string>
+    <string name="real_email_please">Please enter your real email address. It will need to be confirmed</string>
     <string name="register">Register</string>
     <string name="registration">Register</string>
     <string name="errorNetwork">An error occurred while connecting to the server.</string>
@@ -153,4 +154,7 @@
     <string name="short_hour"> h. </string>
     <string name="short_minutes"> min.</string>
     <string name="short_less_minute">less than a minute</string>
+    <string name="forgotPass">Forgot your password?</string>
+    <string name="forgot_help_text_email">Your Email address is required to restore your account</string>
+    <string name="check_mailbox">Check your email</string>
 </resources>

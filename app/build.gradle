@@ -7,28 +7,28 @@ android {
         applicationId "ru.devdem.reminder"
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 10
-        versionName "0.0.5"
+        versionCode 11
+        versionName "0.0.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         alpha {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix = ' alpha'
         }
         beta {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            minifyEnabled false
+            minifyEnabled true
             versionNameSuffix = ' beta'
         }
         release_apk {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            minifyEnabled false
+            minifyEnabled true
             versionNameSuffix = ' apk'
         }
         debug {
