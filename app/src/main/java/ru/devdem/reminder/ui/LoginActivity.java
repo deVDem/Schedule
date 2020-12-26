@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.snackbar.Snackbar;
@@ -58,11 +59,19 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences mSettings;
     private Context mContext;
 
+    // Login Views
     private RelativeLayout mRelativeLogin;
     private MaterialEditText mLETLogin;
     private MaterialEditText mLETPass;
     private Button mLLoginBtn;
+    private TextView mLRestorePass;
 
+    // Forgot pass views
+    private RelativeLayout mRelativeForgot;
+    private MaterialEditText mFEmail;
+    private Button mFRestoreBtn;
+
+    // Register Views
     private RelativeLayout mRelativeRegister;
     private MaterialEditText mRETLogin;
     private MaterialEditText mRETName;
@@ -84,12 +93,49 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mRelativeForgot = findViewById(R.id.forgotPassRl);
+        mFEmail = findViewById(R.id.forgotEmail);
+        mFRestoreBtn = findViewById(R.id.forgotPassBtn);
+        mFRestoreBtn.setOnClickListener(v -> {
+            hideKeyboard();
+            String email = Objects.requireNonNull(mFEmail.getText()).toString();
+            if (mFEmail.validate(emailRegex, getText(R.string.enter_the_correct_address))) {
+                Toast.makeText(this, R.string.wait, Toast.LENGTH_SHORT).show();
+                mNetworkController.restorePassRequest(this, response -> {
+                    try {
+                        JSONObject object = new JSONObject(response);
+                        JSONObject responseObject = object.getJSONObject("response");
+                        if(responseObject.isNull("error")) {
+                            Toast.makeText(this, R.string.check_mailbox, Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    } catch (Exception e) {
+                        controlViews(true);
+                        Log.d(TAG, "forgotPass Error: response="+response);
+                        Toast.makeText(this, R.string.unknown_error, Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    controlViews(true);
+                    Toast.makeText(this, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "forgotPass Error: ", error);
+                }, email);
+                controlViews(false);
+            }
+
+        });
+
         mRelativeLogin = findViewById(R.id.loginRl);
         mLETLogin = findViewById(R.id.loginETLogin);
         mLETPass = findViewById(R.id.loginETPassword);
         mLLoginBtn = findViewById(R.id.loginBtn);
-        mRTVHaveAcc = findViewById(R.id.registerTVHaveAcc);
+        mLRestorePass = findViewById(R.id.loginRestorePass);
 
+        mLRestorePass.setOnClickListener((v) -> {
+            hideKeyboard();
+            ChangeRelativeLayoutView(mRelativeForgot, mRelativeLogin, false);
+        });
         mLLoginBtn.setOnClickListener((l) -> Login());
 
         mRelativeRegister = findViewById(R.id.registerRl);
@@ -98,6 +144,8 @@ public class LoginActivity extends AppCompatActivity {
         mRETEmail = findViewById(R.id.registerEtEmail);
         mRETPass = findViewById(R.id.registerEtPassword);
         mRRegBtn = findViewById(R.id.registerBtn);
+        mRTVHaveAcc = findViewById(R.id.registerTVHaveAcc);
+
         mRRegBtn.setHoldDownListener((l) -> Register());
         mRTVHaveAcc.setOnClickListener((l) -> {
             hideKeyboard();
@@ -109,6 +157,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mRelativeLogin.getVisibility() == View.VISIBLE) {
             ChangeRelativeLayoutView(mRelativeRegister, mRelativeLogin, true);
+        } else if (mRelativeForgot.getVisibility() == View.VISIBLE) {
+            ChangeRelativeLayoutView(mRelativeLogin, mRelativeForgot, true);
         } else {
             super.onBackPressed();
         }
@@ -131,16 +181,23 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Enable or disable views for lock from user
+     *
      */
+
     private void controlViews(boolean enable) {
         mRelativeLogin.setEnabled(enable);
-        mRETName.setEnabled(enable);
-        mRETEmail.setEnabled(enable);
-        mRETPass.setEnabled(enable);
-        mRETLogin.setEnabled(enable);
         mLETLogin.setEnabled(enable);
         mLETPass.setEnabled(enable);
         mLLoginBtn.setEnabled(enable);
+        mLRestorePass.setEnabled(enable);
+        mRelativeForgot.setEnabled(enable);
+        mFEmail.setEnabled(enable);
+        mFRestoreBtn.setEnabled(enable);
+        mRelativeRegister.setEnabled(enable);
+        mRETLogin.setEnabled(enable);
+        mRETName.setEnabled(enable);
+        mRETEmail.setEnabled(enable);
+        mRETPass.setEnabled(enable);
         mRRegBtn.setEnabled(enable);
         mRTVHaveAcc.setEnabled(enable);
     }

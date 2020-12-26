@@ -13,6 +13,7 @@
     <string name="first_and_last_name">Имя и Фамилия</string>
     <string name="login_et">Логин</string>
     <string name="real_data_please">Пожалуйста, введите настоящие данные</string>
+    <string name="real_email_please">Пожалуйста, введите настоящую почту. Её нужно будет подтвердить</string>
     <string name="register">Зарегистрироваться</string>
     <string name="registration">Регистрация</string>
     <string name="errorNetwork">Произошла ошибка при подключении к серверу.</string>
@@ -154,4 +155,7 @@
     <string name="short_hour">ч.</string>
     <string name="short_minutes">мин.</string>
     <string name="short_less_minute">меньше минуты</string>
+    <string name="forgotPass">Забыли свой пароль?</string>
+    <string name="forgot_help_text_email">Для восстановления аккаунта требуется ваш Email</string>
+    <string name="check_mailbox">Проверьте свою почту</string>
 </resources>

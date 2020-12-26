@@ -61,6 +61,13 @@ public class NetworkController {
         queue.add(sendRequest);
     }
 
+    public void restorePassRequest(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String email) {
+        Map<String, String> map = new HashMap<>();
+        map.put("action", "restorePass");
+        map.put("email", email);
+        goSend(context, listener, errorListener, URL_ROOT, map);
+    }
+
     public void addNotification(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener, String token, String group, String title, String message, String image) {
         Map<String, String> map = new HashMap<>();
         map.put("token", token);
