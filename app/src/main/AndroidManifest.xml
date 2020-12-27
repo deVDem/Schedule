@@ -64,7 +64,6 @@
         <activity
             android:name=".ui.FullImageActivity"
             android:theme="@style/FullImage" />
-        <activity android:name=".ui.DownloadActivity" />
         <activity
             android:name=".ui.EditProfileActivity"
             android:theme="@style/EditProfile" />

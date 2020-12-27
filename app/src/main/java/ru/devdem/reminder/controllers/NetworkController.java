@@ -213,7 +213,7 @@ public class NetworkController {
         goSend(context, listener, errorListener, URL_ROOT, map);
     }
 
-    public void getLastVerInt(Context context, Response.Listener<String> listener) {
+    public void getLastVersion(Context context, Response.Listener<String> listener) {
         Map<String, String> map = new HashMap<>();
         goSend(context, listener, null, URL_GET_VER_INT, map);
     }

@@ -9,11 +9,7 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.downloader.Progress;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 
 public class NotificationUtils extends ContextWrapper {
 
@@ -39,27 +35,6 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(true);
     }
 
-    public NotificationCompat.Builder getDownloadChannelNotification(Progress progress) {
-        float mbCurrent = (float) progress.currentBytes / 1048576;
-        float mbTotal = (float) progress.totalBytes / 1048576;
-        float proc = (float) progress.currentBytes / (float) progress.totalBytes * 100;
-        DecimalFormat f = new DecimalFormat("##.00", DecimalFormatSymbols.getInstance(Locale.getDefault()));
-        String procString = f.format(proc);
-        if (proc < 1.0) procString = "0" + procString;
-        String mbCurrentString = f.format(mbCurrent);
-        if (mbCurrent < 1.0) mbCurrentString = "0" + mbCurrentString;
-        String mbTotalString = f.format(mbTotal);
-        if (mbTotal < 1.0) mbTotalString = "0" + mbTotalString;
-        return new NotificationCompat.Builder(getApplicationContext(), DOWNLOAD_CHANNEL_ID)
-                .setContentTitle(getResources().getString(R.string.downloadTitle))
-                .setContentText(procString + "% | " + mbCurrentString + "/" + mbTotalString + " MB")
-                .setSmallIcon(android.R.drawable.stat_sys_download)
-                .setProgress((int) progress.totalBytes, (int) progress.currentBytes, false)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setVibrate(null)
-                .setAutoCancel(false);
-    }
 
     public NotificationCompat.Builder getNewNotificationNotification(String title, String text) {
         return new NotificationCompat.Builder(getApplicationContext(), ANDROID_CHANNEL_ID)

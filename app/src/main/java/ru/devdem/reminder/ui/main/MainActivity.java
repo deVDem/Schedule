@@ -5,11 +5,9 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -41,7 +39,6 @@ import ru.devdem.reminder.R;
 import ru.devdem.reminder.controllers.LessonsController;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.TimeController;
-import ru.devdem.reminder.ui.DownloadActivity;
 import ru.devdem.reminder.ui.HelloActivity;
 import ru.devdem.reminder.ui.SplashActivity;
 
@@ -175,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        //getVerInt(); // TODO: сделать проверку версии приложения
+        getVerInt();
         if (mSettings.getBoolean("notification", true)) {
             startService(new Intent(this, NotificationService.class));
         }
@@ -259,33 +256,17 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 if (!jsonObject.isNull(BuildConfig.BUILD_TYPE)) {
-                    JSONObject verInfJson = jsonObject.getJSONObject(BuildConfig.BUILD_TYPE);
-                    int lastVer = verInfJson.getInt("ver");
-                    String url = verInfJson.getString("url");
-                    boolean market = verInfJson.getBoolean("market");
-                    if (lastVer > BuildConfig.VERSION_CODE && !market) {
-                        Intent updateIntent = DownloadActivity.newIntent(this, url);
-                        updateIntent.setAction("ru.devdem.reminder.downloadupdate");
-                        PendingIntent updatePendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
-                        NotificationCompat.Builder nb = notificationUtils.getNewUpdateChannelNotification();
-                        Notification notification = nb.addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), updatePendingIntent)).build();
-                        notification.contentIntent = updatePendingIntent;
-                        notificationUtils.getManager().notify(102, notification);
-                        snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(R.string.download, v -> {
-                            Intent updateIntent1 = DownloadActivity.newIntent(MainActivity.this, url);
-                            startActivity(updateIntent1);
-                        });
-                        snackbar.show();
-                    } else if (lastVer > BuildConfig.VERSION_CODE && market) {
-                        Uri address = Uri.parse("http://developer.alexanderklimov.ru");
+                    int lastVer = jsonObject.getInt(BuildConfig.BUILD_TYPE);
+                    if (lastVer > BuildConfig.VERSION_CODE) {
+                        Uri address = Uri.parse("https://play.google.com/store/apps/details?id=ru.devdem.reminder");
                         Intent openLinkIntent = new Intent(Intent.ACTION_VIEW, address);
                         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, openLinkIntent, 0);
                         NotificationCompat.Builder nb = notificationUtils.getNewUpdateChannelNotification();
                         Notification notification = nb.addAction(new NotificationCompat.Action(R.drawable.ic_notification_timer, getResources().getString(R.string.download), pendingIntent)).build();
                         notification.contentIntent = pendingIntent;
                         notificationUtils.getManager().notify(102, notification);
-                        snackbar = Snackbar.make(mView, Html.fromHtml("<font color=\"#ffffff\">" + getResources().getString(R.string.a_new_version_of_the_app_is_available) + "</font>"), Snackbar.LENGTH_LONG);
+                        snackbar = Snackbar.make(mView, getResources().getString(R.string.a_new_version_of_the_app_is_available), Snackbar.LENGTH_LONG);
+                        snackbar.setTextColor(getColor(R.color.text_color));
                         snackbar.setAction(R.string.download, v -> {
                             startActivity(openLinkIntent);
                             notificationUtils.getManager().cancel(102);
@@ -297,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         };
-        mNetworkController.getLastVerInt(this, listener);
+        mNetworkController.getLastVersion(this, listener);
     }
 
     public void updateDashboard() {

@@ -7,8 +7,8 @@ android {
         applicationId "ru.devdem.reminder"
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 11
-        versionName "0.0.6"
+        versionCode 12
+        versionName "0.0.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
-    implementation 'com.mindorks.android:prdownloader:0.6.0'
+    //implementation 'com.mindorks.android:prdownloader:0.6.0' --- not needed
     implementation 'com.android.billingclient:billing:3.0.2'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
