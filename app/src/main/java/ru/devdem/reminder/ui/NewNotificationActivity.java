@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Xml;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -19,23 +20,39 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Response;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 
+import okio.Utf8;
+import ru.devdem.reminder.account.AccountManager;
+import ru.devdem.reminder.controllers.HelperConnection;
 import ru.devdem.reminder.controllers.NetworkController;
 import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.object.User;
@@ -56,7 +73,8 @@ public class NewNotificationActivity extends AppCompatActivity {
     private Bitmap mBitmap;
     private LinearLayout mImageLayout;
     private ImageView mImageView;
-    private int REQUEST_ID = 1006;
+    private TextView mLoadingInfoView;
+    private final int REQUEST_ID = 1006;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +86,7 @@ public class NewNotificationActivity extends AppCompatActivity {
         setTitle(getString(R.string.new_notification));
         View view = View.inflate(this, R.layout.activity_new_notification, null);
         setContentView(view);
+        mLoadingInfoView = view.findViewById(R.id.loadingInfoText);
         mLoadingLayout = view.findViewById(R.id.loadingLayout);
         mEditHeader = view.findViewById(R.id.etTitle);
         mEditMessage = view.findViewById(R.id.etText);
@@ -125,47 +144,87 @@ public class NewNotificationActivity extends AppCompatActivity {
         mEditHeader.setEnabled(false);
         mEditMessage.setEnabled(false);
         showHide(mLoadingLayout, mDoneButton, new int[]{mEditHeader.getWidth() * 2, mEditHeader.getHeight() * 2}, true);
-        User user = ObjectsController.getLocalUserInfo(mSettings);
-        String image = null;
-        if (mBitmap != null) {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-            byte[] imgBytes = outputStream.toByteArray();
-            image = Base64.encodeToString(imgBytes, Base64.DEFAULT);
-        }
-        Response.Listener<String> listener = response -> {
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                if (jsonObject.getString("status").equals("ok")) {
-                    Toast.makeText(this, getString(R.string.sended), Toast.LENGTH_SHORT).show();
-                    exit(true);
-                } else {
-                    Toast.makeText(this, getString(R.string.unknown_error), Toast.LENGTH_LONG).show();
-                    mDoneButton.show();
-                    mAddPhotoButton.show();
-                    mEditHeader.setEnabled(true);
-                    mEditMessage.setEnabled(true);
-                    showHide(mLoadingLayout, mDoneButton, new int[]{mEditHeader.getWidth() * 2, mEditHeader.getHeight() * 2}, false);
+        HelperConnection connection = new HelperConnection();
+        try {
+            Thread thread = new Thread(() -> {
+                try {
+                    runOnUiThread(() -> mLoadingInfoView.setText("Converting image.."));
+                    User user = ObjectsController.getLocalUserInfo(mSettings);
+                    String image = null;
+                    if (mBitmap != null) {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        mBitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                        byte[] imgBytes = outputStream.toByteArray();
+                        image = Base64.encodeToString(imgBytes, Base64.DEFAULT);
+                    }
+                    runOnUiThread(() -> mLoadingInfoView.setText("Connecting.."));
+                    connection.openConnection();
+                    runOnUiThread(() -> mLoadingInfoView.setText("Connected. Preparing to sending image.."));
+                    boolean imageNotSended = true;
+                    int state = 1;
+                    OutputStreamWriter osw = new OutputStreamWriter(connection.getOutputStream());
+                    BufferedWriter writer = new BufferedWriter(osw);
+                    while (imageNotSended) {
+
+                        switch (state) {
+                            case 1: {
+                                writer.write(0x1);
+                                writer.write(user.getToken().length());
+                                writer.write(user.getToken(), 0, user.getToken().length());
+                                writer.flush();
+                                connection.getOutputStream().flush();
+                                byte[] inbuf = connection.getData();
+                                if (inbuf[0] == 5) {
+                                    state = 2;
+                                } else if (inbuf[0] == 6) {
+                                    runOnUiThread(() -> {
+                                        Toast.makeText(this, "Confirm your account", Toast.LENGTH_SHORT)
+                                                .show();
+                                        finish();
+                                    });
+                                }
+                                break;
+                            }
+                            case 2: {
+                                writer.write(0x2);
+                                writer.flush();
+                                byte[] inbuf = connection.getData();
+                                if (inbuf[4] == 2) {
+                                    runOnUiThread(() -> mLoadingInfoView.setText("Connected. Sending image.."));
+                                    state = 3;
+                                }
+                                break;
+                            }
+                            case 3: {
+                                int pos = 0;
+                                int imageBytesLength = image.toCharArray().length;
+                                while (pos < imageBytesLength) {
+                                    writer.write(0x3);
+                                    writer.write(image.toCharArray(), pos, pos+2047 < imageBytesLength ? 2047 : imageBytesLength-pos);
+                                    writer.flush();
+                                    pos += 2047;
+                                    int finalPos = pos;
+                                    runOnUiThread(() -> mLoadingInfoView.setText("Connected. Sending image.. " + finalPos / (float) imageBytesLength * 100 + "%"));
+                                }
+                                state = 4;
+                                break;
+                            }
+                            case 4:
+                                writer.write(0x4);
+                                writer.flush();
+                                break;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    finish();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(this, getString(R.string.unknown_error), Toast.LENGTH_LONG).show();
-                mDoneButton.show();
-                mAddPhotoButton.show();
-                mEditHeader.setEnabled(true);
-                mEditMessage.setEnabled(true);
-                showHide(mLoadingLayout, mDoneButton, new int[]{mEditHeader.getWidth() * 2, mEditHeader.getHeight() * 2}, false);
-            }
-        };
-        Response.ErrorListener errorListener = error -> {
-            Toast.makeText(this, getString(R.string.unknown_error) + ": " + error.getMessage(), Toast.LENGTH_LONG).show();
-            mDoneButton.show();
-            mAddPhotoButton.show();
-            mEditHeader.setEnabled(true);
-            mEditMessage.setEnabled(true);
-            showHide(mLoadingLayout, mDoneButton, new int[]{mEditHeader.getWidth() * 2, mEditHeader.getHeight() * 2}, false);
-        };
-        mNetworkController.addNotification(this, listener, errorListener, user.getToken(), user.getGroupId(), Objects.requireNonNull(mEditHeader.getText()).toString(), mEditMessage.getText().toString(), image);
+            });
+            thread.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void deleteImg() {
@@ -203,10 +262,10 @@ public class NewNotificationActivity extends AppCompatActivity {
                 InputStream imageStream = null;
                 if (path != null) {
                     imageStream = getContentResolver().openInputStream(path);
-                mBitmap = BitmapFactory.decodeStream(imageStream);
-                mImageView.setImageBitmap(mBitmap);
-                mImageLayout.setVisibility(View.VISIBLE);
-                mAddPhotoButton.hide();
+                    mBitmap = BitmapFactory.decodeStream(imageStream);
+                    mImageView.setImageBitmap(mBitmap);
+                    mImageLayout.setVisibility(View.VISIBLE);
+                    mAddPhotoButton.hide();
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

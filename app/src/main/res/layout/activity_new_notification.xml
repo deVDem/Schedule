@@ -126,9 +126,10 @@
         android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/cat"
+        android:background="@drawable/box_shape"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:visibility="gone"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/textView6"
@@ -136,14 +137,24 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/loading"
-            android:textColor="@color/text_bold_color"
+            android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/loadingInfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_below="@id/textView6"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            tools:text="Loading information text"
+            />
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView6"
+            android:layout_below="@id/loadingInfoText"
             android:layout_centerHorizontal="true"
             android:layout_margin="30dp" />
     </RelativeLayout>

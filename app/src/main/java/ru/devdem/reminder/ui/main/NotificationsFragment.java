@@ -48,6 +48,7 @@ import ru.devdem.reminder.controllers.ObjectsController;
 import ru.devdem.reminder.object.Notification;
 import ru.devdem.reminder.object.User;
 import ru.devdem.reminder.ui.FullImageActivity;
+import ru.devdem.reminder.ui.NewNotificationActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -99,8 +100,7 @@ public class NotificationsFragment extends Fragment {
                 return true;
             case R.id.menu_edit:
                 // TODO: починить отправлялку сообщений
-                //startActivityForResult(new Intent(getActivity(), NewNotificationActivity.class), 154);
-                Toast.makeText(requireContext(), "Временно не работает", Toast.LENGTH_LONG).show();
+                startActivityForResult(new Intent(getActivity(), NewNotificationActivity.class), 154);
                 return true;
         }
         return super.onOptionsItemSelected(item);
