@@ -197,14 +197,16 @@ public class NewNotificationActivity extends AppCompatActivity {
                             }
                             case 3: {
                                 int pos = 0;
-                                int imageBytesLength = image.toCharArray().length;
+                                int imageBytesLength = image.getBytes().length;
                                 while (pos < imageBytesLength) {
                                     writer.write(0x3);
-                                    writer.write(image.toCharArray(), pos, pos+2047 < imageBytesLength ? 2047 : imageBytesLength-pos);
+                                    for (int i = 0; pos + 2047 < imageBytesLength ? i < 2047 : i < imageBytesLength - pos; i++) {
+                                        writer.write(image.getBytes()[i]);
+                                    }
                                     writer.flush();
                                     pos += 2047;
                                     int finalPos = pos;
-                                    runOnUiThread(() -> mLoadingInfoView.setText("Connected. Sending image.. " + finalPos / (float) imageBytesLength * 100 + "%"));
+                                    runOnUiThread(() -> mLoadingInfoView.setText("Connected. Sending image.. " + Math.round(finalPos / (float) imageBytesLength * 100) + "%"));
                                 }
                                 state = 4;
                                 break;
@@ -212,6 +214,7 @@ public class NewNotificationActivity extends AppCompatActivity {
                             case 4:
                                 writer.write(0x4);
                                 writer.flush();
+                                state=5;
                                 break;
                         }
                     }

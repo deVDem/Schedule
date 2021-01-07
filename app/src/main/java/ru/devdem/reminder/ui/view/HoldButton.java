@@ -63,6 +63,7 @@ public class HoldButton extends AppCompatButton {
                     if (textHolded != null) {
                         setText(textHolded);
                     }
+                    Strength=0f;
                 }
                 break;
             }

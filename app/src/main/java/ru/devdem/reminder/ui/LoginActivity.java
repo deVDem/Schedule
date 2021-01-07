@@ -344,6 +344,7 @@ public class LoginActivity extends AppCompatActivity {
                 password.length() > 5) {
             Response.Listener<String> listener = response -> {
                 try {
+                    Log.d(TAG, "Register: "+response);
                     JSONObject jsonResponse = new JSONObject(response);
                     if (jsonResponse.isNull("error") && !jsonResponse.isNull("response")) {
                         try {
